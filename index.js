@@ -4,6 +4,7 @@ import FormError from "./FormElements/FormError";
 import FormConfirmation from "./FormElements/FormConfirmation";
 import { validateField } from "./Helpers/validation";
 import Submit from "./FormElements/Submit";
+import axios from "axios";
 
 class GravityForm extends Component {
 	constructor(props) {
@@ -28,13 +29,9 @@ class GravityForm extends Component {
 	async componentDidMount() {
 		const { formID, backendUrl } = this.props;
 		this._isMounted = true;
-		const form = await fetch(`${backendUrl}/v1/gravityforms/${formID}`)
-			.then(response => {
-				if (response.ok) {
-					return response.json();
-				}
-				throw new Error();
-			})
+		const form = await axios
+			.get(`${backendUrl}/v1/gravityforms/${formID}`)
+			.then(response => response.data)
 			.catch(() => false);
 
 		if (form && this._isMounted) {
@@ -189,26 +186,24 @@ class GravityForm extends Component {
 		});
 		const { formID, backendUrl } = this.props;
 		const data = new FormData(event.target);
-		const req = await fetch(
+		const response = await axios.post(
 			`${backendUrl}/v1/gravityforms/${formID}/submissions`,
 			{
-				method: "POST",
-				body: data
+				data
 			}
 		);
-		const response = await req.json();
 
-		if (response.is_valid) {
+		if (response.data && response.is_valid) {
 			this.setState({
 				submitting: false,
 				submitSuccess: true,
-				confirmationMessage: response.confirmation_message
+				confirmationMessage: response.data.confirmation_message
 			});
 		} else {
 			this.setState({
 				submitting: false,
 				submitFailed: true,
-				errorMessages: response.validation_messages
+				errorMessages: response.data.validation_messages
 			});
 		}
 	};
