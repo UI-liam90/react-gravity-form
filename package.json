@@ -1,31 +1,31 @@
 {
-	"name": "react-gravity-form",
-	"version": "0.0.2",
-	"description": "A component for including Gravity Forms on React apps via the Wordpress API",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+ssh://git@bitbucket.org/gohike/gravity-forms.git"
-	},
-	"keywords": [
-		"React",
-		"Gravity",
-		"Form",
-		"Forms",
-		"GravityForms",
-		"Component",
-		"Wordpress",
-		"API",
-		"Headless",
-		"CMS"
-	],
-	"author": "Hike",
-	"license": "ISC",
-	"homepage": "https://bitbucket.org/gohike/gravity-forms#readme",
-	"devDependencies": {
-		"react": "^16.8.1"
-	}
+  "name": "react-gravity-form",
+  "version": "0.0.3",
+  "description": "A component for including Gravity Forms on React apps via the Wordpress API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/gohike/gravity-forms.git"
+  },
+  "keywords": [
+    "React",
+    "Gravity",
+    "Form",
+    "Forms",
+    "GravityForms",
+    "Component",
+    "Wordpress",
+    "API",
+    "Headless",
+    "CMS"
+  ],
+  "author": "Hike",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/gohike/gravity-forms#readme",
+  "devDependencies": {
+    "react": "^16.8.1"
+  }
 }
