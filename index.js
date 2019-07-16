@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { basicAuthRequest as fetch } from "../../utils";
 import RenderFields from "./FormElements/RenderFields";
 import FormError from "./FormElements/FormError";
 import FormConfirmation from "./FormElements/FormConfirmation";
 import { validateField } from "./Helpers/validation";
-import { Loading } from "../styles";
 import Submit from "./FormElements/Submit";
 
 class GravityForm extends Component {
@@ -30,9 +28,7 @@ class GravityForm extends Component {
 	async componentDidMount() {
 		const { formID, backendUrl } = this.props;
 		this._isMounted = true;
-		const form = await fetch(
-			`${backendUrl}/wp-json/wismon/v1/gravityforms/${formID}`
-		)
+		const form = await fetch(`${backendUrl}/v1/gravityforms/${formID}`)
 			.then(response => {
 				if (response.ok) {
 					return response.json();
@@ -194,7 +190,7 @@ class GravityForm extends Component {
 		const { formID, backendUrl } = this.props;
 		const data = new FormData(event.target);
 		const req = await fetch(
-			`${backendUrl}/wp-json/wismon/v1/gravityforms/${formID}/submissions`,
+			`${backendUrl}/v1/gravityforms/${formID}/submissions`,
 			{
 				method: "POST",
 				body: data
@@ -271,7 +267,13 @@ class GravityForm extends Component {
 			submitting,
 			activePage
 		} = this.state;
-		const { title, submitIcon, saveStateToHtmlField } = this.props;
+		const {
+			title,
+			submitIcon,
+			saveStateToHtmlField,
+			styledComponents
+		} = this.props;
+		const { Button, Loading } = styledComponents || false;
 		const { cssClass } = formData;
 
 		const isDisabled = Object.keys(formValues).some(
@@ -325,6 +327,7 @@ class GravityForm extends Component {
 
 						<div className="form-wrapper">
 							<RenderFields
+								styledComponents={styledComponents}
 								fields={formData.fields}
 								formValues={formValues}
 								submitFailed={submitFailed}
@@ -345,6 +348,8 @@ class GravityForm extends Component {
 								(formData.pagination &&
 									formData.pagination.pages.length === activePage)) && (
 								<Submit
+									Button={Button}
+									Loading={Loading}
 									formData={formData}
 									submitIcon={submitIcon}
 									isDisabled={isDisabled}

@@ -1,10 +1,7 @@
 import React from 'react';
 import { Box } from 'rebass';
-import { Button } from '../../styles';
 
-export default ({
-  field, pages, nextStep, prevStep, isNextDisabled,
-}) => {
+export default ({ field, pages, nextStep, prevStep, isNextDisabled }) => {
   const {
     id,
     type,
@@ -20,22 +17,19 @@ export default ({
     nextButton,
     previousButton,
     pageNumber,
+    styledComponents,
   } = field;
+
+  const SButton =
+    styledComponents && styledComponents['Button'] ? styledComponents['Button'] : 'button';
 
   return (
     <Box className="form-field">
-      {pageNumber - 1 > 1 && <Button onClick={e => prevStep(e)}>{previousButton.text}</Button>}
+      {pageNumber - 1 > 1 && <SButton onClick={(e) => prevStep(e)}>{previousButton.text}</SButton>}
       {pageNumber <= pages && (
-        <Button
-          type="button"
-          onClick={nextStep}
-          color="pink"
-          p="7px 20px"
-          mt={20}
-          disabled={isNextDisabled}
-        >
+        <SButton onClick={nextStep} color="pink" p="7px 20px" mt={20} disabled={isNextDisabled}>
           {nextButton.text}
-        </Button>
+        </SButton>
       )}
     </Box>
   );
