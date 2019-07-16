@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { basicAuthRequest as fetch } from "../../utils";
-import RenderFields from "./RenderFields";
-import FormError from "./FormError";
-import FormConfirmation from "./FormConfirmation";
+import RenderFields from "./FormElements/RenderFields";
+import FormError from "./FormElements/FormError";
+import FormConfirmation from "./FormElements/FormConfirmation";
 import { validateField } from "./Helpers/validation";
 import { Loading } from "../styles";
-import Submit from "./Submit";
+import Submit from "./FormElements/Submit";
 
 class GravityForm extends Component {
 	constructor(props) {

@@ -1,5 +1,5 @@
 import React from "react";
-import * as FormFields from "./Fields";
+import * as FormFields from "../Fields";
 
 const frac2dec = fraction => {
 	/* assumes fraction is in the form  1-1/2 or 1 1/2 */
