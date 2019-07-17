@@ -44,6 +44,7 @@ export default ({
         ) : (
           <React.Fragment>
             <input
+              id={`input_${id}`}
               name={customName || `input_${id}`}
               type={type}
               value={!value ? '' : value}
