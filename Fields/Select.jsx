@@ -85,6 +85,7 @@ export default ({
               options={options}
               className="form-select"
               styles={customStyles}
+              inputId={`input_${id}`}
             />
             {description && <div className="description">{description}</div>}
           </React.Fragment>

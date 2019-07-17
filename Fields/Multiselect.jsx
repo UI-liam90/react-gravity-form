@@ -70,10 +70,10 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <p className={`group-label ${labelPlacement}`}>
+        <label htmlFor={`input_${id}`} className={`group-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
-        </p>
+        </label>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
         ) : (
@@ -87,6 +87,7 @@ export default ({
               placeholder={placeholder}
               options={options}
               isMulti
+              inputId={`input_${id}`}
             />
             {description && <div className="description">{description}</div>}
           </React.Fragment>
