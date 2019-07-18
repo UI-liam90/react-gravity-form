@@ -33,11 +33,11 @@ export default ({
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
-      <div className="checkboxes">
-        <p className={`group-label ${labelPlacement}`}>
+      <fieldset className="checkboxes">
+        <legend className={`group-label ${labelPlacement}`}>
           {label}
           {label && isRequired ? <abbr>*</abbr> : null}
-        </p>
+        </legend>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
         ) : (
@@ -66,7 +66,7 @@ export default ({
             {validationMessage}
           </span>
         )}
-      </div>
+      </fieldset>
     </Box>
   );
 };

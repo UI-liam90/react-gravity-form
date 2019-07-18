@@ -98,11 +98,11 @@ class Radio extends Component {
         }
         style={{ display: hideField ? 'none' : undefined }}
       >
-        <div className="radios">
-          <p className={`group-label ${labelPlacement}`}>
+        <fieldset className="radios">
+          <legend className={`group-label ${labelPlacement}`}>
             {label}
             {isRequired ? <abbr>*</abbr> : null}
-          </p>
+          </legend>
           {descriptionPlacement === 'above' && description ? (
             description && <div className="description">{description}</div>
           ) : (
@@ -163,7 +163,7 @@ class Radio extends Component {
               {validationMessage}
             </span>
           )}
-        </div>
+        </fiedset>
       </Box>
     );
   }
