@@ -2,9 +2,14 @@
   "name": "react-gravity-form",
   "version": "0.0.8",
   "description": "A component for including Gravity Forms on React apps via the Wordpress API",
-  "main": "index.js",
+  "files": [
+    "dist/*"
+  ],
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel ./src --out-dir ./dist -s inline",
+    "prepublishOnly": "babel ./src --out-dir ./dist -s inline"
   },
   "repository": {
     "type": "git",
@@ -26,7 +31,14 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/gohike/gravity-forms#readme",
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
     "axios": "^0.19.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "react": "^16.8.1"
   },
   "dependencies": {
