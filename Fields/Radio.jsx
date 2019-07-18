@@ -163,7 +163,7 @@ class Radio extends Component {
               {validationMessage}
             </span>
           )}
-        </fiedset>
+        </fieldset>
       </Box>
     );
   }
