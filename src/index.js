@@ -25,7 +25,6 @@ class GravityForm extends Component {
 			conditioanlIds: {}
 		};
 	}
-
 	async componentDidMount() {
 		const { formID, backendUrl } = this.props;
 		this._isMounted = true;
