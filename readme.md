@@ -24,8 +24,8 @@ Include the component anywhere inside your own components:
 
 ```javascript
 <GravityForm
-	backendURL="https://www.example.com"
+	backendUrl="https://www.example.com/wp-json/v1/gravityforms"
 	formID="1"
-	styledComponents={{Button, Input...}} // optional
+	styledComponents={{Button, Loading, Input...}} // optional
 />
 ```

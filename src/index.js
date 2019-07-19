@@ -30,7 +30,7 @@ class GravityForm extends Component {
 		const { formID, backendUrl } = this.props;
 		this._isMounted = true;
 		const form = await axios
-			.get(`${backendUrl}/v1/gravityforms/${formID}`)
+			.get(`${backendUrl}/${formID}`)
 			.then(response => response.data)
 			.catch(() => false);
 
@@ -186,12 +186,9 @@ class GravityForm extends Component {
 		});
 		const { formID, backendUrl } = this.props;
 		const data = new FormData(event.target);
-		const response = await axios.post(
-			`${backendUrl}/v1/gravityforms/${formID}/submissions`,
-			{
-				data
-			}
-		);
+		const response = await axios.post(`${backendUrl}/${formID}/submissions`, {
+			data
+		});
 
 		if (response.data && response.is_valid) {
 			this.setState({
@@ -289,7 +286,7 @@ class GravityForm extends Component {
 				css={{ position: "realtive" }}
 				id={`gravity_form_${this.props.formID}`}
 			>
-				{formData.title ? null : (Loading && <Loading isLoading />)}
+				{formData.title ? null : Loading && <Loading isLoading />}
 
 				{submitFailed && !submitSuccess && (
 					<FormError
