@@ -289,7 +289,7 @@ class GravityForm extends Component {
 				css={{ position: "realtive" }}
 				id={`gravity_form_${this.props.formID}`}
 			>
-				{formData.title ? null : <Loading isLoading />}
+				{formData.title ? null : (Loading && <Loading isLoading />)}
 
 				{submitFailed && !submitSuccess && (
 					<FormError
