@@ -253,7 +253,7 @@ class GravityForm extends Component {
     const {
       title, submitIcon, saveStateToHtmlField, styledComponents,
     } = this.props;
-    const { Button, Loading, GFWrapper } = styledComponents || false;
+    const { Button, Loading, GFWrapper = 'div' } = styledComponents || false;
     const { cssClass } = formData;
 
     const isDisabled = Object.keys(formValues).some(
@@ -268,7 +268,7 @@ class GravityForm extends Component {
       : false;
 
     return (
-      <div
+      <GFWrapper
         className="form-wrapper"
         css={{ position: 'realtive' }}
         id={`gravity_form_${this.props.formID}`}
@@ -334,7 +334,7 @@ class GravityForm extends Component {
         ) : (
           ''
         )}
-      </div>
+      </GFWrapper>
     );
   }
 }

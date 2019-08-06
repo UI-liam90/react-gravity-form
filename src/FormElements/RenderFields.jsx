@@ -72,9 +72,9 @@ export default (props) => {
   const dividedFields = pagination ? divideFieldsIntoPages(fields, pagination.pages) : undefined;
   const maxID = getMaxFieldId(fields);
   const [honeypotValue, setHoneypotValue] = useState('');
-  const { GFWrapper = 'div' } = styledComponents || false;
+
   return (
-    <GFWrapper className="form-fields">
+    <div className="form-fields">
       {pagination && pagination.pages.length > 1
         ? pagination.pages.map((page, index) => (
             <div
@@ -137,6 +137,6 @@ export default (props) => {
           />
         </div>
       )}
-    </GFWrapper>
+    </div>
   );
 };
