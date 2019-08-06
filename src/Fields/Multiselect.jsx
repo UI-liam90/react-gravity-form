@@ -10,6 +10,7 @@ export default ({
   setTouched,
   updateForm,
   hideField,
+  styledComponents,
   ...props
 }) => {
   const {
@@ -61,6 +62,7 @@ export default ({
     updateForm(event, field);
     setTouched(id);
   };
+  const { SelectStyles, Label = 'label' } = styledComponents || false;
   return (
     <Box
       width={width}
@@ -70,10 +72,10 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <label htmlFor={`input_${id}`} className={`group-label ${labelPlacement}`}>
+        <Label htmlFor={`input_${id}`} className={`group-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
-        </label>
+        </Label>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
         ) : (
@@ -88,6 +90,7 @@ export default ({
               options={options}
               isMulti
               inputId={`input_${id}`}
+              styles={SelectStyles}
             />
             {description && <div className="description">{description}</div>}
           </React.Fragment>

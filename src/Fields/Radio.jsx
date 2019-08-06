@@ -74,6 +74,7 @@ class Radio extends Component {
       setTouched,
       updateForm,
       hideField,
+      styledComponents,
     } = this.props;
     const {
       id,
@@ -90,6 +91,8 @@ class Radio extends Component {
     } = field;
     const { inputValue } = this.state;
 
+    const { Radiogroup = 'fieldset', Label = 'legend' } = styledComponents || false;
+
     return (
       <Box
         width={width}
@@ -98,11 +101,11 @@ class Radio extends Component {
         }
         style={{ display: hideField ? 'none' : undefined }}
       >
-        <fieldset className="radios">
-          <legend className={`group-label ${labelPlacement}`}>
+        <Radiogroup className="radios">
+          <Label as="legend" className={`group-label ${labelPlacement}`}>
             {label}
             {isRequired ? <abbr>*</abbr> : null}
-          </legend>
+          </Label>
           {descriptionPlacement === 'above' && description ? (
             description && <div className="description">{description}</div>
           ) : (
@@ -163,7 +166,7 @@ class Radio extends Component {
               {validationMessage}
             </span>
           )}
-        </fieldset>
+        </Radiogroup>
       </Box>
     );
   }

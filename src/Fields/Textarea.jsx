@@ -9,6 +9,7 @@ export default ({
   setTouched,
   hideField,
   updateForm,
+  styledComponents,
   ...props
 }) => {
   const {
@@ -25,6 +26,9 @@ export default ({
     width,
     customName,
   } = field;
+
+  const { Textarea = 'textarea', Label = 'label' } = styledComponents || false;
+
   return (
     <Box
       width={width}
@@ -34,15 +38,15 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
-        </label>
+        </Label>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
         ) : (
           <React.Fragment>
-            <textarea
+            <Textarea
               id={`input_${id}`}
               name={customName || `input_${id}`}
               type={type}

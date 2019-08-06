@@ -9,6 +9,7 @@ export default ({
   setTouched,
   hideField,
   updateForm,
+  styledComponents,
   ...props
 }) => {
   const {
@@ -23,8 +24,11 @@ export default ({
     descriptionPlacement,
     labelPlacement,
     width,
-    customName
+    customName,
   } = field;
+
+  const { Checkbox = 'fieldset', Label = 'legend' } = styledComponents || false;
+
   return (
     <Box
       width={width}
@@ -33,11 +37,11 @@ export default ({
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
-      <fieldset className="checkboxes">
-        <legend className={`group-label ${labelPlacement}`}>
+      <Checkbox className="checkboxes">
+        <Label as="legend" className={`group-label ${labelPlacement}`}>
           {label}
           {label && isRequired ? <abbr>*</abbr> : null}
-        </legend>
+        </Label>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
         ) : (
@@ -66,7 +70,7 @@ export default ({
             {validationMessage}
           </span>
         )}
-      </fieldset>
+      </Checkbox>
     </Box>
   );
 };

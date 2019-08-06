@@ -108,15 +108,16 @@ export default (props) => {
             (field) =>
               fieldTypes.includes(field.type) && (
                 <RenderField
-                  key={field.id}
-                  field={field}
-                  formValues={formValues}
-                  submitFailed={submitFailed}
-                  setTouched={setTouched}
-                  submitSuccess={submitSuccess}
-                  updateForm={updateForm}
-                  touched={touched}
-                  checkConditionalLogic={checkConditionalLogic}
+                key={field.id}
+                field={field}
+                formValues={formValues}
+                submitFailed={submitFailed}
+                setTouched={setTouched}
+                submitSuccess={submitSuccess}
+                updateForm={updateForm}
+                touched={touched}
+                checkConditionalLogic={checkConditionalLogic}
+                styledComponents={styledComponents}
                 />
               )
           )}

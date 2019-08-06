@@ -10,6 +10,7 @@ export default ({
   setTouched,
   hideField,
   updateForm,
+  styledComponents,
   ...props
 }) => {
   const {
@@ -50,7 +51,8 @@ export default ({
     updateForm(event, field);
     setTouched(id);
   };
-  const customStyles = {
+  const { SelectStyles, Label = 'label' } = styledComponents || false;
+  const customStyles = SelectStyles || {
     control: (provided, state) => ({
       ...provided,
       height: 50,
@@ -67,10 +69,10 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
-        </label>
+        </Label>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
         ) : (

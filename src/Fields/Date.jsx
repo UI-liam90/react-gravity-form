@@ -9,6 +9,7 @@ export default ({
   setTouched,
   hideField,
   updateForm,
+  styledComponents,
   ...props
 }) => {
   const {
@@ -27,6 +28,8 @@ export default ({
     customName,
   } = field;
 
+  const { Input = 'input', Label = 'label' } = styledComponents || false;
+
   return (
     <Box
       width={width}
@@ -35,10 +38,10 @@ export default ({
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
-      <label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
+      <Label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
         {label}
         {isRequired ? <abbr>*</abbr> : null}
-      </label>
+      </Label>
       <div className={type}>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
@@ -47,7 +50,7 @@ export default ({
             {inputs
               && inputs.map((item, index) => (
                 <div className={type} key={item.id}>
-                  <input
+                  <Input
                     id={`input_${id}_${index}`}
                     type="number"
                     name={customName || `input_${id}[]`}
