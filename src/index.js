@@ -253,7 +253,7 @@ class GravityForm extends Component {
     const {
       title, submitIcon, saveStateToHtmlField, styledComponents,
     } = this.props;
-    const { Button, Loading } = styledComponents || false;
+    const { Button, Loading, GFWrapper } = styledComponents || false;
     const { cssClass } = formData;
 
     const isDisabled = Object.keys(formValues).some(
