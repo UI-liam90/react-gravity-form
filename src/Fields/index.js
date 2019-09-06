@@ -12,6 +12,7 @@ import Hidden from './Hidden';
 import Page from './Page';
 import Html from './Html';
 import Date from './Date';
+import Fileupload from './Fileupload';
 
 export {
   Checkbox,
@@ -28,4 +29,5 @@ export {
   Page,
   Html,
   Date,
+  Fileupload,
 };

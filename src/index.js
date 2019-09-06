@@ -23,12 +23,14 @@ class GravityForm extends Component {
       activePage: false,
       conditionFields: {},
       conditioanlIds: {},
+      isMultipart: false,
     };
   }
 
   async componentDidMount() {
     const { formID, backendUrl } = this.props;
     this._isMounted = true;
+    let isMultipart = false;
     const form = await axios
       .get(`${backendUrl}/${formID}`)
       .then(response => response.data)
@@ -48,6 +50,9 @@ class GravityForm extends Component {
           value = preselected ? preselected.value : '';
         } else {
           value = field.defaultValue;
+          if (field.type === 'fileupload') {
+            isMultipart = true;
+          }
         }
 
         // grab all conditional logic fields
@@ -89,6 +94,7 @@ class GravityForm extends Component {
         activePage: form.pagination ? 1 : false,
         conditionFields,
         conditioanlIds,
+        isMultipart,
       });
     }
   }
@@ -178,22 +184,32 @@ class GravityForm extends Component {
       errorMessages: false,
     });
     const { formID, backendUrl } = this.props;
+    const gfSubmissionUrl = backendUrl.substring(0, backendUrl.indexOf('/wp-json'));
     const data = new FormData(event.target);
-    const response = await axios.post(`${backendUrl}/${formID}/submissions`, data);
-
-    if (response.data && response.data.is_valid) {
-      this.setState({
-        submitting: false,
-        submitSuccess: true,
-        confirmationMessage: response.data.confirmation_message,
+    axios
+      .post(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, data)
+      .then((response) => {
+        if (response.data && response.data.is_valid) {
+          this.setState({
+            submitting: false,
+            submitSuccess: true,
+            confirmationMessage: response.data.confirmation_message,
+          });
+        } else {
+          this.setState({
+            submitting: false,
+            submitFailed: true,
+            errorMessages: 'Something went wrong',
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          submitting: false,
+          submitFailed: true,
+          errorMessages: error.response.data.validation_messages,
+        });
       });
-    } else {
-      this.setState({
-        submitting: false,
-        submitFailed: true,
-        errorMessages: response.data.validation_messages,
-      });
-    }
   };
 
   nextStep = () => {
@@ -249,6 +265,7 @@ class GravityForm extends Component {
       touched,
       submitting,
       activePage,
+      isMultipart,
     } = this.state;
     const {
       title, submitIcon, saveStateToHtmlField, styledComponents,
@@ -288,7 +305,12 @@ class GravityForm extends Component {
         )}
 
         {!submitSuccess && formData.fields ? (
-          <form onSubmit={e => this.onSubmit(e)} className={cssClass} noValidate>
+          <form
+            onSubmit={e => this.onSubmit(e)}
+            className={cssClass}
+            encType={isMultipart ? 'multipart/form-data' : undefined}
+            noValidate
+          >
             {(formData.title || formData.description) && (
               <div>
                 {formData.title && title ? <h3 className="form-title">{formData.title}</h3> : null}
@@ -300,22 +322,22 @@ class GravityForm extends Component {
 
             <div className="form-wrapper">
               <RenderFields
-								styledComponents={styledComponents}
-								fields={formData.fields}
-								formValues={formValues}
-								submitFailed={submitFailed}
-								submitSuccess={submitSuccess}
-								updateForm={this.updateFormHandler}
-								touched={touched}
-								setTouched={this.setTouched}
-								pagination={formData.pagination}
-								activePage={activePage}
-								prevStep={this.prevStep}
-								nextStep={this.nextStep}
-								isNextDisabled={isNextDisabled}
-								checkConditionalLogic={this.checkConditionalLogic}
-								saveStateToHtmlField={saveStateToHtmlField}
-								enableHoneypot={formData.enableHoneypot}
+                styledComponents={styledComponents}
+                fields={formData.fields}
+                formValues={formValues}
+                submitFailed={submitFailed}
+                submitSuccess={submitSuccess}
+                updateForm={this.updateFormHandler}
+                touched={touched}
+                setTouched={this.setTouched}
+                pagination={formData.pagination}
+                activePage={activePage}
+                prevStep={this.prevStep}
+                nextStep={this.nextStep}
+                isNextDisabled={isNextDisabled}
+                checkConditionalLogic={this.checkConditionalLogic}
+                saveStateToHtmlField={saveStateToHtmlField}
+                enableHoneypot={formData.enableHoneypot}
               />
               {(!formData.pagination
                 || (formData.pagination && formData.pagination.pages.length === activePage)) && (
