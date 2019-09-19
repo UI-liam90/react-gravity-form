@@ -28,7 +28,7 @@ export default ({
     checkboxLabel,
   } = field;
 
-  const { Consent = 'div', Label = 'legend' } = styledComponents || false;
+  const { Consent = 'div', Label = 'label' } = styledComponents || false;
 
   return (
     <Box
@@ -39,7 +39,7 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <Consent className="checkboxes">
-        <Label as="legend" className={`group-label ${labelPlacement}`}>
+        <Label as="label" className={`group-label ${labelPlacement}`}>
           {label}
           {label && isRequired ? <abbr>*</abbr> : null}
         </Label>
