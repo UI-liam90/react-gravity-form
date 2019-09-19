@@ -48,7 +48,7 @@ export default ({
         ) : (
           <React.Fragment>
             {inputs.map((input, i) => (
-              <React.Fragment>
+              <React.Fragment key={`input_${formId}_${id}_${i}`}>
                 {i === 0 && (
                   <React.Fragment>
                     <input
