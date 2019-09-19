@@ -35,7 +35,7 @@ class GravityForm extends Component {
       .get(`${backendUrl}/${formID}`)
       .then(response => response.data)
       .catch(() => false);
-    
+
     if (form && this._isMounted) {
       const formValues = {};
       const conditionFields = [];
@@ -158,26 +158,29 @@ class GravityForm extends Component {
       }
     }
 
-    this.setState({
-      formValues: {
-        ...formValues,
-        [id]: {
-          value,
-          id,
-          valid,
-          label: field.label,
-          pageNumber: field.pageNumber,
-          cssClass: field.cssClass,
-          isRequired: field.isRequired,
+    this.setState(
+      {
+        formValues: {
+          ...formValues,
+          [id]: {
+            value,
+            id,
+            valid,
+            label: field.label,
+            pageNumber: field.pageNumber,
+            cssClass: field.cssClass,
+            isRequired: field.isRequired,
+          },
         },
       },
-    });
-
-  // pass state to parent component
-  const { onChange } = this.props;
-    if (onChange) { 
-      onChange(formValues);
-    }
+      () => {
+        // pass state to parent component
+        const { onChange } = this.props;
+        if (onChange) {
+          onChange(this.state.formValues);
+        }
+      },
+    );
   };
 
   onSubmit = async (event) => {
@@ -291,7 +294,7 @@ class GravityForm extends Component {
       : false;
 
     return (
-      <GFWrapper
+      <div
         className="form-wrapper"
         css={{ position: 'realtive' }}
         id={`gravity_form_${this.props.formID}`}
@@ -362,7 +365,7 @@ class GravityForm extends Component {
         ) : (
           ''
         )}
-      </GFWrapper>
+      </div>
     );
   }
 }
@@ -374,3 +377,4 @@ GravityForm.defaultProps = {
 };
 
 export default GravityForm;
+
