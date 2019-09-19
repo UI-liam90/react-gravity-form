@@ -14,6 +14,7 @@ export default ({
 }) => {
   const {
     id,
+    formId,
     type,
     label,
     cssClass,
@@ -38,7 +39,7 @@ export default ({
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
-      <Label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
+      <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
         {label}
         {isRequired ? <abbr>*</abbr> : null}
       </Label>
@@ -51,7 +52,7 @@ export default ({
               && inputs.map((item, index) => (
                 <div className={type} key={item.id}>
                   <Input
-                    id={`input_${id}_${index}`}
+                    id={`input_${formId}_${id}_${index}`}
                     type="number"
                     name={customName || `input_${id}[]`}
                     placeholder={item.placeholder}
@@ -73,7 +74,7 @@ export default ({
                       setTouched(id);
                     }}
                   />
-                  <label htmlFor={`input_${id}_${index}`} className="hide-label">
+                  <label htmlFor={`input_${formId}_${id}_${index}`} className="hide-label">
                     {item.label}
                   </label>
                   {validationMessage
@@ -81,7 +82,7 @@ export default ({
                     && validationMessage[index]
                     && index === validationMessage[index].index
                     && validationMessage[index].message && (
-                    <span className="error-message" id={`error_${item.id}`}>
+                    <span className="error-message" id={`error_${formId}_${item.id}`}>
                       {validationMessage[index].message}
                     </span>
                   )}

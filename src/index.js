@@ -35,7 +35,7 @@ class GravityForm extends Component {
       .get(`${backendUrl}/${formID}`)
       .then(response => response.data)
       .catch(() => false);
-
+    
     if (form && this._isMounted) {
       const formValues = {};
       const conditionFields = [];
@@ -172,6 +172,12 @@ class GravityForm extends Component {
         },
       },
     });
+
+  // pass state to parent component
+  const { onChange } = this.props;
+    if (onChange) { 
+      onChange(formValues);
+    }
   };
 
   onSubmit = async (event) => {

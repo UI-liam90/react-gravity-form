@@ -14,6 +14,7 @@ export default ({
 }) => {
   const {
     id,
+    formId,
     type,
     label,
     cssClass,
@@ -38,7 +39,7 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
@@ -47,7 +48,7 @@ export default ({
         ) : (
           <React.Fragment>
             <Input
-              id={`input_${id}`}
+              id={`input_${formId}_${id}`}
               name={customName || `input_${id}`}
               type={type}
               value={!value ? '' : value}
@@ -66,7 +67,7 @@ export default ({
           </React.Fragment>
         )}
         {validationMessage && touched && (
-          <span className="error-message" id={`error_${id}`}>
+          <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage}
           </span>
         )}

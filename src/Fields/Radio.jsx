@@ -78,6 +78,7 @@ class Radio extends Component {
     } = this.props;
     const {
       id,
+      formId,
       type,
       label,
       cssClass,
@@ -113,7 +114,7 @@ class Radio extends Component {
               {choices.map((choice, i) => (
                 <div className={type} key={choice.value}>
                   <input
-                    id={`input_${id}_${i}`}
+                    id={`input_${formId}_${id}_${i}`}
                     type="radio"
                     name={customName || `input_${id}`}
                     value={choice.value}
@@ -123,13 +124,13 @@ class Radio extends Component {
                       setTouched(id);
                     }}
                   />
-                  <label htmlFor={`input_${id}_${i}`}>{choice.text}</label>
+                  <label htmlFor={`input_${formId}_${id}_${i}`}>{choice.text}</label>
                 </div>
               ))}
               {field.enableOtherChoice && (
                 <div className={`${type} other-choise`}>
                   <input
-                    id={`input_${id}_${choices.length}`}
+                    id={`input_${formId}_${id}_${choices.length}`}
                     type="radio"
                     name={`input_${id}`}
                     value={inputValue}
@@ -141,7 +142,7 @@ class Radio extends Component {
                     onFocus={e => this.setFocus(e)}
                   />
                   <input
-                    id={`input_${id}_${choices.length}_other`}
+                    id={`input_${formId}_${id}_${choices.length}_other`}
                     type="text"
                     value={inputValue}
                     onFocus={e => this.onFocus(e)}
@@ -162,7 +163,7 @@ class Radio extends Component {
             </React.Fragment>
           )}
           {validationMessage && touched && (
-            <span className="error-message" id={`error_${id}`}>
+            <span className="error-message" id={`error_${formId}_${id}`}>
               {validationMessage}
             </span>
           )}

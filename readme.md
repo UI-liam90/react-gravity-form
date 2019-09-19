@@ -26,6 +26,7 @@ Include the component anywhere inside your own components:
 <GravityForm
 	backendUrl="https://www.example.com/wp-json/v1/gravityforms"
 	formID="1"
+	onChange={someFunction} // optional
 	styledComponents={{Button, Loading, Input...}} // optional
 />
 ```

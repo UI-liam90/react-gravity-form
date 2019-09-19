@@ -13,6 +13,7 @@ import Page from './Page';
 import Html from './Html';
 import Date from './Date';
 import Fileupload from './Fileupload';
+import Consent from './Consent';
 
 export {
   Checkbox,
@@ -30,4 +31,5 @@ export {
   Html,
   Date,
   Fileupload,
+  Consent,
 };

@@ -15,6 +15,7 @@ export default ({
 }) => {
   const {
     id,
+    formId,
     type,
     label,
     cssClass,
@@ -69,7 +70,7 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
@@ -87,13 +88,13 @@ export default ({
               options={options}
               className="form-select"
               styles={customStyles}
-              inputId={`input_${id}`}
+              inputId={`input_${formId}_${id}`}
             />
             {description && <div className="description">{description}</div>}
           </React.Fragment>
         )}
         {validationMessage && touched && (
-          <span className="error-message" id={`error_${id}`}>
+          <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage}
           </span>
         )}
