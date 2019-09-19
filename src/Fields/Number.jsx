@@ -60,7 +60,7 @@ export default ({
                 updateForm(event, field);
                 setTouched(id);
               }}
-              aria-describedby={`error_${id}`}
+              aria-describedby={`error_${formId}_${id}`}
               aria-invalid={!!validationMessage && touched}
             />
             {description && <div className="description">{description}</div>}

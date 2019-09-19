@@ -56,10 +56,13 @@ export default ({
                       type="checkbox"
                       name={customName || `input_${input.id}`}
                       value={1}
+                      required={isRequired}
+                      // checked={!value}
                       onChange={(event) => {
                         updateForm(event, field);
                         setTouched(id);
                       }}
+                      aria-invalid={!!validationMessage && touched}
                     />
                     <label
                       className="gfield_consent_label"
@@ -92,7 +95,7 @@ export default ({
         )}
 
         {validationMessage && touched && (
-          <span className="error-message" id={`error_${id}`}>
+          <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage}
           </span>
         )}

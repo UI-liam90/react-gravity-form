@@ -131,6 +131,8 @@ class GravityForm extends Component {
         label: dateLabel,
       };
       value = values;
+    } else if (field.type == 'consent') {
+      value = event.target ? event.target.checked : 'null';
     } else {
       value = event.target ? event.target.value : 'null';
     }
@@ -377,4 +379,3 @@ GravityForm.defaultProps = {
 };
 
 export default GravityForm;
-

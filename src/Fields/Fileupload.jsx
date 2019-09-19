@@ -87,7 +87,7 @@ class Fileupload extends Component {
                 }}
                 accept={this.prepareAllowedTypes(allowedExtensions) || undefined}
                 aria-label={label}
-                aria-describedby={`error_${id}`}
+                aria-describedby={`error_${formID}_${id}`}
                 aria-invalid={!!validationMessage}
                 hidden="hidden"
               />
@@ -113,7 +113,7 @@ class Fileupload extends Component {
             </span>
           )}
           {fieldError && (
-            <span className="error-message" id={`error_${id}`}>
+            <span className="error-message" id={`error_${formID}_${id}`}>
               {fieldError}
             </span>
           )}

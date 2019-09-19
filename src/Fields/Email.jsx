@@ -60,7 +60,7 @@ export default ({
                 setTouched(id);
               }}
               aria-label={label}
-              aria-describedby={`error_${id}`}
+              aria-describedby={`error_${formId}_${id}`}
               aria-invalid={!!validationMessage && touched}
             />
             {description && <div className="description">{description}</div>}
