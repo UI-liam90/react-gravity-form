@@ -294,7 +294,7 @@ class GravityForm extends Component {
       : false;
 
     return (
-      <div
+      <GFWrapper
         className="form-wrapper"
         css={{ position: 'realtive' }}
         id={`gravity_form_${this.props.formID}`}
@@ -365,7 +365,7 @@ class GravityForm extends Component {
         ) : (
           ''
         )}
-      </div>
+      </GFWrapper>
     );
   }
 }
