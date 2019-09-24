@@ -28,5 +28,6 @@ Include the component anywhere inside your own components:
 	formID="1"
 	onChange={someFunction} // optional
 	styledComponents={{Button, Loading, Input...}} // optional
+	populatedFields={{parameterName: "Value"}}
 />
 ```

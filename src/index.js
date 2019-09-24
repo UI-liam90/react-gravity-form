@@ -28,7 +28,7 @@ class GravityForm extends Component {
   }
 
   async componentDidMount() {
-    const { formID, backendUrl } = this.props;
+    const { formID, backendUrl, populatedFields } = this.props;
     this._isMounted = true;
     let isMultipart = false;
     const form = await axios
@@ -43,13 +43,25 @@ class GravityForm extends Component {
       // eslint-disable-next-line no-restricted-syntax
       for (const field of form.fields) {
         let value;
+        const hasPopulation = field.inputName && populatedFields && populatedFields[field.inputName];
         if (field.type === 'checkbox') {
-          value = field.choices.filter(choice => choice.isSelected).map(choice => choice.value);
+          value = field.choices
+            .filter(choice => (hasPopulation ? choice.value === populatedFields[field.inputName] : choice.isSelected))
+            .map(choice => choice.value);
         } else if (field.type === 'radio') {
-          const preselected = field.choices.find(choice => choice.isSelected);
-          value = preselected ? preselected.value : '';
+          if (hasPopulation) {
+            value = populatedFields[field.inputName];
+          } else {
+            const preselected = field.choices.find(choice => choice.isSelected);
+            value = preselected ? preselected.value : '';
+          }
+        } else if (field.type === 'select') {
+          const selectedOption = field.choices
+            .filter(choice => (hasPopulation ? choice.value === populatedFields[field.inputName] : choice.isSelected))
+            .map(item => ({ value: item.value, label: item.text }));
+          value = selectedOption && selectedOption.length > 0 ? selectedOption[0] : '';
         } else {
-          value = field.defaultValue;
+          value = hasPopulation ? populatedFields[field.inputName] : field.defaultValue;
           if (field.type === 'fileupload') {
             isMultipart = true;
           }
