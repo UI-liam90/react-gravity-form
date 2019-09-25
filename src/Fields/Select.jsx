@@ -52,15 +52,10 @@ export default ({
     updateForm(event, field);
     setTouched(id);
   };
-  const { SelectStyles, Label = 'label' } = styledComponents || false;
-  const customStyles = SelectStyles || {
-    control: (provided, state) => ({
-      ...provided,
-      height: 50,
-      borderWidth: '2px',
-      borderColor: '#DBDBDB',
-    }),
-  };
+  const { ReactSelect, Label = 'label' } = styledComponents || false;
+
+  const RSelect = ReactSelect || Select;
+
   return (
     <Box
       width={width}
@@ -78,7 +73,7 @@ export default ({
           description && <div className="description">{description}</div>
         ) : (
           <React.Fragment>
-            <Select
+            <RSelect
               name={customName || `input_${id}`}
               required={isRequired}
               value={selectedOption}
@@ -87,7 +82,7 @@ export default ({
               placeholder={placeholder}
               options={options}
               className="form-select"
-              styles={customStyles}
+              // styles={customStyles}
               inputId={`input_${formId}_${id}`}
             />
             {description && <div className="description">{description}</div>}
