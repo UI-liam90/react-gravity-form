@@ -197,6 +197,16 @@ class GravityForm extends Component {
     );
   };
 
+  scrollToConfirmation = () => { 
+    const rect = this.wrapperRef ? this.wrapperRef.getBoundingClientRect() : false;
+    if (rect && window) {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo({
+        top: scrollTop + rect.top - 100,
+      });
+    }
+  }
+
   onSubmit = async (event) => {
     event.preventDefault();
     this.setState({
@@ -218,6 +228,7 @@ class GravityForm extends Component {
             submitSuccess: true,
             confirmationMessage: response.data.confirmation_message,
           });
+          this.scrollToConfirmation();
         } else {
           this.setState({
             submitting: false,
@@ -309,6 +320,7 @@ class GravityForm extends Component {
 
     return (
       <GFWrapper
+        ref={(el) => (this.wrapperRef = el)}
         className="form-wrapper"
         css={{ position: 'realtive' }}
         id={`gravity_form_${this.props.formID}`}
