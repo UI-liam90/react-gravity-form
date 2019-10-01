@@ -23,18 +23,18 @@ const isEmpty = (value) => {
   return false;
 };
 
-const isRequired = (required, empty) => {
+const isRequired = (required, empty, message) => {
   if (required && empty) {
-    return 'This field is required';
+    return message || 'This field is required';
   }
   return false;
 };
 
 const selectValidation = (required, value, placeholder) => !(value === placeholder && required);
 
-const checkboxValidation = (values) => {
+const checkboxValidation = (values, message) => {
   if (values.length < 1) {
-    return 'This field is required';
+    return message || 'This field is required';
   }
   return false;
 };
@@ -85,19 +85,28 @@ const isDate = (values, field) => {
 const validateField = (value, type, required, field) => {
   // Check first if requried checkbox or radio
   if ((type === 'checkbox' || type === 'radio') && required) {
-    return checkboxValidation(value);
+    return checkboxValidation(value, field.errorMessage);
   }
   // Check if empty
   const empty = isEmpty(value);
   let validationMessage = '';
+  const message = field && field.errorMessage ? field.errorMessage : false;
   // Set validation message if required
-  validationMessage = required ? isRequired(required, empty) : false;
+  validationMessage = required ? isRequired(required, empty, message) : false;
   // Set other validation messages
   if (!validationMessage && !empty) {
     if (type == 'email') {
-      validationMessage = isEmail(value) ? false : 'Enter a valid email';
+      validationMessage = isEmail(value)
+        ? false
+        : field.errorMessage
+          ? field.errorMessage
+          : 'Enter a valid email';
     } else if (type == 'website') {
-      validationMessage = isUrl(value) ? false : 'Enter a valid url';
+      validationMessage = isUrl(value)
+        ? false
+        : field.errorMessage
+          ? field.errorMessage
+          : 'Enter a valid url';
     } else if (type == 'date') {
       const isValid = isDate(value, field);
       validationMessage = isValid.length > 0 ? isValid : false;
