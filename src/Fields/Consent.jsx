@@ -67,9 +67,8 @@ export default ({
                     <label
                       className="gfield_consent_label"
                       htmlFor={customName || `input_${formId}_${id}_1`}
-                    >
-                      {checkboxLabel}
-                    </label>
+ 		      dangerouslySetInnerHTML={{__html: checkboxLabel}}
+                    />
                   </React.Fragment>
                 )}
                 {i === 1 && (
