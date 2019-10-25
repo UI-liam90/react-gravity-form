@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from 'rebass';
 
 export default ({
   field,
@@ -28,7 +27,7 @@ export default ({
     customName,
   } = field;
 
-  const { Checkbox = 'fieldset', Label = 'legend' } = styledComponents || false;
+  const { Checkbox = 'fieldset', Label = 'legend', Box = "div" } = styledComponents || false;
 
   return (
     <Box

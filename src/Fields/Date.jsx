@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from 'rebass';
 
 export default ({
   field,
@@ -29,7 +28,7 @@ export default ({
     customName,
   } = field;
 
-  const { Input = 'input', Label = 'label' } = styledComponents || false;
+  const { Input = 'input', Label = 'label', Box = "div" } = styledComponents || false;
 
   return (
     <Box
