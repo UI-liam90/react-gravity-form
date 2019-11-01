@@ -84,7 +84,7 @@ class GravityForm extends Component {
         }
 
         formValues[field.id] = {
-          valid: validateField(value, field.type, field.isRequired),
+          valid: validateField(value, field),
           value,
           label: field.label,
           pageNumber: field.pageNumber,
@@ -152,8 +152,9 @@ class GravityForm extends Component {
     if (type === 'text' && field.cssClass.indexOf('iban') > -1) {
       type = 'iban';
     }
+   
     // Validate field
-    const valid = validateField(value, type, isRequired, field);
+    const valid = validateField(value, field);
 
     // if field ID is somewhere in conditional fields
     // recalculate all conditions
@@ -305,6 +306,7 @@ class GravityForm extends Component {
       title, submitIcon, saveStateToHtmlField, styledComponents,
     } = this.props;
     const { Button, Loading, GFWrapper = 'div' } = styledComponents || false;
+
     const { cssClass } = formData;
 
     const isDisabled = Object.keys(formValues).some(
@@ -313,13 +315,13 @@ class GravityForm extends Component {
     const isNextDisabled = activePage
       ? Object.keys(formValues).some(
         x => formValues[x].pageNumber === activePage
-            && !formValues[x].hideField
-            && formValues[x].valid,
+          && !formValues[x].hideField
+          && formValues[x].valid,
       )
       : false;
-
+    
     return (
-      <GFWrapper
+      <div as={GFWrapper}
         ref={(el) => (this.wrapperRef = el)}
         className="form-wrapper"
         css={{ position: 'realtive' }}
@@ -391,7 +393,7 @@ class GravityForm extends Component {
         ) : (
           ''
         )}
-      </GFWrapper>
+      </div>
     );
   }
 }

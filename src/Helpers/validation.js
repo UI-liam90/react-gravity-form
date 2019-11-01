@@ -82,7 +82,8 @@ const isDate = (values, field) => {
   return validation;
 };
 
-const validateField = (value, type, required, field) => {
+const validateField = (value, field) => {
+  const { type, isRequired: required } = field;
   // Check first if requried checkbox or radio
   if ((type === 'checkbox' || type === 'radio') && required) {
     return checkboxValidation(value, field.errorMessage);
