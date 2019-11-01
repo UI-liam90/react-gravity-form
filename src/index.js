@@ -247,7 +247,9 @@ class GravityForm extends Component {
       });
   };
 
-  nextStep = () => {
+  nextStep = (e) => {
+    console.log('next step');
+    e.preventDefault();
     const { activePage } = this.state;
     this.setState({
       activePage: activePage + 1,
