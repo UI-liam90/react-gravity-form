@@ -404,4 +404,6 @@ GravityForm.defaultProps = {
   saveStateToHtmlField: false,
 };
 
+export { validateField, FormConfirmation, FormError, RenderFields, Submit };
+
 export default GravityForm;
