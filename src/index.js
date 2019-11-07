@@ -323,10 +323,10 @@ class GravityForm extends Component {
       : false;
     
     return (
-      <div as={GFWrapper}
+      <GFWrapper
         ref={(el) => (this.wrapperRef = el)}
         className="form-wrapper"
-        css={{ position: 'realtive' }}
+        css={{ position: 'relative' }}
         id={`gravity_form_${this.props.formID}`}
       >
         {formData.title ? null : Loading && <Loading isLoading />}
@@ -395,7 +395,7 @@ class GravityForm extends Component {
         ) : (
           ''
         )}
-      </div>
+      </GFWrapper>
     );
   }
 }
