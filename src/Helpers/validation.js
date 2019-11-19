@@ -39,6 +39,37 @@ const checkboxValidation = (values, message) => {
   return false;
 };
 
+const passwordValidation = (values, field) => {
+  const {
+ inputs, isRequired: required, minPasswordStrength, errorMessage 
+} = field;
+  const { required: requiredMsg, mismatch } = errorMessage;
+
+  // check if fields is required and isn't empty
+  const isInputsEmpty = values && values.filter(item => item.val === '').length;
+  if (isInputsEmpty === inputs.length && required) {
+    return requiredMsg || 'This field is required';
+  }
+
+  // if there is repeat password field => check if match
+  if (values && values.length === 2 && inputs && inputs.length === 2) {
+    if (values[1].val !== values[0].val) {
+      return mismatch || 'Mismatch';
+    }
+
+    // check form password strength
+    // if (minPasswordStrength) {
+    //   return gformPasswordStrength(values[0].val, values[1].val[1]);
+    // }
+  }
+
+  // check form password strength
+  // if (minPasswordStrength) {
+  // }
+
+  return false;
+};
+
 const isDate = (values, field) => {
   const validation = [];
   for (let i = 0; i < values.length; i++) {
@@ -88,6 +119,11 @@ const validateField = (value, field) => {
   if ((type === 'checkbox' || type === 'radio') && required) {
     return checkboxValidation(value, field.errorMessage);
   }
+
+  if (type === 'password') {
+    return passwordValidation(value, field);
+  }
+
   // Check if empty
   const empty = isEmpty(value);
   let validationMessage = '';

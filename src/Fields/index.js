@@ -14,6 +14,7 @@ import Html from './Html';
 import Date from './Date';
 import Fileupload from './Fileupload';
 import Consent from './Consent';
+import Password from './Password';
 
 export {
   Checkbox,
@@ -32,4 +33,5 @@ export {
   Date,
   Fileupload,
   Consent,
+  Password,
 };

@@ -145,7 +145,14 @@ class GravityForm extends Component {
       value = values;
     } else if (field.type == 'consent') {
       value = event.target ? event.target.checked : 'null';
-    } else {
+    }else if (field.type === 'password') {
+      const { subId } = field;
+      const values = [...formValues[field.id].value];
+      values[subId] = {
+        val: event.target.value,
+      };
+      value = values;
+    }else {
       value = event.target ? event.target.value : 'null';
     }
     // if field is IBAN
