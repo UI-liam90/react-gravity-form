@@ -27,7 +27,6 @@ export default ({
     customName,
     inputs,
   } = field;
-  console.log('validationMessage', validationMessage);
 
   const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
   return (
