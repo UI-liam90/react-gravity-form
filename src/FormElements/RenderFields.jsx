@@ -45,6 +45,7 @@ const fieldTypes = [
   'date',
   'fileupload',
   'consent',
+  'password',
 ];
 
 const honeyPotLables = ['Name', 'Email', 'Phone', 'Comments'];
