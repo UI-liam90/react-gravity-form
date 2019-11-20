@@ -1,19 +1,35 @@
-const isEmail = (email) => {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
+const getMessage = (message, type) => {
+  if (!type) return false;
+  if (message && typeof message === 'object' && message[type]) {
+    return message[type];
+  }
+  return message;
 };
 
-const isUrl = (str) => {
+const isEmail = (email, message) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!re.test(email)) {
+    const customMessage = getMessage(message, 'email');
+    return customMessage || 'Enter a valid email';
+  }
+  return true;
+};
+
+const isUrl = (str, message) => {
   const pattern = new RegExp(
-    '^(https?:\\/\\/)?' // protocol
-    + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
-    + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
-    + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
-    + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
-      + '(\\#[-a-z\\d_]*)?$',
-    'i',
+    '^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
   ); // fragment locator
-  return !!pattern.test(str);
+  if (!pattern.test(str)) {
+    const customMessage = getMessage(message, 'url');
+    return customMessage || 'Enter a valid url';
+  }
+  return true;
 };
 
 const isEmpty = (value) => {
@@ -25,7 +41,8 @@ const isEmpty = (value) => {
 
 const isRequired = (required, empty, message) => {
   if (required && empty) {
-    return message || 'This field is required';
+    const customMessage = getMessage(message, 'required');
+    return customMessage || 'This field is required';
   }
   return false;
 };
@@ -40,13 +57,11 @@ const checkboxValidation = (values, message) => {
 };
 
 const passwordValidation = (values, field) => {
-  const {
- inputs, isRequired: required, minPasswordStrength, errorMessage 
-} = field;
+  const { inputs, isRequired: required, minPasswordStrength, errorMessage } = field;
   const { required: requiredMsg, mismatch } = errorMessage;
 
   // check if fields is required and isn't empty
-  const isInputsEmpty = values && values.filter(item => item.val === '').length;
+  const isInputsEmpty = values && values.filter((item) => item.val === '').length;
   if (isInputsEmpty === inputs.length && required) {
     return requiredMsg || 'This field is required';
   }
@@ -132,19 +147,11 @@ const validateField = (value, field) => {
   validationMessage = required ? isRequired(required, empty, message) : false;
   // Set other validation messages
   if (!validationMessage && !empty) {
-    if (type == 'email') {
-      validationMessage = isEmail(value)
-        ? false
-        : field.errorMessage
-          ? field.errorMessage
-          : 'Enter a valid email';
-    } else if (type == 'website') {
-      validationMessage = isUrl(value)
-        ? false
-        : field.errorMessage
-          ? field.errorMessage
-          : 'Enter a valid url';
-    } else if (type == 'date') {
+    if (type === 'email') {
+      validationMessage = isEmail(value, message);
+    } else if (type === 'website') {
+      validationMessage = isUrl(value, message);
+    } else if (type === 'date') {
       const isValid = isDate(value, field);
       validationMessage = isValid.length > 0 ? isValid : false;
     }
@@ -152,6 +159,5 @@ const validateField = (value, field) => {
   return validationMessage;
 };
 
-export {
-  isEmpty, selectValidation, checkboxValidation, isUrl, isEmail, isRequired, validateField,
-};
+export { isEmpty, selectValidation, checkboxValidation, isUrl, isEmail, isRequired, validateField };
+
