@@ -17,13 +17,13 @@ const isEmail = (email, message) => {
 
 const isUrl = (str, message) => {
   const pattern = new RegExp(
-    '^(https?:\\/\\/)?' // protocol
-    + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
-    + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
-    + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
-    + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
-      + '(\\#[-a-z\\d_]*)?$',
-    'i',
+    '^(https?:\\/\\/)?' + // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
   ); // fragment locator
   if (!pattern.test(str)) {
     const customMessage = getMessage(message, 'url');
@@ -57,14 +57,13 @@ const checkboxValidation = (values, message) => {
 };
 
 const passwordValidation = (values, field) => {
-  const {
- inputs, isRequired: required, minPasswordStrength, errorMessage 
-} = field || false;
+  const { inputs, isRequired: required, minPasswordStrength, errorMessage } = field || false;
   const { required: requiredMsg, mismatch } = errorMessage || false;
 
   // check if fields is required and isn't empty
-  const isInputsEmpty = values && values.filter(item => item.val === '').length;
-  if (isInputsEmpty === inputs.length && required) {
+  const isInputsEmpty = values && values.filter((item) => item.val === '').length;
+
+  if (((values && values.length === 0) || isInputsEmpty === inputs.length) && required) {
     return requiredMsg || 'This field is required';
   }
 
@@ -161,7 +160,5 @@ const validateField = (value, field) => {
   return validationMessage;
 };
 
-export {
- isEmpty, selectValidation, checkboxValidation, isUrl, isEmail, isRequired, validateField 
-};
+export { isEmpty, selectValidation, checkboxValidation, isUrl, isEmail, isRequired, validateField };
 

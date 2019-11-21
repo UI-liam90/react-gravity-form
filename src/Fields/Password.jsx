@@ -80,6 +80,7 @@ export default ({
                   )}
                 </span>
               ))}
+            {description && <div className="description">{description}</div>}
           </div>
         )}
         {validationMessage && touched && (
@@ -91,3 +92,4 @@ export default ({
     </Box>
   );
 };
+

@@ -147,7 +147,8 @@ class GravityForm extends Component {
       value = event.target ? event.target.checked : 'null';
     }else if (field.type === 'password') {
       const { subId } = field;
-      const values = [...formValues[field.id].value];
+    const values =
+        formValues[field.id] && formValues[field.id].value ? [...formValues[field.id].value] : [];
       values[subId] = {
         val: event.target.value,
       };
