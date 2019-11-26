@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const FormError = ({ errorMessage, errors, fields }) => (
   <div>
     <div className="form-error">{errorMessage}</div>
-    <ul>
+    {/* <ul>
       {Object.keys(errors).map(item => (
         <li className="travelcompany-input" key={item}>
           <span className="input-label">
@@ -12,14 +12,14 @@ const FormError = ({ errorMessage, errors, fields }) => (
           </span>
         </li>
       ))}
-    </ul>
+    </ul> */}
   </div>
 );
 
 FormError.propTypes = {
   errorMessage: PropTypes.string.isRequired,
-  errors: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
-  fields: PropTypes.object.isRequired,
+  // errors: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
+  // fields: PropTypes.object.isRequired,
 };
 
 export default FormError;

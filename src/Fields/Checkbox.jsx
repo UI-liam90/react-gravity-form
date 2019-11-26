@@ -9,6 +9,8 @@ export default ({
   hideField,
   updateForm,
   styledComponents,
+  error,
+  unsetError,
   ...props
 }) => {
   const {
@@ -27,13 +29,15 @@ export default ({
     customName,
   } = field;
 
-  const { Checkbox = 'fieldset', Label = 'legend', Box = "div" } = styledComponents || false;
+  const { Checkbox = 'fieldset', Label = 'legend', Box = 'div' } = styledComponents || false;
 
   return (
     <Box
       width={width}
       className={
-        validationMessage && touched ? `form-field error ${cssClass}` : `form-field ${cssClass}`
+        (validationMessage && touched) || error
+          ? `form-field error ${cssClass}`
+          : `form-field ${cssClass}`
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
@@ -57,6 +61,7 @@ export default ({
                   onChange={(event) => {
                     updateForm(event, field);
                     setTouched(id);
+                    unsetError(id);
                   }}
                 />
                 <label htmlFor={`input_${formId}_${inputs[i].id}`}>{choice.text}</label>
@@ -65,9 +70,9 @@ export default ({
             {description && <div className="description">{description}</div>}
           </React.Fragment>
         )}
-        {validationMessage && touched && (
+        {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
-            {validationMessage}
+            {validationMessage || error}
           </span>
         )}
       </Checkbox>

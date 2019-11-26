@@ -9,6 +9,8 @@ export default ({
   hideField,
   updateForm,
   styledComponents,
+  error,
+  unsetError,
   ...props
 }) => {
   const {
@@ -28,13 +30,15 @@ export default ({
     customName,
   } = field;
 
-  const { Input = 'input', Label = 'label', Box = "div" } = styledComponents || false;
+  const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
 
   return (
     <Box
       width={width}
       className={
-        validationMessage && touched ? `form-field error ${cssClass}` : `form-field ${cssClass}`
+        (validationMessage && touched) || error
+          ? `form-field error ${cssClass}`
+          : `form-field ${cssClass}`
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
@@ -47,8 +51,8 @@ export default ({
           description && <div className="description">{description}</div>
         ) : (
           <React.Fragment>
-            {inputs
-              && inputs.map((item, index) => (
+            {inputs &&
+              inputs.map((item, index) => (
                 <div className={type} key={item.id}>
                   <Input
                     id={`input_${formId}_${id}_${index}`}
@@ -61,8 +65,8 @@ export default ({
                       item.label === 'MM'
                         ? 12
                         : item.label === 'DD'
-                          ? 31
-                          : new Date().getFullYear() + 1
+                        ? 31
+                        : new Date().getFullYear() + 1
                     }
                     maxLength={item.label === 'YYYY' ? 4 : 2}
                     value={item.value}
@@ -71,20 +75,22 @@ export default ({
                       field.dateLabel = item.label;
                       updateForm(event, field);
                       setTouched(id);
+                      unsetError(id);
                     }}
                   />
                   <label htmlFor={`input_${formId}_${id}_${index}`} className="hide-label">
                     {item.label}
                   </label>
-                  {validationMessage
-                    && touched
-                    && validationMessage[index]
-                    && index === validationMessage[index].index
-                    && validationMessage[index].message && (
-                    <span className="error-message" id={`error_${formId}_${item.id}`}>
-                      {validationMessage[index].message}
-                    </span>
-                  )}
+                  {validationMessage &&
+                    touched &&
+                    validationMessage[index] &&
+                    index === validationMessage[index].index &&
+                    validationMessage[index].message && (
+                      <span className="error-message" id={`error_${formId}_${item.id}`}>
+                        {validationMessage[index].message}
+                      </span>
+                    )}
+                  {error && <span className="error-message">{error}</span>}
                 </div>
               ))}
 

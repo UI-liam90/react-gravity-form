@@ -66,6 +66,8 @@ const RenderField = ({
   checkConditionalLogic,
   saveStateToHtmlField,
   styledComponents,
+  error,
+  unsetError,
 }) => {
   const FormComponent = FormFields[formatComponentName(field.type)];
   const { cleanedCssClass, width } = formatWidthFromCss(field.cssClass);
@@ -85,6 +87,8 @@ const RenderField = ({
       submitSuccess={submitSuccess}
       touched={touched[field.id]}
       setTouched={setTouched}
+      unsetError={unsetError}
+      error={error}
       pages={pages}
       prevStep={prevStep}
       nextStep={nextStep}
