@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import RenderField from './RenderField';
 
 const divideFieldsIntoPages = (fields, pages) => {
-  const tmpFields = pages.map(item => []);
+  const tmpFields = pages.map((item) => []);
 
   for (let i = 0; i < fields.length; i++) {
     const arr = tmpFields[fields[i].pageNumber];
@@ -46,6 +46,7 @@ const fieldTypes = [
   'fileupload',
   'consent',
   'password',
+  'section',
 ];
 
 const honeyPotLables = ['Name', 'Email', 'Phone', 'Comments'];
@@ -80,12 +81,37 @@ export default (props) => {
     <div className="form-fields">
       {pagination && pagination.pages.length > 1
         ? pagination.pages.map((page, index) => (
-          <div
-            className={`page${activePage === index + 1 ? ' active' : ''}`}
-            key={`page-${index}`}
-          >
-            {dividedFields[index].map(
-              field => fieldTypes.includes(field.type) && (
+            <div
+              className={`page${activePage === index + 1 ? ' active' : ''}`}
+              key={`page-${index}`}
+            >
+              {dividedFields[index].map(
+                (field) =>
+                  fieldTypes.includes(field.type) && (
+                    <RenderField
+                      key={field.id}
+                      field={field}
+                      formValues={formValues}
+                      submitFailed={submitFailed}
+                      setTouched={setTouched}
+                      submitSuccess={submitSuccess}
+                      updateForm={updateForm}
+                      touched={touched}
+                      pages={pagination.pages.length}
+                      prevStep={prevStep}
+                      nextStep={nextStep}
+                      isNextDisabled={isNextDisabled}
+                      checkConditionalLogic={checkConditionalLogic}
+                      saveStateToHtmlField={saveStateToHtmlField}
+                      styledComponents={styledComponents}
+                    />
+                  )
+              )}
+            </div>
+          ))
+        : fields.map(
+            (field) =>
+              fieldTypes.includes(field.type) && (
                 <RenderField
                   key={field.id}
                   field={field}
@@ -95,34 +121,11 @@ export default (props) => {
                   submitSuccess={submitSuccess}
                   updateForm={updateForm}
                   touched={touched}
-                  pages={pagination.pages.length}
-                  prevStep={prevStep}
-                  nextStep={nextStep}
-                  isNextDisabled={isNextDisabled}
                   checkConditionalLogic={checkConditionalLogic}
-                  saveStateToHtmlField={saveStateToHtmlField}
                   styledComponents={styledComponents}
                 />
-              ),
-            )}
-          </div>
-        ))
-        : fields.map(
-          field => fieldTypes.includes(field.type) && (
-            <RenderField
-              key={field.id}
-              field={field}
-              formValues={formValues}
-              submitFailed={submitFailed}
-              setTouched={setTouched}
-              submitSuccess={submitSuccess}
-              updateForm={updateForm}
-              touched={touched}
-              checkConditionalLogic={checkConditionalLogic}
-              styledComponents={styledComponents}
-            />
-          ),
-        )}
+              )
+          )}
       {enableHoneypot && (
         <div className="form-field gform_validation_container">
           <label htmlFor={`input_${maxID}`} className="gf-label ">
@@ -133,7 +136,7 @@ export default (props) => {
             name={`input_${maxID}`}
             id={`input_${maxID}`}
             value={honeypotValue}
-            onChange={e => setHoneypotValue(e.target.value)}
+            onChange={(e) => setHoneypotValue(e.target.value)}
             autoComplete="off"
           />
         </div>

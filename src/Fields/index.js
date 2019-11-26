@@ -15,6 +15,7 @@ import Date from './Date';
 import Fileupload from './Fileupload';
 import Consent from './Consent';
 import Password from './Password';
+import Section from './Section';
 
 export {
   Checkbox,
@@ -34,4 +35,5 @@ export {
   Fileupload,
   Consent,
   Password,
+  Section,
 };

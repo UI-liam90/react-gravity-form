@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export default ({
   field,
@@ -25,24 +25,30 @@ export default ({
     labelPlacement,
     width,
     customName,
-    inputs,
+    inputs
   } = field;
 
-  const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
+  const { Input = "input", Label = "label", Box = "div" } =
+    styledComponents || false;
   return (
     <Box
       width={width}
       className={
-        validationMessage && touched ? `form-field error ${cssClass}` : `form-field ${cssClass}`
+        validationMessage && touched
+          ? `form-field error ${cssClass}`
+          : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label
+          htmlFor={`input_${formId}_${id}`}
+          className={`gf-label ${labelPlacement}`}
+        >
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
+        {descriptionPlacement === "above" && description ? (
           description && <div className="description">{description}</div>
         ) : (
           <div className="ginput_container ginput_container_password">
@@ -52,22 +58,24 @@ export default ({
                 <span
                   key={`input_${formId}_${input.id}`}
                   className={`${
-                    inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
+                    inputs.length > 1
+                      ? `ginput_${i === 0 ? "left" : "right"}`
+                      : "medim"
                   }`}
                 >
                   <Input
                     id={`input_${formId}_${input.id}_${i}`}
-                    name={customName || `input_${id}${i === 1 ? `_${i}` : ''}`}
+                    name={customName || `input_${id}${i === 1 ? `_${i}` : ""}`}
                     type={type}
                     value={input.value}
                     placeholder={placeholder}
                     required={isRequired}
                     autoComplete="off"
-                    onChange={(event) => {
+                    onChange={event => {
                       field.subId = i;
                       updateForm(event, field);
                     }}
-                    onBlur={(event) => {
+                    onBlur={event => {
                       updateForm(event, field);
                       setTouched(id);
                     }}
@@ -76,11 +84,12 @@ export default ({
                     aria-invalid={!!validationMessage && touched}
                   />
                   {inputs && inputs.length == 2 && (
-                    <label htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}</label>
+                    <label htmlFor={`input_${formId}_${input.id}_${i}`}>
+                      {input.label}
+                    </label>
                   )}
                 </span>
               ))}
-            {description && <div className="description">{description}</div>}
           </div>
         )}
         {validationMessage && touched && (
@@ -88,8 +97,8 @@ export default ({
             {validationMessage}
           </span>
         )}
+        {description && <div className="description">{description}</div>}
       </div>
     </Box>
   );
 };
-
