@@ -50,9 +50,9 @@ export default ({
           description && <div className="description">{description}</div>
         ) : (
           <div className="ginput_container ginput_container_password">
-            {inputs &&
-              inputs.length &&
-              inputs.map((input, i) => (
+            {inputs
+              && inputs.length
+              && inputs.map((input, i) => (
                 <span
                   key={`input_${formId}_${input.id}`}
                   className={`${
@@ -61,7 +61,7 @@ export default ({
                 >
                   <Input
                     id={`input_${formId}_${input.id}_${i}`}
-                    name={customName || `input_${id}${i === 1 ? `_${i}` : ''}`}
+                    name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
                     type={type}
                     value={input.value}
                     placeholder={placeholder}
