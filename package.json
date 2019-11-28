@@ -1,6 +1,6 @@
 {
   "name": "react-gravity-form",
-  "version": "0.0.47",
+  "version": "0.0.48",
   "description": "A component for including Gravity Forms on React apps via the Wordpress API",
   "files": [
     "dist/*"
