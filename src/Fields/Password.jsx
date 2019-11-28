@@ -79,8 +79,6 @@ export default ({
 
   const setGFPwdStrength = (password) => {
     const result = gformPasswordStrength(password);
-    console.log('result', result);
-    console.log('password', password);
     setPasswordStrength(result);
   };
 
@@ -103,9 +101,9 @@ export default ({
           description && <div className="description">{description}</div>
         ) : (
           <div className="ginput_container ginput_container_password">
-            {inputs
-              && inputs.length
-              && inputs.map((input, i) => (
+            {inputs &&
+              inputs.length &&
+              inputs.map((input, i) => (
                 <span
                   key={`input_${formId}_${input.id}`}
                   className={`${

@@ -17,13 +17,13 @@ const isEmail = (email, message) => {
 
 const isUrl = (str, message) => {
   const pattern = new RegExp(
-    '^(https?:\\/\\/)?' + // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-      '(\\#[-a-z\\d_]*)?$',
-    'i'
+    '^(https?:\\/\\/)?' // protocol
+    + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' // domain name
+    + '((\\d{1,3}\\.){3}\\d{1,3}))' // OR ip (v4) address
+    + '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' // port and path
+    + '(\\?[;&a-z\\d%_.~+=-]*)?' // query string
+      + '(\\#[-a-z\\d_]*)?$',
+    'i',
   ); // fragment locator
   if (!pattern.test(str)) {
     const customMessage = getMessage(message, 'url');
@@ -61,7 +61,7 @@ const passwordValidation = (values, field) => {
   const { required: requiredMsg, mismatch } = errorMessage || false;
 
   // check if fields is required and isn't empty
-  const isInputsEmpty = values && values.filter((item) => item && item.val === '').length;
+  const isInputsEmpty = values && values.filter(item => item && item.val === '').length;
 
   if (((values && values.length === 0) || isInputsEmpty === inputs.length) && required) {
     return requiredMsg || 'This field is required';
@@ -69,7 +69,7 @@ const passwordValidation = (values, field) => {
 
   // if there is repeat password field => check if match
   if (values && values.length === 2 && inputs && inputs.length === 2) {
-    if (values[1] && values[0] && values[1].val !== values[0].val) {
+    if (values[1] && values[0] && values[1].val !== '' && values[1].val !== values[0].val) {
       return mismatch || 'Mismatch';
     }
   }
@@ -151,4 +151,6 @@ const validateField = (value, field) => {
   return validationMessage;
 };
 
-export { isEmpty, selectValidation, checkboxValidation, isUrl, isEmail, isRequired, validateField };
+export {
+ isEmpty, selectValidation, checkboxValidation, isUrl, isEmail, isRequired, validateField 
+};
