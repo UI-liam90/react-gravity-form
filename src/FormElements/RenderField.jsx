@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as FormFields from '../Fields';
 
 const frac2dec = (fraction) => {
@@ -63,7 +63,6 @@ const RenderField = ({
   prevStep,
   nextStep,
   isNextDisabled,
-  checkConditionalLogic,
   saveStateToHtmlField,
   styledComponents,
   error,
@@ -75,12 +74,26 @@ const RenderField = ({
     field.cssClass = cleanedCssClass;
     field.width = width;
   }
+  const value = formValues[field.id] ? formValues[field.id].value : field.defaultValue;
+  const [fieldClassName, setFieldClassName] = useState(
+    `${field.cssClass}${value && value !== '' ? 'filled' : ''}`,
+  );
+
+  const setFocusClass = (action) => {
+    if (action) {
+      if (fieldClassName.indexOf(' filled') === -1) {
+        setFieldClassName(`${fieldClassName} filled`);
+      }
+    } else {
+      setFieldClassName(fieldClassName.replace(' filled', ''));
+    }
+  };
 
   return (
     <FormComponent
       key={field.id}
       field={field}
-      value={formValues[field.id] ? formValues[field.id].value : field.defaultValue}
+      value={value}
       updateForm={(event, field) => updateForm(event, field)}
       validationMessage={formValues[field.id] ? formValues[field.id].valid : false}
       submitFailed={submitFailed}
@@ -100,6 +113,8 @@ const RenderField = ({
           : false
       }
       styledComponents={styledComponents}
+      cssClass={fieldClassName}
+      setFocusClass={setFocusClass}
     />
   );
 };

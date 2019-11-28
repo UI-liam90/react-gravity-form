@@ -57,11 +57,11 @@ const checkboxValidation = (values, message) => {
 };
 
 const passwordValidation = (values, field) => {
-  const { inputs, isRequired: required, minPasswordStrength, errorMessage } = field || false;
+  const { inputs, isRequired: required, errorMessage } = field || false;
   const { required: requiredMsg, mismatch } = errorMessage || false;
 
   // check if fields is required and isn't empty
-  const isInputsEmpty = values && values.filter((item) => item.val === '').length;
+  const isInputsEmpty = values && values.filter((item) => item && item.val === '').length;
 
   if (((values && values.length === 0) || isInputsEmpty === inputs.length) && required) {
     return requiredMsg || 'This field is required';
@@ -69,19 +69,10 @@ const passwordValidation = (values, field) => {
 
   // if there is repeat password field => check if match
   if (values && values.length === 2 && inputs && inputs.length === 2) {
-    if (values[1].val !== values[0].val) {
+    if (values[1] && values[0] && values[1].val !== values[0].val) {
       return mismatch || 'Mismatch';
     }
-
-    // check form password strength
-    // if (minPasswordStrength) {
-    //   return gformPasswordStrength(values[0].val, values[1].val[1]);
-    // }
   }
-
-  // check form password strength
-  // if (minPasswordStrength) {
-  // }
 
   return false;
 };
@@ -161,4 +152,3 @@ const validateField = (value, field) => {
 };
 
 export { isEmpty, selectValidation, checkboxValidation, isUrl, isEmail, isRequired, validateField };
-
