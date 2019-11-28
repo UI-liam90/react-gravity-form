@@ -12,6 +12,8 @@ export default ({
   styledComponents,
   error,
   unsetError,
+  setFocusClass,
+  cssClass,
   ...props
 }) => {
   const {
@@ -19,7 +21,6 @@ export default ({
     formId,
     type,
     label,
-    cssClass,
     isRequired,
     choices,
     placeholder,
@@ -67,6 +68,7 @@ export default ({
     };
     updateForm(event, field);
     setTouched(id);
+    setFocusClass(value !== '');
   };
   const { SelectStyles, Label = 'label', Box = 'div' } = styledComponents || false;
   return (
@@ -96,6 +98,7 @@ export default ({
                 handleChange(option, field);
               }}
               onBlur={() => handleBlur()}
+              onFocus={() => setFocusClass(true)}
               placeholder={placeholder}
               options={options}
               isMulti

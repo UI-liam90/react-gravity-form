@@ -11,6 +11,8 @@ export default ({
   updateForm,
   styledComponents,
   error,
+  setFocusClass,
+  cssClass,
   unsetError,
   ...props
 }) => {
@@ -19,7 +21,6 @@ export default ({
     formId,
     type,
     label,
-    cssClass,
     isRequired,
     choices,
     placeholder,
@@ -55,6 +56,7 @@ export default ({
     };
     updateForm(event, field);
     setTouched(id);
+    setFocusClass(value !== '');
   };
   const { ReactSelect, Label = 'label', Box = 'div' } = styledComponents || false;
 
@@ -88,6 +90,7 @@ export default ({
                 unsetError(id);
               }}
               onBlur={() => handleBlur()}
+              onFocus={() => setFocusClass(true)}
               placeholder={placeholder}
               options={options}
               className="form-select"

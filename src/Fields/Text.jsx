@@ -11,6 +11,8 @@ export default ({
   styledComponents,
   error,
   unsetError,
+  setFocusClass,
+  cssClass,
   ...props
 }) => {
   const {
@@ -24,7 +26,6 @@ export default ({
     description,
     descriptionPlacement,
     labelPlacement,
-    cssClass,
     width,
     customName,
   } = field;
@@ -64,7 +65,9 @@ export default ({
               onBlur={(event) => {
                 updateForm(event, field);
                 setTouched(id);
+                setFocusClass(value !== '');
               }}
+              onFocus={() => setFocusClass(true)}
               aria-label={label}
               aria-describedby={`error_${formId}_${id}`}
               aria-invalid={(!!validationMessage && touched) || !!error}

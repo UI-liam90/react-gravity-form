@@ -11,6 +11,8 @@ export default ({
   styledComponents,
   error,
   unsetError,
+  setFocusClass,
+  cssClass,
   ...props
 }) => {
   const {
@@ -18,7 +20,6 @@ export default ({
     formId,
     type,
     label,
-    cssClass,
     placeholder,
     isRequired,
     maxLength,
@@ -51,8 +52,8 @@ export default ({
           description && <div className="description">{description}</div>
         ) : (
           <React.Fragment>
-            {inputs &&
-              inputs.map((item, index) => (
+            {inputs
+              && inputs.map((item, index) => (
                 <div className={type} key={item.id}>
                   <Input
                     id={`input_${formId}_${id}_${index}`}
@@ -65,8 +66,8 @@ export default ({
                       item.label === 'MM'
                         ? 12
                         : item.label === 'DD'
-                        ? 31
-                        : new Date().getFullYear() + 1
+                          ? 31
+                          : new Date().getFullYear() + 1
                     }
                     maxLength={item.label === 'YYYY' ? 4 : 2}
                     value={item.value}
@@ -76,20 +77,22 @@ export default ({
                       updateForm(event, field);
                       setTouched(id);
                       unsetError(id);
+                      setFocusClass(item.value !== '');
                     }}
+                    onFocus={() => setFocusClass(true)}
                   />
                   <label htmlFor={`input_${formId}_${id}_${index}`} className="hide-label">
                     {item.label}
                   </label>
-                  {validationMessage &&
-                    touched &&
-                    validationMessage[index] &&
-                    index === validationMessage[index].index &&
-                    validationMessage[index].message && (
-                      <span className="error-message" id={`error_${formId}_${item.id}`}>
-                        {validationMessage[index].message}
-                      </span>
-                    )}
+                  {validationMessage
+                    && touched
+                    && validationMessage[index]
+                    && index === validationMessage[index].index
+                    && validationMessage[index].message && (
+                    <span className="error-message" id={`error_${formId}_${item.id}`}>
+                      {validationMessage[index].message}
+                    </span>
+                  )}
                   {error && <span className="error-message">{error}</span>}
                 </div>
               ))}
