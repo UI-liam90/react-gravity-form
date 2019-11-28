@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export default ({
   field,
@@ -29,25 +29,26 @@ export default ({
     inputs,
     cssClass,
     passwordStrengthEnabled,
-    minPasswordStrength,
+    minPasswordStrength
   } = field;
 
-  const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
+  const { Input = "input", Label = "label", Box = "div" } =
+    styledComponents || false;
 
   const [passwords, setPasswords] = useState(inputs);
-  const [passwordStrength, setPasswordStrength] = useState('blank');
+  const [passwordStrength, setPasswordStrength] = useState("blank");
 
   const setFocusClass = (action, i) => {
     const pass = { ...passwords };
     if (action) {
-      pass[i].cssClass = 'filled';
+      pass[i].cssClass = "filled";
     } else {
-      pass[i].cssClass = '';
+      pass[i].cssClass = "";
     }
     setPasswords(pass);
   };
 
-  const gformPasswordStrength = (password1) => {
+  const gformPasswordStrength = password1 => {
     const shortPass = 1;
     const badPass = 2;
     const goodPass = 3;
@@ -57,10 +58,10 @@ export default ({
     let natLog;
     let score;
 
-    if (password1.length <= 0) return 'blank';
+    if (password1.length <= 0) return "blank";
 
     // password < 4
-    if (password1.length < 4) return 'short';
+    if (password1.length < 4) return "short";
 
     if (password1.match(/[0-9]/)) symbolSize += 10;
     if (password1.match(/[a-z]/)) symbolSize += 26;
@@ -70,14 +71,14 @@ export default ({
     natLog = Math.log(Math.pow(symbolSize, password1.length));
     score = natLog / Math.LN2;
 
-    if (score < 40) return 'bad';
+    if (score < 40) return "bad";
 
-    if (score < 56) return 'good';
+    if (score < 56) return "good";
 
-    return 'strong';
+    return "strong";
   };
 
-  const setGFPwdStrength = (password) => {
+  const setGFPwdStrength = password => {
     const result = gformPasswordStrength(password);
     setPasswordStrength(result);
   };
@@ -90,14 +91,14 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label className={`gf-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
+        {descriptionPlacement === "above" && description ? (
           description && <div className="description">{description}</div>
         ) : (
           <div className="ginput_container ginput_container_password">
@@ -107,18 +108,24 @@ export default ({
                 <span
                   key={`input_${formId}_${input.id}`}
                   className={`${
-                    inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
-                  } ${passwords[i].cssClass ? passwords[i].cssClass : ''}`}
+                    inputs.length > 1
+                      ? `ginput_${i === 0 ? "left" : "right"}`
+                      : "medim"
+                  } ${passwords[i].cssClass ? passwords[i].cssClass : ""}`}
                 >
                   <Input
                     id={`input_${formId}_${input.id}_${i}`}
-                    name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
+                    name={
+                      customName || `input_${id}${i === 1 ? `_${i + 1}` : ""}`
+                    }
                     type={type}
-                    value={value && value[i] && value[i].val ? value[i].val : ''}
+                    value={
+                      value && value[i] && value[i].val ? value[i].val : ""
+                    }
                     placeholder={placeholder}
                     required={isRequired}
                     autoComplete="off"
-                    onChange={(event) => {
+                    onChange={event => {
                       field.subId = i;
                       updateForm(event, field);
                       unsetError(id);
@@ -126,20 +133,26 @@ export default ({
                         setGFPwdStrength(event.target.value);
                       }
                     }}
-                    onBlur={(event) => {
+                    onBlur={event => {
                       field.subId = i;
                       updateForm(event, field);
                       setTouched(id);
-                      setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
+                      setFocusClass(
+                        value &&
+                          value[i] &&
+                          value[i].val &&
+                          value[i].val !== "",
+                        i
+                      );
                     }}
                     onFocus={() => setFocusClass(true, i)}
                     aria-label={label}
                     aria-describedby={`error_${formId}_${input.id}_${i}`}
                     aria-invalid={!!validationMessage && touched}
                   />
-                  {inputs && inputs.length == 2 && (
-                    <label htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}</label>
-                  )}
+                  <label htmlFor={`input_${formId}_${input.id}_${i}`}>
+                    {input.label}
+                  </label>
                 </span>
               ))}
           </div>
@@ -158,9 +171,9 @@ export default ({
               id={`input_${formId}_${id}_strength_indicator`}
               className={`gfield_password_strength ${passwordStrength}`}
             >
-              {passwordStrength && passwordStrength !== 'blank'
+              {passwordStrength && passwordStrength !== "blank"
                 ? passwordStrength
-                : 'Strength indicator'}
+                : "Strength indicator"}
             </div>
             <input
               type="hidden"
