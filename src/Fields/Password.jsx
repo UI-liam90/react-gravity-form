@@ -122,7 +122,9 @@ export default ({
                     value={
                       value && value[i] && value[i].val ? value[i].val : ""
                     }
-                    placeholder={placeholder}
+                    placeholder={
+                      input.placeholder ? input.placeholder : placeholder
+                    }
                     required={isRequired}
                     autoComplete="off"
                     onChange={event => {

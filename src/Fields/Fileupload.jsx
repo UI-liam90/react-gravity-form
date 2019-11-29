@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class Fileupload extends Component {
   state = {
+    imagePreviewUrl: null,
     selectedFile: null,
     uploadFileText: 'No file chosen',
   };
@@ -9,10 +10,36 @@ class Fileupload extends Component {
   inputFile = React.createRef();
 
   onChangeHandler = (event) => {
+    const { hasPreview, allowedExtensions } = this.props.field;
     this.setState({
+      imagePreviewUrl: null,
       selectedFile: event.target.files[0],
       uploadFileText: event.target.files[0] ? event.target.files[0].name : 'No file chosen',
     });
+
+    if (hasPreview && event.target && event.target.files[0]) {
+      // check file type
+      const extension = event.target.files[0].name
+        .split('.')
+        .pop()
+        .toLowerCase(); // file extension from input file
+      const isSuccess = allowedExtensions.indexOf(extension) > -1; // is extension in acceptable types
+      if (isSuccess) {
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          this.setState({
+            imagePreviewUrl: reader.result,
+          });
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+      }
+    }
+  };
+
+  removeFilePreview = () => {
+    this.setState({ imagePreviewUrl: null, selectedFile: null });
   };
 
   prepareAllowedTypes = (types) => {
@@ -26,7 +53,7 @@ class Fileupload extends Component {
   };
 
   render() {
-    const { selectedFile, uploadFileText } = this.state;
+    const { selectedFile, uploadFileText, imagePreviewUrl } = this.state;
     const {
       field,
       value,
@@ -52,6 +79,8 @@ class Fileupload extends Component {
       labelPlacement,
       width,
       allowedExtensions,
+      buttonText,
+      hasPreview,
     } = field;
     const {
  Button = 'button', Label = 'label', FileWrapper = 'div', Box = 'div' 
@@ -97,6 +126,24 @@ class Fileupload extends Component {
                 aria-invalid={!!validationMessage || !!error}
                 hidden="hidden"
               />
+              {hasPreview && (
+                <div
+                  className="file-preview"
+                  style={
+                    selectedFile && imagePreviewUrl
+                      ? { backgroundImage: `url(${imagePreviewUrl})` }
+                      : undefined
+                  }
+                >
+                  {selectedFile && imagePreviewUrl && (
+                    <button
+                      type="button"
+                      className="remove-file"
+                      onClick={() => this.removeFilePreview()}
+                    />
+                  )}
+                </div>
+              )}
               <div
                 aria-pressed="false"
                 tabIndex="0"
@@ -105,7 +152,7 @@ class Fileupload extends Component {
                 onClick={this.onButtonClickHandler}
               >
                 <Button color="yellow" tabIndex="-1" type="button">
-                  Choose a file
+                  {buttonText || 'Choose a file'}
                 </Button>
                 <span>{uploadFileText}</span>
               </div>
