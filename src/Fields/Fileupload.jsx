@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 
 class Fileupload extends Component {
   state = {
-    imagePreviewUrl: null,
-    selectedFile: null,
+    imagePreviewUrl: this.props.field.preview || null,
+    selectedFile: this.props.field.preview ? true : null,
     uploadFileText: 'No file chosen',
+    previewID: this.props.value || null,
   };
 
   inputFile = React.createRef();
@@ -30,6 +31,7 @@ class Fileupload extends Component {
         reader.onloadend = () => {
           this.setState({
             imagePreviewUrl: reader.result,
+            previewID: false,
           });
         };
 
@@ -39,7 +41,7 @@ class Fileupload extends Component {
   };
 
   removeFilePreview = () => {
-    this.setState({ imagePreviewUrl: null, selectedFile: null });
+    this.setState({ imagePreviewUrl: null, selectedFile: null, previewID: false });
   };
 
   prepareAllowedTypes = (types) => {
@@ -53,7 +55,10 @@ class Fileupload extends Component {
   };
 
   render() {
-    const { selectedFile, uploadFileText, imagePreviewUrl } = this.state;
+    const {
+ selectedFile, uploadFileText, imagePreviewUrl, previewID 
+} = this.state;
+
     const {
       field,
       value,
@@ -81,6 +86,7 @@ class Fileupload extends Component {
       allowedExtensions,
       buttonText,
       hasPreview,
+      maxFileSize,
     } = field;
     const {
  Button = 'button', Label = 'label', FileWrapper = 'div', Box = 'div' 
@@ -104,6 +110,9 @@ class Fileupload extends Component {
             description && <div className="description">{description}</div>
           ) : (
             <React.Fragment>
+              {maxFileSize && (
+                <input type="hidden" name="MAX_FILE_SIZE" value={maxFileSize * 1048576} />
+              )}
               <input
                 id={`input_${formID}_${id}`}
                 name={`input_${id}`}
@@ -126,6 +135,9 @@ class Fileupload extends Component {
                 aria-invalid={!!validationMessage || !!error}
                 hidden="hidden"
               />
+              {previewID && field.preview && (
+                <input type="hidden" name="file-upload-preview" value={previewID} />
+              )}
               {hasPreview && (
                 <div
                   className="file-preview"
