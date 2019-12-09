@@ -65,6 +65,7 @@ const RenderField = ({
   isNextDisabled,
   saveStateToHtmlField,
   styledComponents,
+  customComponents,
   error,
   unsetError,
 }) => {
@@ -115,6 +116,7 @@ const RenderField = ({
       styledComponents={styledComponents}
       cssClass={fieldClassName}
       setFocusClass={setFocusClass}
+      component={customComponents && customComponents[field.id]}
     />
   );
 };

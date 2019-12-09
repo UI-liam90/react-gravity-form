@@ -47,6 +47,7 @@ const fieldTypes = [
   'consent',
   'password',
   'section',
+  'custom',
 ];
 
 const honeyPotLables = ['Name', 'Email', 'Phone', 'Comments'];
@@ -70,6 +71,7 @@ export default (props) => {
     saveStateToHtmlField,
     enableHoneypot,
     styledComponents,
+    customComponents,
     unsetError,
     errors,
   } = props;
@@ -105,6 +107,7 @@ export default (props) => {
                     checkConditionalLogic={checkConditionalLogic}
                     saveStateToHtmlField={saveStateToHtmlField}
                     styledComponents={styledComponents}
+                    customComponents={customComponents}
                     error={errors && errors[field.id] ? errors[field.id] : false}
                     unsetError={unsetError}
                   />
