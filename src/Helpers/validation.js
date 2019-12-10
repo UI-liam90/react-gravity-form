@@ -144,7 +144,13 @@ const validateField = (value, field) => {
     } else if (type === 'website') {
       validationMessage = isUrl(value, message);
     } else if (type === 'date') {
-      const isValid = isDate(value, field);
+      console.log('value', value);
+      let isValid = true;
+      if (field.dateType && field.dateType === 'datepicker') {
+        isValid = required ? isRequired(required, empty, message) : false;
+      } else {
+        isValid = isDate(value, field);
+      }
       validationMessage = isValid.length > 0 ? isValid : false;
     }
   }

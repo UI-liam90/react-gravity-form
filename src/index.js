@@ -43,10 +43,10 @@ class GravityForm extends Component {
       // eslint-disable-next-line no-restricted-syntax
       for (const field of form.fields) {
         let value;
-        const hasPopulation =          field.inputName && populatedFields && populatedFields[field.inputName];
+        const hasPopulation = field.inputName && populatedFields && populatedFields[field.inputName];
         if (field.type === 'checkbox') {
           value = field.choices
-            .filter(choice => (hasPopulation ? choice.value === populatedFields[field.inputName] : choice.isSelected),)
+            .filter(choice => (hasPopulation ? choice.value === populatedFields[field.inputName] : choice.isSelected))
             .map(choice => choice.value);
         } else if (field.type === 'radio') {
           if (hasPopulation) {
@@ -57,7 +57,7 @@ class GravityForm extends Component {
           }
         } else if (field.type === 'select') {
           const selectedOption = field.choices
-            .filter(choice => (hasPopulation ? choice.value === populatedFields[field.inputName] : choice.isSelected),)
+            .filter(choice => (hasPopulation ? choice.value === populatedFields[field.inputName] : choice.isSelected))
             .map(item => ({ value: item.value, label: item.text }));
           value = selectedOption && selectedOption.length > 0 ? selectedOption[0] : '';
         } else {
@@ -145,7 +145,7 @@ class GravityForm extends Component {
         values.push(event.target.value);
       }
       value = values;
-    } else if (field.type == 'date') {
+    } else if (field.type == 'date' && field.dateType !== 'datepicker') {
       const { subId, dateLabel } = field;
       const values = [...formValues[field.id].value];
       values[subId] = {
@@ -157,7 +157,7 @@ class GravityForm extends Component {
       value = event.target ? event.target.checked : 'null';
     } else if (field.type === 'password') {
       const { subId } = field;
-      const values =        formValues[field.id] && formValues[field.id].value ? [...formValues[field.id].value] : [];
+      const values = formValues[field.id] && formValues[field.id].value ? [...formValues[field.id].value] : [];
       values[subId] = {
         val: event.target.value,
       };
@@ -330,8 +330,8 @@ class GravityForm extends Component {
       dropzoneText,
     } = this.props;
     const {
- Button, Loading, GFWrapper = 'div', FormError: SFormError 
-} = styledComponents || false;
+      Button, Loading, GFWrapper = 'div', FormError: SFormError,
+    } = styledComponents || false;
 
     const { cssClass } = formData;
 
@@ -434,7 +434,7 @@ GravityForm.defaultProps = {
 };
 
 export {
- validateField, FormConfirmation, FormError, RenderFields, Submit 
+  validateField, FormConfirmation, FormError, RenderFields, Submit,
 };
 
 export default GravityForm;
