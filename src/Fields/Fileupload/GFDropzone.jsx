@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 
 function Accept({ dropzoneText, ...props }) {
   const [files, setFiles] = useState([]);
+  const [cssClass, setcssClass] = useState('dropzone');
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
     accept: 'image/*',
     onDrop: event => {
@@ -18,15 +19,27 @@ function Accept({ dropzoneText, ...props }) {
       setTouched(id);
       unsetError(id);
     },
+    onDragOver: event => {
+      setcssClass('dropzone over');
+    },
+    onDragLeave: event => {
+      setcssClass('dropzone');
+    },
+    onDropAccepted: event => {
+      setcssClass('dropzone');
+    },
   });
 
-  const thumbs = files.map(file => (
-    <div key={file.name}>
-      <div>
-        <img src={file.preview} />
+  const thumbs =
+    files &&
+    !!files.length > 0 &&
+    files.map(file => (
+      <div key={file.name}>
+        <div>
+          <img src={file.preview} />
+        </div>
       </div>
-    </div>
-  ));
+    ));
   const { id, formID, field, isRequired } = props;
 
   useEffect(
@@ -43,7 +56,7 @@ function Accept({ dropzoneText, ...props }) {
     <div className="container">
       <div
         {...getRootProps({
-          className: 'dropzone',
+          className: cssClass,
         })}
       >
         <input
@@ -53,9 +66,9 @@ function Accept({ dropzoneText, ...props }) {
           required={isRequired}
           {...getInputProps()}
         />
-        <p  dangerouslySetInnerHTML={{ __html: text }} />
+        {thumbs && <div className="preview">{thumbs}</div>}
+        <p dangerouslySetInnerHTML={{ __html: text }} />
       </div>
-      <aside>{thumbs}</aside>
     </div>
   );
 }
