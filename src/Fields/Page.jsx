@@ -1,8 +1,6 @@
 import React from 'react';
 
-export default ({
-  field, pages, nextStep, prevStep, isNextDisabled, styledComponents,
-}) => {
+export default ({ field, pages, nextStep, prevStep, isNextDisabled, styledComponents }) => {
   const {
     id,
     type,
@@ -25,18 +23,12 @@ export default ({
   return (
     <Box className="form-field">
       {pageNumber - 1 > 1 && (
-        <Button mr={10} onClick={e => prevStep(e)}>
+        <Button className="prev" mr={10} onClick={e => prevStep(e)}>
           {previousButton.text}
         </Button>
       )}
       {pageNumber <= pages && (
-        <Button
-          onClick={e => nextStep(e)}
-          color="pink"
-          p="7px 20px"
-          mt={20}
-          disabled={isNextDisabled}
-        >
+        <Button className="next" onClick={e => nextStep(e)} mt={20} disabled={isNextDisabled}>
           {nextButton.text}
         </Button>
       )}

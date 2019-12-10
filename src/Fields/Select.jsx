@@ -30,13 +30,21 @@ export default ({
     width,
     customName,
   } = field;
+
+  let selected = null;
   // Map options
-  const options = choices.map(choice => ({
-    value: choice.value,
-    label: choice.text,
-  }));
+  const options = choices.map((choice) => {
+    const item = {
+      value: choice.value,
+      label: choice.text,
+    };
+    if (choice.isSelected) {
+      selected = item;
+    }
+    return item;
+  });
   // Handle State
-  const [selectedOption, selectOption] = useState(value || '');
+  const [selectedOption, selectOption] = useState(value || selected);
   // Handle change
   const handleChange = (option) => {
     selectOption(option);
