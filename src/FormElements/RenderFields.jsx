@@ -89,6 +89,11 @@ export default (props) => {
             className={`page${activePage === index + 1 ? ' active' : ''}`}
             key={`page-${index}`}
           >
+            {page && (
+              <div className="gf_step">
+                <span>{page}</span>
+              </div>
+            )}
             {dividedFields[index].map(
               field => fieldTypes.includes(field.type) && (
                   <RenderField
