@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Dropzone from 'react-dropzone';
+import GFDropzone from './GFDropzone';
 
 class Fileupload extends Component {
   state = {
@@ -72,6 +74,7 @@ class Fileupload extends Component {
       styledComponents,
       error,
       unsetError,
+      dropzoneText
     } = this.props;
     const {
       id,
@@ -91,6 +94,9 @@ class Fileupload extends Component {
     const {
  Button = 'button', Label = 'label', FileWrapper = 'div', Box = 'div' 
 } =      styledComponents || false;
+
+    const hasDropzone = cssClass.indexOf('dropzone') > -1;
+
     return (
       <Box
         width={width}
@@ -108,6 +114,8 @@ class Fileupload extends Component {
           </Label>
           {descriptionPlacement === 'above' && description ? (
             description && <div className="description">{description}</div>
+          ) : hasDropzone ? (
+              <GFDropzone dropzoneText={dropzoneText} field={field} id={id} formID={formID} isRequired={isRequired} updateForm={updateForm} setTouched={setTouched} unsetError={unsetError} />
           ) : (
             <React.Fragment>
               {maxFileSize && (

@@ -74,6 +74,7 @@ export default (props) => {
     customComponents,
     unsetError,
     errors,
+    dropzoneText,
   } = props;
 
   // get page indexes
@@ -115,6 +116,7 @@ export default (props) => {
                     customComponents={customComponents}
                     error={errors && errors[field.id] ? errors[field.id] : false}
                     unsetError={unsetError}
+                    dropzoneText={dropzoneText}
                   />
                 ),
             )}
@@ -135,6 +137,7 @@ export default (props) => {
                 styledComponents={styledComponents}
                 error={errors && errors[field.id] ? errors[field.id] : false}
                 unsetError={unsetError}
+                dropzoneText={dropzoneText}
               />
             ),
         )}
