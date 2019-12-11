@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Select from 'react-select';
+import React, { useState } from "react";
+import Select from "react-select";
 
 export default ({
   field,
@@ -11,7 +11,6 @@ export default ({
   updateForm,
   styledComponents,
   error,
-  setFocusClass,
   cssClass,
   unsetError,
   ...props
@@ -28,15 +27,15 @@ export default ({
     descriptionPlacement,
     labelPlacement,
     width,
-    customName,
+    customName
   } = field;
 
   let selected = null;
   // Map options
-  const options = choices.map((choice) => {
+  const options = choices.map(choice => {
     const item = {
       value: choice.value,
-      label: choice.text,
+      label: choice.text
     };
     if (choice.isSelected) {
       selected = item;
@@ -46,12 +45,12 @@ export default ({
   // Handle State
   const [selectedOption, selectOption] = useState(value || selected);
   // Handle change
-  const handleChange = (option) => {
+  const handleChange = option => {
     selectOption(option);
     const event = {
       target: {
-        value: option,
-      },
+        value: option
+      }
     };
     updateForm(event, field);
   };
@@ -59,14 +58,14 @@ export default ({
   const handleBlur = () => {
     const event = {
       target: {
-        value: selectedOption,
-      },
+        value: selectedOption
+      }
     };
     updateForm(event, field);
     setTouched(id);
-    setFocusClass(value !== '');
   };
-  const { ReactSelect, Label = 'label', Box = 'div' } = styledComponents || false;
+  const { ReactSelect, Label = "label", Box = "div" } =
+    styledComponents || false;
 
   const RSelect = ReactSelect || Select;
 
@@ -78,14 +77,17 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label
+          htmlFor={`input_${formId}_${id}`}
+          className={`gf-label ${labelPlacement}`}
+        >
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
+        {descriptionPlacement === "above" && description ? (
           description && <div className="description">{description}</div>
         ) : (
           <React.Fragment>
@@ -93,12 +95,11 @@ export default ({
               name={customName || `input_${id}`}
               required={isRequired}
               value={selectedOption}
-              onChange={(option) => {
+              onChange={option => {
                 handleChange(option, field);
                 unsetError(id);
               }}
               onBlur={() => handleBlur()}
-              onFocus={() => setFocusClass(true)}
               placeholder={placeholder}
               options={options}
               className="form-select"
