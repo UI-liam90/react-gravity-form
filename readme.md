@@ -29,6 +29,7 @@ Include the component anywhere inside your own components:
 	onChange={someFunction} // optional
 	styledComponents={{Button, Loading, Input...}} // optional
 	populatedFields={{parameterName: "Value"}}
+	jumpToConfirmation={false} // optional, default is equal to true
 />
 ```
 

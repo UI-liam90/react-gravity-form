@@ -234,7 +234,7 @@ class GravityForm extends Component {
       confirmationMessage: false,
       errorMessages: false,
     });
-    const { formID, backendUrl } = this.props;
+    const { formID, backendUrl, jumpToConfirmation } = this.props;
     const gfSubmissionUrl = backendUrl.substring(0, backendUrl.indexOf('/wp-json'));
     const data = new FormData(event.target);
     axios
@@ -246,7 +246,9 @@ class GravityForm extends Component {
             submitSuccess: true,
             confirmationMessage: response.data.confirmation_message,
           });
-          this.scrollToConfirmation();
+          if(jumpToConfirmation){
+            this.scrollToConfirmation();
+          }
         } else {
           this.setState({
             submitting: false,
@@ -431,6 +433,7 @@ GravityForm.defaultProps = {
   title: true,
   submitIcon: false,
   saveStateToHtmlField: false,
+  jumpToConfirmation: true,
 };
 
 export {
