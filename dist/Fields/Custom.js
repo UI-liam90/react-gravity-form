@@ -9,11 +9,19 @@ var _react = _interopRequireDefault(require("react"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 // eslint-disable-next-line
 var _default = function _default(_ref) {
   var field = _ref.field,
       styledComponents = _ref.styledComponents,
-      component = _ref.component;
+      component = _ref.component,
+      props = _objectWithoutProperties(_ref, ["field", "styledComponents", "component"]);
+
   var cssClass = field.cssClass,
       width = field.width;
 
@@ -26,8 +34,11 @@ var _default = function _default(_ref) {
   return Component ? _react["default"].createElement(Box, {
     width: width,
     className: "form-field ".concat(cssClass)
-  }, _react["default"].createElement(Component, null)) : '';
+  }, _react["default"].createElement(Component, _extends({
+    field: field,
+    styledComponents: styledComponents
+  }, props))) : '';
 };
 
 exports["default"] = _default;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9GaWVsZHMvQ3VzdG9tLmpzeCJdLCJuYW1lcyI6WyJmaWVsZCIsInN0eWxlZENvbXBvbmVudHMiLCJjb21wb25lbnQiLCJjc3NDbGFzcyIsIndpZHRoIiwiQm94IiwiQ29tcG9uZW50Il0sIm1hcHBpbmdzIjoiOzs7Ozs7O0FBQUE7Ozs7QUFFQTtlQUNlLHdCQUE0QztBQUFBLE1BQXpDQSxLQUF5QyxRQUF6Q0EsS0FBeUM7QUFBQSxNQUFsQ0MsZ0JBQWtDLFFBQWxDQSxnQkFBa0M7QUFBQSxNQUFoQkMsU0FBZ0IsUUFBaEJBLFNBQWdCO0FBQUEsTUFDakRDLFFBRGlELEdBQzdCSCxLQUQ2QixDQUNqREcsUUFEaUQ7QUFBQSxNQUN2Q0MsS0FEdUMsR0FDN0JKLEtBRDZCLENBQ3ZDSSxLQUR1Qzs7QUFBQSxjQUdqQ0gsZ0JBQWdCLElBQUksS0FIYTtBQUFBLHdCQUdqREksR0FIaUQ7QUFBQSxNQUdqREEsR0FIaUQsMEJBRzNDLEtBSDJDLGNBSXpEOzs7QUFDQSxNQUFNQyxTQUFTLEdBQUdKLFNBQWxCO0FBRUEsU0FBT0ksU0FBUyxHQUNkLGdDQUFDLEdBQUQ7QUFBSyxJQUFBLEtBQUssRUFBRUYsS0FBWjtBQUFtQixJQUFBLFNBQVMsdUJBQWdCRCxRQUFoQjtBQUE1QixLQUNFLGdDQUFDLFNBQUQsT0FERixDQURjLEdBS2QsRUFMRjtBQU9ELEMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuXG4vLyBlc2xpbnQtZGlzYWJsZS1uZXh0LWxpbmVcbmV4cG9ydCBkZWZhdWx0ICh7IGZpZWxkLCBzdHlsZWRDb21wb25lbnRzLCBjb21wb25lbnQgfSkgPT4ge1xuICBjb25zdCB7IGNzc0NsYXNzLCB3aWR0aCB9ID0gZmllbGQ7XG5cbiAgY29uc3QgeyBCb3ggPSAnZGl2JyB9ID0gc3R5bGVkQ29tcG9uZW50cyB8fCBmYWxzZTtcbiAgLy8gZ2V0IGNvbXBvbmVudFxuICBjb25zdCBDb21wb25lbnQgPSBjb21wb25lbnQ7XG5cbiAgcmV0dXJuIENvbXBvbmVudCA/IChcbiAgICA8Qm94IHdpZHRoPXt3aWR0aH0gY2xhc3NOYW1lPXtgZm9ybS1maWVsZCAke2Nzc0NsYXNzfWB9PlxuICAgICAgPENvbXBvbmVudCAvPlxuICAgIDwvQm94PlxuICApIDogKFxuICAgICcnXG4gICk7XG59O1xuIl19
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9GaWVsZHMvQ3VzdG9tLmpzeCJdLCJuYW1lcyI6WyJmaWVsZCIsInN0eWxlZENvbXBvbmVudHMiLCJjb21wb25lbnQiLCJwcm9wcyIsImNzc0NsYXNzIiwid2lkdGgiLCJCb3giLCJDb21wb25lbnQiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFBQTs7Ozs7Ozs7OztBQUVBO2VBQ2Usd0JBQXNEO0FBQUEsTUFBbkRBLEtBQW1ELFFBQW5EQSxLQUFtRDtBQUFBLE1BQTVDQyxnQkFBNEMsUUFBNUNBLGdCQUE0QztBQUFBLE1BQTFCQyxTQUEwQixRQUExQkEsU0FBMEI7QUFBQSxNQUFaQyxLQUFZOztBQUFBLE1BQzNEQyxRQUQyRCxHQUN2Q0osS0FEdUMsQ0FDM0RJLFFBRDJEO0FBQUEsTUFDakRDLEtBRGlELEdBQ3ZDTCxLQUR1QyxDQUNqREssS0FEaUQ7O0FBQUEsY0FHM0NKLGdCQUFnQixJQUFJLEtBSHVCO0FBQUEsd0JBRzNESyxHQUgyRDtBQUFBLE1BRzNEQSxHQUgyRCwwQkFHckQsS0FIcUQsY0FJbkU7OztBQUNBLE1BQU1DLFNBQVMsR0FBR0wsU0FBbEI7QUFFQSxTQUFPSyxTQUFTLEdBQ2QsZ0NBQUMsR0FBRDtBQUFLLElBQUEsS0FBSyxFQUFFRixLQUFaO0FBQW1CLElBQUEsU0FBUyx1QkFBZ0JELFFBQWhCO0FBQTVCLEtBQ0UsZ0NBQUMsU0FBRDtBQUFXLElBQUEsS0FBSyxFQUFFSixLQUFsQjtBQUF5QixJQUFBLGdCQUFnQixFQUFFQztBQUEzQyxLQUFpRUUsS0FBakUsRUFERixDQURjLEdBS2QsRUFMRjtBQU9ELEMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuXG4vLyBlc2xpbnQtZGlzYWJsZS1uZXh0LWxpbmVcbmV4cG9ydCBkZWZhdWx0ICh7IGZpZWxkLCBzdHlsZWRDb21wb25lbnRzLCBjb21wb25lbnQsIC4uLnByb3BzIH0pID0+IHtcbiAgY29uc3QgeyBjc3NDbGFzcywgd2lkdGggfSA9IGZpZWxkO1xuXG4gIGNvbnN0IHsgQm94ID0gJ2RpdicgfSA9IHN0eWxlZENvbXBvbmVudHMgfHwgZmFsc2U7XG4gIC8vIGdldCBjb21wb25lbnRcbiAgY29uc3QgQ29tcG9uZW50ID0gY29tcG9uZW50O1xuXG4gIHJldHVybiBDb21wb25lbnQgPyAoXG4gICAgPEJveCB3aWR0aD17d2lkdGh9IGNsYXNzTmFtZT17YGZvcm0tZmllbGQgJHtjc3NDbGFzc31gfT5cbiAgICAgIDxDb21wb25lbnQgZmllbGQ9e2ZpZWxkfSBzdHlsZWRDb21wb25lbnRzPXtzdHlsZWRDb21wb25lbnRzfSB7Li4ucHJvcHN9IC8+XG4gICAgPC9Cb3g+XG4gICkgOiAoXG4gICAgJydcbiAgKTtcbn07XG4iXX0=
