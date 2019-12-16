@@ -2,55 +2,58 @@ import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 function Accept({ dropzoneText, ...props }) {
-  const [files, setFiles] = useState([]);
+  const { field } = props;
+  const { defaultValue } = field || [];
+  const [files, setFiles] = useState([defaultValue]);
   const [cssClass, setcssClass] = useState('dropzone');
-  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+  const {
+ getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject 
+} = useDropzone({
     accept: 'image/*',
-    onDrop: event => {
-      const { id, formID, field, isRequired, updateForm, setTouched, unsetError } = props;
+    onDrop: (event) => {
+      const {
+ id, formID, field, isRequired, updateForm, setTouched, unsetError 
+} = props;
       setFiles(
-        event.map(file =>
-          Object.assign(file, {
+        event.map(file => Object.assign(file, {
             preview: URL.createObjectURL(file),
-          })
-        )
+          }),),
       );
       updateForm(event, field);
       setTouched(id);
       unsetError(id);
     },
-    onDragOver: event => {
+    onDragOver: (event) => {
       setcssClass('dropzone over');
     },
-    onDragLeave: event => {
+    onDragLeave: (event) => {
       setcssClass('dropzone');
     },
-    onDropAccepted: event => {
+    onDropAccepted: (event) => {
       setcssClass('dropzone');
     },
   });
 
-  const thumbs =
-    files &&
-    !!files.length > 0 &&
-    files.map(file => (
+  const thumbs =    files
+    && !!files.length > 0
+    && files.map(file => (
       <div key={file.name}>
         <div>
           <img src={file.preview} />
         </div>
       </div>
     ));
-  const { id, formID, field, isRequired } = props;
+  const { id, formID, isRequired } = props;
 
   useEffect(
     () => () => {
       // Make sure to revoke the data uris to avoid memory leaks
       files.forEach(file => URL.revokeObjectURL(file.preview));
     },
-    [files]
+    [files],
   );
 
-  const text = dropzoneText || "Drag 'n' drop some files here, or click to select files";
+  const text = dropzoneText || 'Drag \'n\' drop some files here, or click to select files';
 
   return (
     <div className="container">

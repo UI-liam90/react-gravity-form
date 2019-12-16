@@ -74,7 +74,7 @@ class Fileupload extends Component {
       styledComponents,
       error,
       unsetError,
-      dropzoneText
+      dropzoneText,
     } = this.props;
     const {
       id,
@@ -115,7 +115,16 @@ class Fileupload extends Component {
           {descriptionPlacement === 'above' && description ? (
             description && <div className="description">{description}</div>
           ) : hasDropzone ? (
-              <GFDropzone dropzoneText={dropzoneText} field={field} id={id} formID={formID} isRequired={isRequired} updateForm={updateForm} setTouched={setTouched} unsetError={unsetError} />
+            <GFDropzone
+              dropzoneText={dropzoneText}
+              field={field}
+              id={id}
+              formID={formID}
+              isRequired={isRequired}
+              updateForm={updateForm}
+              setTouched={setTouched}
+              unsetError={unsetError}
+            />
           ) : (
             <React.Fragment>
               {maxFileSize && (

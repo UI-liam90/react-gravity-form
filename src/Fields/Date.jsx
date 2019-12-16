@@ -32,9 +32,8 @@ export default ({
     customName,
     dateType,
     dateFormat,
+    defaultValue,
   } = field;
-
-  const [startDate, setDate] = useState(null);
 
   const {
  Input = 'input', Label = 'label', Box = 'div', DatePicker: SdatePicker = 'div' 
@@ -42,6 +41,15 @@ export default ({
 
   // conver date format
   const format = dateFormat && dateFormat === 'dmy' ? 'dd/MM/yyyy' : false;
+  let selectedValue = defaultValue ? new Date(defaultValue) : false;
+  if (format && defaultValue) {
+    const dateParts = defaultValue.split('/');
+    const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
+    selectedValue = dateObject;
+  }
+
+  const [startDate, setDate] = useState(selectedValue);
+
   return (
     <Box
       width={width}
