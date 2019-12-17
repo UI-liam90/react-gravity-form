@@ -36,8 +36,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field consent error ${cssClass}`
+          : `form-field consent ${cssClass}`
       }
       style={{ display: hideField ? 'none' : undefined }}
     >

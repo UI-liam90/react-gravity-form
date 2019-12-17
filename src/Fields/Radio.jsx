@@ -11,12 +11,12 @@ function formatMoney(amount, decimalCount = 2, decimal = '.', thousands = ',') {
     const j = i.length > 3 ? i.length % 3 : 0;
 
     return (
-      negativeSign
-      + (j ? i.substr(0, j) + thousands : '')
-      + i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${thousands}`)
-      + (decimalCount
-        ? decimal
-          + Math.abs(amount - i)
+      negativeSign +
+      (j ? i.substr(0, j) + thousands : '') +
+      i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${thousands}`) +
+      (decimalCount
+        ? decimal +
+          Math.abs(amount - i)
             .toFixed(decimalCount)
             .slice(2)
         : '')
@@ -32,7 +32,7 @@ class Radio extends Component {
     inputValue: false,
   };
 
-  onFocus = (e) => {
+  onFocus = e => {
     let { value } = e.target;
     const { otherValue, inputValue } = this.state;
 
@@ -44,7 +44,7 @@ class Radio extends Component {
     this.setState({ inputValue: value });
   };
 
-  onBlur = (e) => {
+  onBlur = e => {
     const { value } = e.target;
     if (value.replace(' ', '') == '') {
       this.setState({ inputValue: this.state.otherValue });
@@ -54,13 +54,13 @@ class Radio extends Component {
     }
   };
 
-  onChange = (e) => {
+  onChange = e => {
     const { value } = e.target;
 
     this.setState({ inputValue: value });
   };
 
-  setFocus = (e) => {
+  setFocus = e => {
     this.otherChoise.focus();
   };
 
@@ -94,7 +94,8 @@ class Radio extends Component {
     } = field;
     const { inputValue } = this.state;
 
-    const { Radiogroup = 'fieldset', Label = 'legend', Box = 'div' } = styledComponents || false;
+    const { Radiogroup = 'fieldset', Label = 'legend', Box = 'div', Input = 'input' } =
+      styledComponents || false;
 
     return (
       <Box
@@ -123,7 +124,7 @@ class Radio extends Component {
                     name={customName || `input_${id}`}
                     value={choice.value}
                     checked={value === choice.value}
-                    onChange={(event) => {
+                    onChange={event => {
                       updateForm(event, field);
                       setTouched(id);
                       unsetError(id);
@@ -139,7 +140,7 @@ class Radio extends Component {
                     type="radio"
                     name={`input_${id}`}
                     value={inputValue}
-                    onChange={(event) => {
+                    onChange={event => {
                       updateForm(event, field);
                       setTouched(id);
                       unsetError(id);
@@ -147,17 +148,17 @@ class Radio extends Component {
                     ref={e => (this.otherRadio = e)}
                     onFocus={e => this.setFocus(e)}
                   />
-                  <input
+                  <Input
                     id={`input_${formId}_${id}_${choices.length}_other`}
                     type="text"
                     placeholder={otherPlaceholder || 'Other'}
                     value={inputValue || ''}
                     onFocus={e => this.onFocus(e)}
-                    onBlur={(e) => {
+                    onBlur={e => {
                       updateForm(e, field);
                       this.onBlur(e);
                     }}
-                    onChange={(e) => {
+                    onChange={e => {
                       // updateForm(e, field);
                       // setTouched(id);
                       this.onChange(e);
