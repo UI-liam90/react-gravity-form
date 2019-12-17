@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 function Accept({ dropzoneText, ...props }) {
   const { field } = props;
   const { defaultValue } = field || [];
-  const [files, setFiles] = useState([defaultValue]);
+  const [files, setFiles] = useState(defaultValue ? [defaultValue] : []);
   const [cssClass, setcssClass] = useState('dropzone');
   const {
  getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject 
