@@ -90,6 +90,7 @@ class Radio extends Component {
       labelPlacement,
       width,
       customName,
+      otherPlaceholder,
     } = field;
     const { inputValue } = this.state;
 
@@ -149,7 +150,8 @@ class Radio extends Component {
                   <input
                     id={`input_${formId}_${id}_${choices.length}_other`}
                     type="text"
-                    value={inputValue}
+                    placeholder={otherPlaceholder || 'Other'}
+                    value={inputValue || ''}
                     onFocus={e => this.onFocus(e)}
                     onBlur={(e) => {
                       updateForm(e, field);

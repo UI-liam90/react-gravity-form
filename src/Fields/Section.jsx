@@ -1,7 +1,9 @@
 import React from 'react';
 
 export default ({ field, hideField, styledComponents }) => {
-  const { cssClass, width, label } = field;
+  const {
+ cssClass, width, label, description, descriptionPlacement 
+} = field;
 
   const { Box = 'div' } = styledComponents || false;
 
@@ -11,7 +13,15 @@ export default ({ field, hideField, styledComponents }) => {
       className={`form-field gsection ${cssClass}`}
       style={{ display: hideField ? 'none' : undefined }}
     >
-      <h2 className="gsection_title" dangerouslySetInnerHTML={{ __html: label }} />
+      <React.Fragment>
+        {descriptionPlacement === 'above'
+          && description
+          && (description && <div className="description">{description}</div>)}
+        <h2 className="gsection_title" dangerouslySetInnerHTML={{ __html: label }} />
+        {descriptionPlacement !== 'above'
+          && description
+          && (description && <div className="description">{description}</div>)}
+      </React.Fragment>
     </Box>
   );
 };
