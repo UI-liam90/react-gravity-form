@@ -1,25 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-function formatMoney(amount, decimalCount = 2, decimal = '.', thousands = ',') {
+function formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
   try {
     decimalCount = Math.abs(decimalCount);
     decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
 
-    const negativeSign = amount < 0 ? '-' : '';
+    const negativeSign = amount < 0 ? "-" : "";
 
-    const i = parseInt((amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))).toString();
+    const i = parseInt(
+      (amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))
+    ).toString();
     const j = i.length > 3 ? i.length % 3 : 0;
 
     return (
       negativeSign +
-      (j ? i.substr(0, j) + thousands : '') +
+      (j ? i.substr(0, j) + thousands : "") +
       i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${thousands}`) +
       (decimalCount
         ? decimal +
           Math.abs(amount - i)
             .toFixed(decimalCount)
             .slice(2)
-        : '')
+        : "")
     );
   } catch (e) {
     console.log(e);
@@ -29,7 +31,7 @@ function formatMoney(amount, decimalCount = 2, decimal = '.', thousands = ',') {
 class Radio extends Component {
   state = {
     otherValue: false,
-    inputValue: false,
+    inputValue: false
   };
 
   onFocus = e => {
@@ -37,7 +39,7 @@ class Radio extends Component {
     const { otherValue, inputValue } = this.state;
 
     if (otherValue === value) {
-      value = '';
+      value = "";
     }
     this.otherRadio.click();
     this.otherRadio.checked = true;
@@ -46,7 +48,7 @@ class Radio extends Component {
 
   onBlur = e => {
     const { value } = e.target;
-    if (value.replace(' ', '') == '') {
+    if (value.replace(" ", "") == "") {
       this.setState({ inputValue: this.state.otherValue });
       this.otherRadio.checked = false;
     } else {
@@ -75,7 +77,7 @@ class Radio extends Component {
       hideField,
       styledComponents,
       error,
-      unsetError,
+      unsetError
     } = this.props;
     const {
       id,
@@ -90,12 +92,16 @@ class Radio extends Component {
       labelPlacement,
       width,
       customName,
-      otherPlaceholder,
+      otherPlaceholder
     } = field;
     const { inputValue } = this.state;
 
-    const { Radiogroup = 'fieldset', Label = 'legend', Box = 'div', Input = 'input' } =
-      styledComponents || false;
+    const {
+      Radiogroup = "fieldset",
+      Label = "legend",
+      Box = "div",
+      Input = "input"
+    } = styledComponents || false;
 
     return (
       <Box
@@ -105,14 +111,14 @@ class Radio extends Component {
             ? `form-field error ${cssClass}`
             : `form-field ${cssClass}`
         }
-        style={{ display: hideField ? 'none' : undefined }}
+        style={{ display: hideField ? "none" : undefined }}
       >
         <Radiogroup className="radios">
           <Label as="legend" className={`group-label ${labelPlacement}`}>
             {label}
             {isRequired ? <abbr>*</abbr> : null}
           </Label>
-          {descriptionPlacement === 'above' && description ? (
+          {descriptionPlacement === "above" && description ? (
             description && <div className="description">{description}</div>
           ) : (
             <React.Fragment>
@@ -130,7 +136,9 @@ class Radio extends Component {
                       unsetError(id);
                     }}
                   />
-                  <label htmlFor={`input_${formId}_${id}_${i}`}>{choice.text}</label>
+                  <label htmlFor={`input_${formId}_${id}_${i}`}>
+                    {choice.text}
+                  </label>
                 </div>
               ))}
               {field.enableOtherChoice && (
@@ -151,8 +159,8 @@ class Radio extends Component {
                   <Input
                     id={`input_${formId}_${id}_${choices.length}_other`}
                     type="text"
-                    placeholder={otherPlaceholder || 'Other'}
-                    value={inputValue || ''}
+                    placeholder={otherPlaceholder || "Other"}
+                    value={inputValue || ""}
                     onFocus={e => this.onFocus(e)}
                     onBlur={e => {
                       updateForm(e, field);
@@ -171,12 +179,12 @@ class Radio extends Component {
               {description && <div className="description">{description}</div>}
             </React.Fragment>
           )}
-          {((validationMessage && touched) || error) && (
-            <span className="error-message" id={`error_${formId}_${id}`}>
-              {validationMessage || error}
-            </span>
-          )}
         </Radiogroup>
+        {((validationMessage && touched) || error) && (
+          <span className="error-message" id={`error_${formId}_${id}`}>
+            {validationMessage || error}
+          </span>
+        )}
       </Box>
     );
   }
