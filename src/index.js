@@ -274,6 +274,14 @@ class GravityForm extends Component {
       )
       .then(response => {
         if (response.data && response.data.is_valid) {
+          const confirmationMessage = response.data.confirmation_message;
+          const { type, link } = confirmationMessage || false;
+          if (type && link && type === "redirect") {
+            if (typeof window !== "undefined") {
+              window.location.replace(link);
+              return false;
+            }
+          }
           this.setState({
             submitting: false,
             submitSuccess: true,
