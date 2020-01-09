@@ -8,6 +8,7 @@ class Fileupload extends Component {
     selectedFile: this.props.field.preview ? true : null,
     uploadFileText: 'No file chosen',
     previewID: this.props.value || null,
+    errorText: this.props.error || false,
   };
 
   inputFile = React.createRef();
@@ -43,12 +44,15 @@ class Fileupload extends Component {
   };
 
   removeFilePreview = () => {
+    const { field, unsetError } = this.props;
+    this.inputFile.current.value = '';
     this.setState({ imagePreviewUrl: null, selectedFile: null, previewID: false });
+    unsetError(field.id);
   };
 
   prepareAllowedTypes = (types) => {
     let accept = types.split(',');
-    accept = accept.map(str => `.${str.replace(/\s/g, '')}`).join(', ');
+    accept = accept.map((str) => `.${str.replace(/\s/g, '')}`).join(', ');
     return accept;
   };
 
@@ -57,9 +61,7 @@ class Fileupload extends Component {
   };
 
   render() {
-    const {
- selectedFile, uploadFileText, imagePreviewUrl, previewID 
-} = this.state;
+    const { selectedFile, uploadFileText, imagePreviewUrl, previewID } = this.state;
 
     const {
       field,
@@ -91,9 +93,8 @@ class Fileupload extends Component {
       hasPreview,
       maxFileSize,
     } = field;
-    const {
- Button = 'button', Label = 'label', FileWrapper = 'div', Box = 'div' 
-} =      styledComponents || false;
+    const { Button = 'button', Label = 'label', FileWrapper = 'div', Box = 'div' } =
+      styledComponents || false;
 
     const hasDropzone = cssClass.indexOf('dropzone') > -1;
 
@@ -206,3 +207,4 @@ class Fileupload extends Component {
 }
 
 export default Fileupload;
+
