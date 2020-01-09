@@ -335,7 +335,10 @@ class GravityForm extends Component {
     const hideBasedOnRules = [];
     for (let i = 0; i < rules.length; i++) {
       const { fieldId, value } = rules[i];
-      const conditionFieldValue = formValues[fieldId].value;
+      const conditionFieldValue =
+        formValues[fieldId].value && formValues[fieldId].value.value
+          ? formValues[fieldId].value.value
+          : formValues[fieldId].value || false;
 
       const stringValue = Array.isArray(conditionFieldValue)
         ? conditionFieldValue.join("")
