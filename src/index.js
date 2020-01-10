@@ -261,7 +261,12 @@ class GravityForm extends Component {
       confirmationMessage: false,
       errorMessages: false
     });
-    const { formID, backendUrl, jumpToConfirmation, onSubmitSuccess } = this.props;
+    const {
+      formID,
+      backendUrl,
+      jumpToConfirmation,
+      onSubmitSuccess
+    } = this.props;
     const gfSubmissionUrl = backendUrl.substring(
       0,
       backendUrl.indexOf("/wp-json")
@@ -275,7 +280,10 @@ class GravityForm extends Component {
       .then(response => {
         if (response.data && response.data.is_valid) {
           if (onSubmitSuccess) {
-            onSubmitSuccess(response.data);
+            const res = onSubmitSuccess(response.data);
+            if (!res) {
+              return false;
+            }
           }
           const confirmationMessage = response.data.confirmation_message;
           const { type, link } = confirmationMessage || false;
