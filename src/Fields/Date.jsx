@@ -33,6 +33,7 @@ export default ({
     dateType,
     dateFormat,
     defaultValue,
+    datepickerOptions,
   } = field;
 
   const { Input = 'input', Label = 'label', Box = 'div', DatePicker: SdatePicker = 'div' } =
@@ -71,6 +72,21 @@ export default ({
   };
 
   const formatedInputs = getFormattedInputs(inputs);
+
+  const adjustDatePickerOptions = (options) => {
+    if (dateType && dateType === 'datepicker' && options) {
+      const keys = Object.keys(options);
+      if (keys && keys.length > 0) {
+        for (let i = 0; i < keys.length; i++) {
+          if (keys[i] === 'minDate' || keys[i] === 'maxDate') {
+            options[keys[i]] = new Date(options[keys[i]]);
+          }
+        }
+      }
+    }
+    return options;
+  };
+  const dateOptions = adjustDatePickerOptions(datepickerOptions) || {};
 
   return (
     <Box
@@ -131,6 +147,7 @@ export default ({
                     onFocus={() => setFocusClass(true)}
                     required={isRequired}
                     placeholderText={placeholder}
+                    {...dateOptions}
                   />
                 </SdatePicker>
                 {((validationMessage && touched) || error) && (

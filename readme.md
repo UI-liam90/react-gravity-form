@@ -79,3 +79,24 @@ import ComponentName from 'ComponentName';
 ```javascript
 <GravityForm dropzoneText="Drag here or browse to upload" {...props} />
 ```
+
+### DatePicker
+
+If Date Input Type is `datepicker` we use a React <a target="_blank" href="https://github.com/Hacker0x01/react-datepicker">DatePicker</a> module. If you want to pass your own props to the component use `gform_pre_render` hook and pass this options using `datepickerOptions` key. Example:
+
+```php
+<?php
+add_filter( 'gform_pre_render', 'adjust_date_field' );
+function adjust_date_field($form){
+	foreach( $form['fields'] as &$field )  {
+					if ( $field->type == 'date' ) {
+						$field['datepickerOptions'] = array(
+          		'minDate' => date("Y/m/d"),
+							'dateFormat' => 'MM/dd/yyy'
+        		);
+					}
+	}
+	return $form;
+
+}
+```
