@@ -335,7 +335,7 @@ class GravityForm extends Component {
   };
 
   checkConditionalLogic = (condition, fields = false) => {
-    const { rules, actionType } = condition;
+    const { rules, actionType, operator } = condition;
     if (!rules) return true;
 
     const formValues = fields || this.state.formValues;
