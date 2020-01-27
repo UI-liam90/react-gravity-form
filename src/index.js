@@ -354,11 +354,27 @@ class GravityForm extends Component {
       const stringValue = Array.isArray(conditionFieldValue)
         ? conditionFieldValue.join("")
         : conditionFieldValue;
-      if (stringValue && value === stringValue) {
-        hideBasedOnRules[i] = actionType === "hide";
+
+      // Check if comparision value is empty 
+      if(!value){
+        if (!stringValue && !value) {
+          hideBasedOnRules[i] = actionType === "hide";
+        } else {
+          hideBasedOnRules[i] = actionType !== "hide";
+        }
       } else {
-        hideBasedOnRules[i] = actionType !== "hide";
+        if (stringValue && value == stringValue) {
+          hideBasedOnRules[i] = actionType === "hide";
+        } else {
+          hideBasedOnRules[i] = actionType !== "hide";
+        }
       }
+
+      // If operator is 'isnot' reverse value
+      if(operator === 'isnot'){
+        hideBasedOnRules[i] = !hideBasedOnRules[i]
+      }
+      
     }
     hideField = hideBasedOnRules.every(i => i === true);
     // formValues[id].hideField = hideField;
