@@ -335,7 +335,7 @@ class GravityForm extends Component {
   };
 
   checkConditionalLogic = (condition, fields = false) => {
-    const { rules, actionType, operator } = condition;
+    const { rules, actionType } = condition;
     if (!rules) return true;
 
     const formValues = fields || this.state.formValues;
@@ -345,7 +345,7 @@ class GravityForm extends Component {
     let hideField = actionType !== "hide";
     const hideBasedOnRules = [];
     for (let i = 0; i < rules.length; i++) {
-      const { fieldId, value } = rules[i];
+      const { fieldId, value, operator } = rules[i];
       const conditionFieldValue =
         formValues[fieldId].value && formValues[fieldId].value.value
           ? formValues[fieldId].value.value
