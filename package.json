@@ -8,7 +8,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel ./src --out-dir ./dist --presets minify",
+    "build": "babel ./src --out-dir ./dist",
     "prepublishOnly": "babel ./src --out-dir ./dist -s inline"
   },
   "repository": {
@@ -31,20 +31,18 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/gohike/gravity-forms#readme",
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-react": "^7.8.3",
     "babel-preset-minify": "^0.5.1",
-    "react": "^16.8.1"
+    "react": "^16.12.0"
   },
   "dependencies": {
-    "axios": "^0.19.0",
-    "react-select": "^3.0.4",
+    "axios": "^0.19.2",
+    "react-datepicker": "^2.11.0",
     "react-dropzone": "^10.2.1",
-    "react-datepicker": "^2.10.1"
+    "react-select": "^3.0.8"
   }
 }
