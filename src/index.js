@@ -323,7 +323,7 @@ class GravityForm extends Component {
     const { activePage } = this.state;
     this.setState({
       activePage: activePage + 1
-    });
+    }, ()=>this.scrollToConfirmation());
   };
 
   prevStep = e => {
@@ -331,7 +331,7 @@ class GravityForm extends Component {
     const { activePage } = this.state;
     this.setState({
       activePage: activePage - 1
-    });
+    }, ()=>this.scrollToConfirmation());
   };
 
   checkConditionalLogic = (condition, fields = false) => {
