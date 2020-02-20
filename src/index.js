@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import fetch from "isomorphic-unfetch";
 import RenderFields from "./FormElements/RenderFields";
 import FormError from "./FormElements/FormError";
 import FormConfirmation from "./FormElements/FormConfirmation";
@@ -31,9 +31,9 @@ class GravityForm extends Component {
     const { formID, backendUrl, populatedFields } = this.props;
     this._isMounted = true;
     let isMultipart = false;
-    const form = await axios
-      .get(`${backendUrl}/${formID}`)
-      .then(response => response.data)
+    const form = await fetch(`${backendUrl}/${formID}`)
+      .then(resp => resp.json())
+      .then(response => response)
       .catch(() => false);
 
     if (form && this._isMounted) {
@@ -272,20 +272,21 @@ class GravityForm extends Component {
       backendUrl.indexOf("/wp-json")
     );
     const data = new FormData(event.target);
-    axios
-      .post(
-        `${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`,
-        data
-      )
+
+    fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
+      method: "POST",
+      body: data
+    })
+      .then(resp => resp.json())
       .then(response => {
-        if (response.data && response.data.is_valid) {
+        if (response && response.is_valid) {
           if (onSubmitSuccess) {
-            const res = onSubmitSuccess(response.data);
+            const res = onSubmitSuccess(response);
             if (!res) {
               return false;
             }
           }
-          const confirmationMessage = response.data.confirmation_message;
+          const confirmationMessage = response.confirmation_message;
           const { type, link } = confirmationMessage || false;
           if (type && link && type === "redirect") {
             if (typeof window !== "undefined") {
@@ -296,7 +297,7 @@ class GravityForm extends Component {
           this.setState({
             submitting: false,
             submitSuccess: true,
-            confirmationMessage: response.data.confirmation_message
+            confirmationMessage: response.confirmation_message
           });
           if (jumpToConfirmation) {
             this.scrollToConfirmation();
@@ -313,7 +314,7 @@ class GravityForm extends Component {
         this.setState({
           submitting: false,
           submitFailed: true,
-          errorMessages: error.response.data.validation_messages
+          errorMessages: error.response.validation_messages
         });
       });
   };
@@ -321,17 +322,23 @@ class GravityForm extends Component {
   nextStep = e => {
     e.preventDefault();
     const { activePage } = this.state;
-    this.setState({
-      activePage: activePage + 1
-    }, ()=>this.scrollToConfirmation());
+    this.setState(
+      {
+        activePage: activePage + 1
+      },
+      () => this.scrollToConfirmation()
+    );
   };
 
   prevStep = e => {
     e.preventDefault();
     const { activePage } = this.state;
-    this.setState({
-      activePage: activePage - 1
-    }, ()=>this.scrollToConfirmation());
+    this.setState(
+      {
+        activePage: activePage - 1
+      },
+      () => this.scrollToConfirmation()
+    );
   };
 
   checkConditionalLogic = (condition, fields = false) => {
@@ -355,26 +362,23 @@ class GravityForm extends Component {
         ? conditionFieldValue.join("")
         : conditionFieldValue;
 
-      // Check if comparision value is empty 
-      if(!value){
+      // Check if comparision value is empty
+      if (!value) {
         if (!stringValue && !value) {
           hideBasedOnRules[i] = actionType === "hide";
         } else {
           hideBasedOnRules[i] = actionType !== "hide";
         }
+      } else if (stringValue && value == stringValue) {
+        hideBasedOnRules[i] = actionType === "hide";
       } else {
-        if (stringValue && value == stringValue) {
-          hideBasedOnRules[i] = actionType === "hide";
-        } else {
-          hideBasedOnRules[i] = actionType !== "hide";
-        }
+        hideBasedOnRules[i] = actionType !== "hide";
       }
 
       // If operator is 'isnot' reverse value
-      if(operator === 'isnot'){
-        hideBasedOnRules[i] = !hideBasedOnRules[i]
+      if (operator === "isnot") {
+        hideBasedOnRules[i] = !hideBasedOnRules[i];
       }
-      
     }
     hideField = hideBasedOnRules.every(i => i === true);
     // formValues[id].hideField = hideField;
