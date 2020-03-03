@@ -30,7 +30,7 @@ export default ({
     customName
   } = field;
 
-  let selected = null;
+  let selected = '';
   // Map options
   const options = choices.map(choice => {
     const item = {

@@ -145,6 +145,7 @@ export default ({
                     }}
                     dateFormat={format || undefined}
                     onFocus={() => setFocusClass(true)}
+                    autoComplete="off"
                     required={isRequired}
                     placeholderText={placeholder}
                     {...dateOptions}
