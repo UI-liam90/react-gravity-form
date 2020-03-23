@@ -67,22 +67,19 @@ export default ({
             {emailConfirmEnabled ? (
               <>
                 {inputs && inputs.length && inputs.map((input, i) => (
-                  <span
-                    key={`input_${formId}_${input.id}`}
-                    className={emails[i].cssClass ? emails[i].cssClass : ''}
-                  >
+                  <span key={`input_${formId}_${input.id}`}>
                     <Label
                       className={`gf-label ${labelPlacement}`}
-                      htmlFor={`input_${formId}_${input.id}_${i}`}
+                      htmlFor={`input_${formId}_${input.id}`}
                     >
                       {input.label}
                     </Label>
                     <Input
                       id={`input_${formId}_${input.id}_${i}`}
                       name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
-                      type={type}
                       value={value && value[i] && value[i].val ? value[i].val : ''}
-                      placeholder={input.label}
+                      type={type}
+                      placeholder={input.placeholder}
                       maxLength={maxLength}
                       required={isRequired}
                       onChange={(event) => {
@@ -99,7 +96,7 @@ export default ({
                         setFocusClassInputs(value && value[i] && value[i].val && value[i].val !== '', i);
                       }}
                       onFocus={() => setFocusClassInputs(true, i)}
-                      aria-label={label}
+                      aria-label={input.label}
                       aria-describedby={`error_${formId}_${input.id}_${i}`}
                       aria-invalid={(!!validationMessage && touched) || !!error}
                       className={i === 0 && "form-field"}
