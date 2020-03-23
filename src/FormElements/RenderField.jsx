@@ -78,7 +78,7 @@ const RenderField = ({
   }
   const value = formValues[field.id] ? formValues[field.id].value : field.defaultValue;
   const [fieldClassName, setFieldClassName] = useState(
-    `${field.cssClass}${value && value !== '' ? 'filled' : ''}`,
+    `${field.cssClass}${field.type === 'select' ? value.value !== '' ? 'filled' : '' : value && value !== '' ? 'filled' : ''}`,
   );
 
   const setFocusClass = (action) => {

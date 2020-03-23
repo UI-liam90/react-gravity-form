@@ -7,6 +7,7 @@ export default ({
   validationMessage,
   touched,
   setTouched,
+  setFocusClass,
   hideField,
   updateForm,
   styledComponents,
@@ -69,6 +70,8 @@ export default ({
 
   const RSelect = ReactSelect || Select;
 
+  console.log(selectedOption);
+
   return (
     <Box
       width={width}
@@ -94,15 +97,17 @@ export default ({
             <RSelect
               name={customName || `input_${id}`}
               required={isRequired}
-              value={selectedOption}
+              value={selectedOption && selectedOption.value ? selectedOption : ''}
               onChange={option => {
                 handleChange(option, field);
                 unsetError(id);
               }}
               onBlur={() => handleBlur()}
+              onFocus={() => setFocusClass(true)}
               placeholder={placeholder}
               options={options}
               className="form-select"
+
               // styles={customStyles}
               inputId={`input_${formId}_${id}`}
             />
