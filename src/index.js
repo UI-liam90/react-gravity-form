@@ -154,6 +154,7 @@ class GravityForm extends Component {
     let { id, type, isRequired } = field;
     // Set new value
     let value;
+
     if (field.type === "checkbox") {
       const values = [...formValues[field.id].value];
       const index = values.indexOf(event.target.value);
@@ -174,6 +175,16 @@ class GravityForm extends Component {
     } else if (field.type == "consent") {
       value = event.target ? event.target.checked : "null";
     } else if (field.type === "password") {
+      const { subId } = field;
+      const values =
+        formValues[field.id] && formValues[field.id].value
+          ? [...formValues[field.id].value]
+          : [];
+      values[subId] = {
+        val: event.target.value
+      };
+      value = values;
+    } else if (field.type === "email" && field.emailConfirmEnabled) {
       const { subId } = field;
       const values =
         formValues[field.id] && formValues[field.id].value

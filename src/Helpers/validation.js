@@ -141,6 +141,10 @@ const validateField = (value, field) => {
     return passwordValidation(value, field);
   }
 
+  if (type === "email" && field.emailConfirmEnabled) {
+    return passwordValidation(value, field);
+  }
+
   // Check if empty
   const empty = isEmpty(value);
   let validationMessage = "";
