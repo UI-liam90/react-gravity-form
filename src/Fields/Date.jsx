@@ -148,6 +148,7 @@ export default ({
                     autoComplete="off"
                     required={isRequired}
                     placeholderText={placeholder}
+                    maxDate={cssClass.includes('past') && new Date()}
                     {...dateOptions}
                   />
                 </SdatePicker>
