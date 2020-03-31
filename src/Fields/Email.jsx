@@ -6,7 +6,6 @@ export default ({
   validationMessage,
   touched,
   setTouched,
-  setFocusClass,
   hideField,
   updateForm,
   styledComponents,
@@ -34,7 +33,7 @@ export default ({
 
   const [emails, setEmails] = useState(inputs);
 
-  const setFocusClassInputs = (action, i) => {
+  const setFocusClass = (action, i) => {
     const email = { ...emails };
     if (action) {
       email[i].cssClass = 'filled';
@@ -56,50 +55,47 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <Label className={`gf-label ${labelPlacement}`}>
+        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
         {descriptionPlacement === 'above' && description ? (
           description && <div className="description">{description}</div>
         ) : (
-            <React.Fragment>
+          <React.Fragment>
             {emailConfirmEnabled ? (
               <>
                 {inputs && inputs.length && inputs.map((input, i) => (
-                  <span key={`input_${formId}_${input.id}`}>
-                    <Label
-                      className={`gf-label ${labelPlacement}`}
-                      htmlFor={`input_${formId}_${input.id}`}
-                    >
-                      {input.label}
-                    </Label>
+                  <span
+                    key={`input_${formId}_${input.id}`}
+                    className={`${
+                      inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
+                    } ${emails[i].cssClass ? emails[i].cssClass : ''}`}
+                  >
+                    <Label className={`gf-label ${labelPlacement}`} htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}{isRequired ? <abbr>*</abbr> : null}</Label>
                     <Input
                       id={`input_${formId}_${input.id}_${i}`}
                       name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
-                      value={value && value[i] && value[i].val ? value[i].val : ''}
                       type={type}
-                      placeholder={input.placeholder}
-                      maxLength={maxLength}
+                      value={value && value[i] && value[i].val ? value[i].val : ''}
+                      placeholder={input.label ? input.label : placeholder}
                       required={isRequired}
+                      autoComplete="off"
                       onChange={(event) => {
                         field.subId = i;
-
                         updateForm(event, field);
                         unsetError(id);
                       }}
                       onBlur={(event) => {
                         field.subId = i;
-
                         updateForm(event, field);
                         setTouched(id);
-                        setFocusClassInputs(value && value[i] && value[i].val && value[i].val !== '', i);
+                        setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
                       }}
-                      onFocus={() => setFocusClassInputs(true, i)}
-                      aria-label={input.label}
+                      onFocus={() => setFocusClass(true, i)}
+                      aria-label={label}
                       aria-describedby={`error_${formId}_${input.id}_${i}`}
-                      aria-invalid={(!!validationMessage && touched) || !!error}
-                      className={i === 0 && "form-field"}
+                      aria-invalid={!!validationMessage && touched}
                     />
                   </span>
                 ))}
