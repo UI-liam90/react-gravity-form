@@ -174,17 +174,7 @@ class GravityForm extends Component {
       value = values;
     } else if (field.type == "consent") {
       value = event.target ? event.target.checked : "null";
-    } else if (field.type === "password") {
-      const { subId } = field;
-      const values =
-        formValues[field.id] && formValues[field.id].value
-          ? [...formValues[field.id].value]
-          : [];
-      values[subId] = {
-        val: event.target.value
-      };
-      value = values;
-    } else if (field.type === "email" && field.emailConfirmEnabled) {
+    } else if (field.type === "password" || (field.type === "email" && field.emailConfirmEnabled)) {
       const { subId } = field;
       const values =
         formValues[field.id] && formValues[field.id].value
