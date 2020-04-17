@@ -127,12 +127,15 @@ class GravityForm extends Component {
         isMultipart
       }, () => {
         // pass state to parent component
-        const { nextStep, prevStep } = this.props;
+        const { nextStep, prevStep, activePage } = this.props;
         if (nextStep) {
           nextStep(() => this.nextStep);
         }
         if (prevStep) {
           prevStep(() => this.prevStep);
+        }
+        if (activePage) {
+          activePage(this.state.activePage);
         }
       });
     }
@@ -332,6 +335,9 @@ class GravityForm extends Component {
   nextStep = e => {
     e && e.preventDefault();
     const { activePage } = this.state;
+    const { activePage: setActive } = this.props;
+
+    setActive && setActive(activePage + 1);
     this.setState(
       {
         activePage: activePage + 1
@@ -343,6 +349,9 @@ class GravityForm extends Component {
   prevStep = e => {
     e && e.preventDefault();
     const { activePage } = this.state;
+    const { activePage: setActive } = this.props;
+
+    setActive && setActive(activePage - 1);
     this.setState(
       {
         activePage: activePage - 1
