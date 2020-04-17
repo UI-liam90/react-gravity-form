@@ -70,8 +70,6 @@ export default ({
 
   const RSelect = ReactSelect || Select;
 
-  console.log(selectedOption);
-
   return (
     <Box
       width={width}
