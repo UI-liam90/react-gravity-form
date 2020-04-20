@@ -72,13 +72,13 @@ export default ({
                       inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
                     } ${emails[i].cssClass ? emails[i].cssClass : ''}`}
                   >
-                    <Label className={`gf-label ${labelPlacement}`} htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}{isRequired ? <abbr>*</abbr> : null}</Label>
+                    <Label className={`gf-label ${labelPlacement}`} htmlFor={`input_${formId}_${input.id}_${i}`}>{input.customLabel || input.label}{isRequired ? <abbr>*</abbr> : null}</Label>
                     <Input
                       id={`input_${formId}_${input.id}_${i}`}
                       name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
                       type={type}
                       value={value && value[i] && value[i].val ? value[i].val : ''}
-                      placeholder={input.label ? input.label : placeholder}
+                      placeholder={input.placeholder ? input.placeholder : placeholder}
                       required={isRequired}
                       autoComplete="off"
                       onChange={(event) => {
