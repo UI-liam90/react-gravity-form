@@ -28,10 +28,10 @@ class GravityForm extends Component {
   }
 
   async componentDidMount() {
-    const { formID, backendUrl, populatedFields } = this.props;
+    const { formID, backendUrl, populatedFields, fetchOptions } = this.props;
     this._isMounted = true;
     let isMultipart = false;
-    const form = await fetch(`${backendUrl}/${formID}`)
+    const form = await fetch(`${backendUrl}/${formID}`, fetchOptions)
       .then(resp => resp.json())
       .then(response => response)
       .catch(() => false);
