@@ -244,9 +244,22 @@ class GravityForm extends Component {
       },
       () => {
         // pass state to parent component
-        const { onChange } = this.props;
+        const { onChange, onChangeField } = this.props;
         if (onChange) {
           onChange(this.state.formValues);
+        }
+        if (onChangeField) {
+          onChangeField({
+            [id]: {
+              value,
+              id,
+              valid,
+              label: field.label,
+              pageNumber: field.pageNumber,
+              cssClass: field.cssClass,
+              isRequired: field.isRequired
+            }
+          });
         }
       }
     );
