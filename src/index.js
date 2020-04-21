@@ -28,7 +28,7 @@ class GravityForm extends Component {
   }
 
   async componentDidMount() {
-    const { formID, backendUrl, populatedFields, fetchOptions } = this.props;
+    const { formID, backendUrl, populatedFields, populatedEntry, fetchOptions } = this.props;
     this._isMounted = true;
     let isMultipart = false;
     const form = await fetch(`${backendUrl}/${formID}`, fetchOptions)
@@ -43,10 +43,22 @@ class GravityForm extends Component {
       // eslint-disable-next-line no-restricted-syntax
       for (const field of form.fields) {
         let value;
+        let hasPopulatedEntry = false;
         const hasPopulation =
           field.inputName &&
           populatedFields &&
           populatedFields[field.inputName];
+
+        if (populatedEntry && populatedEntry[field.id]) {
+          hasPopulatedEntry = true;
+        } else if (populatedEntry && field.inputs) {
+          field.inputs.some(input => {
+            if (populatedEntry[input.id]) {
+              hasPopulatedEntry = true;
+            }
+          });
+        }
+
         if (field.type === "checkbox") {
           value = field.choices
             .filter(choice =>
@@ -55,6 +67,12 @@ class GravityForm extends Component {
                 : choice.isSelected
             )
             .map(choice => choice.value);
+
+          if (hasPopulatedEntry) {
+            value = field.inputs
+            .filter(choice => populatedEntry[choice.id])
+            .map(choice => choice.label);
+          }
         } else if (field.type === "radio") {
           if (hasPopulation) {
             value = populatedFields[field.inputName];
@@ -77,7 +95,7 @@ class GravityForm extends Component {
         } else {
           value = hasPopulation
             ? populatedFields[field.inputName]
-            : field.defaultValue;
+            : hasPopulatedEntry ? populatedEntry[field.id] : field.defaultValue;
           if (field.type === "fileupload") {
             isMultipart = true;
           }
