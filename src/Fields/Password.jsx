@@ -97,51 +97,53 @@ export default ({
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
-          description && <div className="description">{description}</div>
-        ) : (
-          <div className="ginput_container ginput_container_password">
-            {inputs &&
-              inputs.length &&
-              inputs.map((input, i) => (
-                <span
-                  key={`input_${formId}_${input.id}`}
-                  className={`${
-                    inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
-                  } ${passwords[i].cssClass ? passwords[i].cssClass : ''}`}
-                >
-                  <Input
-                    id={`input_${formId}_${input.id}_${i}`}
-                    name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
-                    type={type}
-                    value={value && value[i] && value[i].val ? value[i].val : ''}
-                    placeholder={input.placeholder ? input.placeholder : placeholder}
-                    required={isRequired}
-                    autoComplete="off"
-                    onChange={(event) => {
-                      field.subId = i;
-                      updateForm(event, field);
-                      unsetError(id);
-                      if (passwordStrengthEnabled && i === 0) {
-                        setGFPwdStrength(event.target.value);
-                      }
-                    }}
-                    onBlur={(event) => {
-                      field.subId = i;
-                      updateForm(event, field);
-                      setTouched(id);
-                      setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
-                    }}
-                    onFocus={() => setFocusClass(true, i)}
-                    aria-label={label}
-                    aria-describedby={`error_${formId}_${input.id}_${i}`}
-                    aria-invalid={!!validationMessage && touched}
-                  />
-                  <label htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}</label>
-                </span>
-              ))}
-          </div>
+        {descriptionPlacement === "above" && description && (
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, '<br />') }}
+          />
         )}
+        <div className="ginput_container ginput_container_password">
+          {inputs &&
+            inputs.length &&
+            inputs.map((input, i) => (
+              <span
+                key={`input_${formId}_${input.id}`}
+                className={`${
+                  inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
+                } ${passwords[i].cssClass ? passwords[i].cssClass : ''}`}
+              >
+                <Input
+                  id={`input_${formId}_${input.id}_${i}`}
+                  name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
+                  type={type}
+                  value={value && value[i] && value[i].val ? value[i].val : ''}
+                  placeholder={input.placeholder ? input.placeholder : placeholder}
+                  required={isRequired}
+                  autoComplete="off"
+                  onChange={(event) => {
+                    field.subId = i;
+                    updateForm(event, field);
+                    unsetError(id);
+                    if (passwordStrengthEnabled && i === 0) {
+                      setGFPwdStrength(event.target.value);
+                    }
+                  }}
+                  onBlur={(event) => {
+                    field.subId = i;
+                    updateForm(event, field);
+                    setTouched(id);
+                    setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
+                  }}
+                  onFocus={() => setFocusClass(true, i)}
+                  aria-label={label}
+                  aria-describedby={`error_${formId}_${input.id}_${i}`}
+                  aria-invalid={!!validationMessage && touched}
+                />
+                <label htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}</label>
+              </span>
+            ))}
+        </div>
         {((validationMessage && touched) || error) && (
           <span
             className="error-message"
@@ -149,7 +151,7 @@ export default ({
             dangerouslySetInnerHTML={{ __html: validationMessage || error }}
           />
         )}
-        {description && (
+        {descriptionPlacement !== "above" && description && (
           <div
             className="description"
             dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, '<br />') }}

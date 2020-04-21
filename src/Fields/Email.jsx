@@ -59,76 +59,73 @@ export default ({
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
-          description && <div className="description">{description}</div>
-        ) : (
-          <React.Fragment>
-            {emailConfirmEnabled ? (
-              <>
-                {inputs && inputs.length && inputs.map((input, i) => (
-                  <span
-                    key={`input_${formId}_${input.id}`}
-                    className={`${
-                      inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
-                    } ${emails[i].cssClass ? emails[i].cssClass : ''}`}
-                  >
-                    <Label className={`gf-label ${labelPlacement}`} htmlFor={`input_${formId}_${input.id}_${i}`}>{input.customLabel || input.label}{isRequired ? <abbr>*</abbr> : null}</Label>
-                    <Input
-                      id={`input_${formId}_${input.id}_${i}`}
-                      name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
-                      type={type}
-                      value={value && value[i] && value[i].val ? value[i].val : ''}
-                      placeholder={input.placeholder ? input.placeholder : placeholder}
-                      required={isRequired}
-                      autoComplete="off"
-                      onChange={(event) => {
-                        field.subId = i;
-                        updateForm(event, field);
-                        unsetError(id);
-                      }}
-                      onBlur={(event) => {
-                        field.subId = i;
-                        updateForm(event, field);
-                        setTouched(id);
-                        setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
-                      }}
-                      onFocus={() => setFocusClass(true, i)}
-                      aria-label={label}
-                      aria-describedby={`error_${formId}_${input.id}_${i}`}
-                      aria-invalid={!!validationMessage && touched}
-                    />
-                  </span>
-                ))}
-              </>
-            ) : (
-              <>
+        {descriptionPlacement === "above" && description && (
+          <div className="description">{description}</div>
+        )}
+        {emailConfirmEnabled ? (
+          <>
+            {inputs && inputs.length && inputs.map((input, i) => (
+              <span
+                key={`input_${formId}_${input.id}`}
+                className={`${
+                  inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
+                } ${emails[i].cssClass ? emails[i].cssClass : ''}`}
+              >
+                <Label className={`gf-label ${labelPlacement}`} htmlFor={`input_${formId}_${input.id}_${i}`}>{input.customLabel || input.label}{isRequired ? <abbr>*</abbr> : null}</Label>
                 <Input
-                  id={`input_${formId}_${id}`}
-                  name={customName || `input_${id}`}
+                  id={`input_${formId}_${input.id}_${i}`}
+                  name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
                   type={type}
-                  value={!value ? '' : value}
-                  placeholder={placeholder}
-                  maxLength={maxLength}
+                  value={value && value[i] && value[i].val ? value[i].val : ''}
+                  placeholder={input.placeholder ? input.placeholder : placeholder}
                   required={isRequired}
+                  autoComplete="off"
                   onChange={(event) => {
+                    field.subId = i;
                     updateForm(event, field);
                     unsetError(id);
                   }}
                   onBlur={(event) => {
+                    field.subId = i;
                     updateForm(event, field);
                     setTouched(id);
-                    setFocusClass(value !== '');
+                    setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
                   }}
-                  onFocus={() => setFocusClass(true)}
+                  onFocus={() => setFocusClass(true, i)}
                   aria-label={label}
-                  aria-describedby={`error_${formId}_${id}`}
-                  aria-invalid={(!!validationMessage && touched) || !!error}
+                  aria-describedby={`error_${formId}_${input.id}_${i}`}
+                  aria-invalid={!!validationMessage && touched}
                 />
-              </>
-            )}
-            {description && <div className="description">{description}</div>}
-          </React.Fragment>
+              </span>
+            ))}
+          </>
+        ) : (
+          <>
+            <Input
+              id={`input_${formId}_${id}`}
+              name={customName || `input_${id}`}
+              type={type}
+              value={!value ? '' : value}
+              placeholder={placeholder}
+              maxLength={maxLength}
+              required={isRequired}
+              onChange={(event) => {
+                updateForm(event, field);
+                unsetError(id);
+              }}
+              onBlur={(event) => {
+                updateForm(event, field);
+                setTouched(id);
+                setFocusClass(value !== '');
+              }}
+              onFocus={() => setFocusClass(true)}
+              aria-label={label}
+              aria-describedby={`error_${formId}_${id}`}
+              aria-invalid={(!!validationMessage && touched) || !!error}
+            />
+          </>
         )}
+        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}

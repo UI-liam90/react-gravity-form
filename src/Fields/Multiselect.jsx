@@ -84,27 +84,24 @@ export default ({
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
-          description && <div className="description">{description}</div>
-        ) : (
-          <React.Fragment>
-            <Select
-              name={customName || `input_${id}[]`}
-              required={isRequired}
-              value={selectedOption}
-              onChange={(option) => {
-                handleChange(option, field);
-              }}
-              onBlur={() => handleBlur()}
-              placeholder={placeholder}
-              options={options}
-              isMulti
-              inputId={`input_${formId}_${id}`}
-              styles={SelectStyles}
-            />
-            {description && <div className="description">{description}</div>}
-          </React.Fragment>
+        {descriptionPlacement === "above" && description && (
+          <div className="description">{description}</div>
         )}
+        <Select
+          name={customName || `input_${id}[]`}
+          required={isRequired}
+          value={selectedOption}
+          onChange={(option) => {
+            handleChange(option, field);
+          }}
+          onBlur={() => handleBlur()}
+          placeholder={placeholder}
+          options={options}
+          isMulti
+          inputId={`input_${formId}_${id}`}
+          styles={SelectStyles}
+        />
+        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}

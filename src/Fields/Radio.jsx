@@ -118,67 +118,64 @@ class Radio extends Component {
             {label}
             {isRequired ? <abbr>*</abbr> : null}
           </Label>
-          {descriptionPlacement === "above" && description ? (
-            description && <div className="description">{description}</div>
-          ) : (
-            <React.Fragment>
-              {choices.map((choice, i) => (
-                <div className={type} key={choice.value}>
-                  <input
-                    id={`input_${formId}_${id}_${i}`}
-                    type="radio"
-                    name={customName || `input_${id}`}
-                    value={choice.value}
-                    checked={value === choice.value}
-                    onChange={event => {
-                      updateForm(event, field);
-                      setTouched(id);
-                      unsetError(id);
-                    }}
-                  />
-                  <label htmlFor={`input_${formId}_${id}_${i}`}>
-                    {choice.text}
-                  </label>
-                </div>
-              ))}
-              {field.enableOtherChoice && (
-                <div className={`${type} other-choise`}>
-                  <input
-                    id={`input_${formId}_${id}_${choices.length}`}
-                    type="radio"
-                    name={`input_${id}`}
-                    value={inputValue}
-                    onChange={event => {
-                      updateForm(event, field);
-                      setTouched(id);
-                      unsetError(id);
-                    }}
-                    ref={e => (this.otherRadio = e)}
-                    onFocus={e => this.setFocus(e)}
-                  />
-                  <Input
-                    id={`input_${formId}_${id}_${choices.length}_other`}
-                    type="text"
-                    placeholder={otherPlaceholder || "Other"}
-                    value={inputValue || ""}
-                    onFocus={e => this.onFocus(e)}
-                    onBlur={e => {
-                      updateForm(e, field);
-                      this.onBlur(e);
-                    }}
-                    onChange={e => {
-                      // updateForm(e, field);
-                      // setTouched(id);
-                      this.onChange(e);
-                      unsetError(id);
-                    }}
-                    ref={e => (this.otherChoise = e)}
-                  />
-                </div>
-              )}
-              {description && <div className="description">{description}</div>}
-            </React.Fragment>
+          {descriptionPlacement === "above" && description && (
+            <div className="description">{description}</div>
           )}
+          {choices.map((choice, i) => (
+            <div className={type} key={choice.value}>
+              <input
+                id={`input_${formId}_${id}_${i}`}
+                type="radio"
+                name={customName || `input_${id}`}
+                value={choice.value}
+                checked={value === choice.value}
+                onChange={event => {
+                  updateForm(event, field);
+                  setTouched(id);
+                  unsetError(id);
+                }}
+              />
+              <label htmlFor={`input_${formId}_${id}_${i}`}>
+                {choice.text}
+              </label>
+            </div>
+          ))}
+          {field.enableOtherChoice && (
+            <div className={`${type} other-choise`}>
+              <input
+                id={`input_${formId}_${id}_${choices.length}`}
+                type="radio"
+                name={`input_${id}`}
+                value={inputValue}
+                onChange={event => {
+                  updateForm(event, field);
+                  setTouched(id);
+                  unsetError(id);
+                }}
+                ref={e => (this.otherRadio = e)}
+                onFocus={e => this.setFocus(e)}
+              />
+              <Input
+                id={`input_${formId}_${id}_${choices.length}_other`}
+                type="text"
+                placeholder={otherPlaceholder || "Other"}
+                value={inputValue || ""}
+                onFocus={e => this.onFocus(e)}
+                onBlur={e => {
+                  updateForm(e, field);
+                  this.onBlur(e);
+                }}
+                onChange={e => {
+                  // updateForm(e, field);
+                  // setTouched(id);
+                  this.onChange(e);
+                  unsetError(id);
+                }}
+                ref={e => (this.otherChoise = e)}
+              />
+            </div>
+          )}
+          {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
         </Radiogroup>
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>

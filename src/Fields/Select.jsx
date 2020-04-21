@@ -88,30 +88,27 @@ export default ({
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === "above" && description ? (
-          description && <div className="description">{description}</div>
-        ) : (
-          <React.Fragment>
-            <RSelect
-              name={customName || `input_${id}`}
-              required={isRequired}
-              value={selectedOption && selectedOption.value ? selectedOption : ''}
-              onChange={option => {
-                handleChange(option, field);
-                unsetError(id);
-              }}
-              onBlur={() => handleBlur()}
-              onFocus={() => setFocusClass(true)}
-              placeholder={placeholder}
-              options={options}
-              className="form-select"
-
-              // styles={customStyles}
-              inputId={`input_${formId}_${id}`}
-            />
-            {description && <div className="description">{description}</div>}
-          </React.Fragment>
+        {descriptionPlacement === "above" && description && (
+          <div className="description">{description}</div>
         )}
+        <RSelect
+          name={customName || `input_${id}`}
+          required={isRequired}
+          value={selectedOption && selectedOption.value ? selectedOption : ''}
+          onChange={option => {
+            handleChange(option, field);
+            unsetError(id);
+          }}
+          onBlur={() => handleBlur()}
+          onFocus={() => setFocusClass(true)}
+          placeholder={placeholder}
+          options={options}
+          className="form-select"
+
+          // styles={customStyles}
+          inputId={`input_${formId}_${id}`}
+        />
+        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}

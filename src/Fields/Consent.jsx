@@ -46,57 +46,53 @@ export default ({
           {label}
           {label && isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
-          description && <div className="description">{description}</div>
-        ) : (
-          <React.Fragment>
-            {inputs.map((input, i) => (
-              <React.Fragment key={`input_${formId}_${id}_${i}`}>
-                {i === 0 && (
-                  <React.Fragment>
-                    <input
-                      id={`input_${formId}_${id}_1`}
-                      type="checkbox"
-                      name={customName || `input_${input.id}`}
-                      value={1}
-                      required={isRequired}
-                      // checked={!value}
-                      onChange={(event) => {
-                        updateForm(event, field);
-                        setTouched(id);
-                        unsetError(id);
-                      }}
-                      aria-invalid={(!!validationMessage && touched) || !!error}
-                    />
-                    <label
-                      className="gfield_consent_label"
-                      htmlFor={customName || `input_${formId}_${id}_1`}
-                      dangerouslySetInnerHTML={{ __html: checkboxLabel }}
-                    />
-                  </React.Fragment>
-                )}
-                {i === 1 && (
-                  <input
-                    type="hidden"
-                    name={`input_${input.id}`}
-                    value={checkboxLabel}
-                    className="gform_hidden"
-                  />
-                )}
-                {i === 2 && (
-                  <input
-                    type="hidden"
-                    name={`input_${input.id}`}
-                    value="1"
-                    className="gform_hidden"
-                  />
-                )}
-              </React.Fragment>
-            ))}
-            {description && <div className="description">{description}</div>}
-          </React.Fragment>
+        {descriptionPlacement === "above" && description && (
+          <div className="description">{description}</div>
         )}
-
+        {inputs.map((input, i) => (
+          <React.Fragment key={`input_${formId}_${id}_${i}`}>
+            {i === 0 && (
+              <React.Fragment>
+                <input
+                  id={`input_${formId}_${id}_1`}
+                  type="checkbox"
+                  name={customName || `input_${input.id}`}
+                  value={1}
+                  required={isRequired}
+                  // checked={!value}
+                  onChange={(event) => {
+                    updateForm(event, field);
+                    setTouched(id);
+                    unsetError(id);
+                  }}
+                  aria-invalid={(!!validationMessage && touched) || !!error}
+                />
+                <label
+                  className="gfield_consent_label"
+                  htmlFor={customName || `input_${formId}_${id}_1`}
+                  dangerouslySetInnerHTML={{ __html: checkboxLabel }}
+                />
+              </React.Fragment>
+            )}
+            {i === 1 && (
+              <input
+                type="hidden"
+                name={`input_${input.id}`}
+                value={checkboxLabel}
+                className="gform_hidden"
+              />
+            )}
+            {i === 2 && (
+              <input
+                type="hidden"
+                name={`input_${input.id}`}
+                value="1"
+                className="gform_hidden"
+              />
+            )}
+          </React.Fragment>
+        ))}
+        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}

@@ -46,35 +46,32 @@ export default ({
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === 'above' && description ? (
-          description && <div className="description">{description}</div>
-        ) : (
-          <React.Fragment>
-            <Input
-              id={`input_${formId}_${id}`}
-              name={customName || `input_${id}`}
-              type={type}
-              value={!value ? '' : value}
-              placeholder={placeholder}
-              maxLength={maxLength}
-              required={isRequired}
-              onChange={(event) => {
-                updateForm(event, field);
-                unsetError(id);
-              }}
-              onBlur={(event) => {
-                updateForm(event, field);
-                setTouched(id);
-                setFocusClass(value !== '');
-              }}
-              onFocus={() => setFocusClass(true)}
-              aria-label={label}
-              aria-describedby={`error_${formId}_${id}`}
-              aria-invalid={(!!validationMessage && touched) || !!error}
-            />
-            {description && <div className="description">{description}</div>}
-          </React.Fragment>
+        {descriptionPlacement === "above" && description && (
+          <div className="description">{description}</div>
         )}
+        <Input
+          id={`input_${formId}_${id}`}
+          name={customName || `input_${id}`}
+          type={type}
+          value={!value ? '' : value}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          required={isRequired}
+          onChange={(event) => {
+            updateForm(event, field);
+            unsetError(id);
+          }}
+          onBlur={(event) => {
+            updateForm(event, field);
+            setTouched(id);
+            setFocusClass(value !== '');
+          }}
+          onFocus={() => setFocusClass(true)}
+          aria-label={label}
+          aria-describedby={`error_${formId}_${id}`}
+          aria-invalid={(!!validationMessage && touched) || !!error}
+        />
+        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}
