@@ -8,6 +8,7 @@ const Submit = ({
   submitting,
   prevStep,
   Component,
+  loadingSpinner,
 }) => {
   const SButton = Button || "button";
 
@@ -23,6 +24,7 @@ const Submit = ({
           className={submitting ? "loading" : undefined}
         >
           {formData.button.text}
+          {loadingSpinner ? <span /> : ""}
         </SButton>
         {formData.lastPageButton && (
           <SButton className="prev" onClick={(e) => prevStep(e)}>
