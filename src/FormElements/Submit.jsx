@@ -14,7 +14,7 @@ const Submit = ({
 
   return (
     <React.Fragment>
-      <div className={`footer${Component ? " multiple" : undefined}`}>
+      <div className={`footer${Component ? " multiple" : ''}`}>
         <input type="hidden" name="nonce" value={formData.nonce} />
         {Component ? <Component submitting={submitting} /> : ""}
         <SButton
