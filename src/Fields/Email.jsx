@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export default ({
   field,
@@ -35,7 +35,8 @@ export default ({
 
   const setFocusClass = (action, i) => {
     const email = { ...emails };
-    if (action) {
+    if (!email[i]) return;
+    if (action && email && !!email.length > 0) {
       email[i].cssClass = 'filled';
     } else {
       email[i].cssClass = '';
@@ -43,7 +44,8 @@ export default ({
     setEmails(email);
   };
 
-  const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
+  const { Input = "input", Label = "label", Box = "div" } =
+    styledComponents || false;
   return (
     <Box
       width={width}
@@ -52,10 +54,13 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label
+          htmlFor={`input_${formId}_${id}`}
+          className={`gf-label ${labelPlacement}`}
+        >
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
@@ -64,40 +69,62 @@ export default ({
         )}
         {emailConfirmEnabled ? (
           <>
-            {inputs && inputs.length && inputs.map((input, i) => (
-              <span
-                key={`input_${formId}_${input.id}`}
-                className={`${
-                  inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
-                } ${emails[i].cssClass ? emails[i].cssClass : ''}`}
-              >
-                <Label className={`gf-label ${labelPlacement}`} htmlFor={`input_${formId}_${input.id}_${i}`}>{input.customLabel || input.label}{isRequired ? <abbr>*</abbr> : null}</Label>
-                <Input
-                  id={`input_${formId}_${input.id}_${i}`}
-                  name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
-                  type={type}
-                  value={value && value[i] && value[i].val ? value[i].val : ''}
-                  placeholder={input.placeholder ? input.placeholder : placeholder}
-                  required={isRequired}
-                  autoComplete="off"
-                  onChange={(event) => {
-                    field.subId = i;
-                    updateForm(event, field);
-                    unsetError(id);
-                  }}
-                  onBlur={(event) => {
-                    field.subId = i;
-                    updateForm(event, field);
-                    setTouched(id);
-                    setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
-                  }}
-                  onFocus={() => setFocusClass(true, i)}
-                  aria-label={label}
-                  aria-describedby={`error_${formId}_${input.id}_${i}`}
-                  aria-invalid={!!validationMessage && touched}
-                />
-              </span>
-            ))}
+            {inputs &&
+              inputs.length &&
+              inputs.map((input, i) => (
+                <span
+                  key={`input_${formId}_${input.id}`}
+                  className={`${
+                    inputs.length > 1
+                      ? `ginput_${i === 0 ? "left" : "right"}`
+                      : "medim"
+                  } ${emails[i].cssClass ? emails[i].cssClass : ""}`}
+                >
+                  <Label
+                    className={`gf-label ${labelPlacement}`}
+                    htmlFor={`input_${formId}_${input.id}_${i}`}
+                  >
+                    {input.customLabel || input.label}
+                    {isRequired ? <abbr>*</abbr> : null}
+                  </Label>
+                  <Input
+                    id={`input_${formId}_${input.id}_${i}`}
+                    name={
+                      customName || `input_${id}${i === 1 ? `_${i + 1}` : ""}`
+                    }
+                    type={type}
+                    value={
+                      value && value[i] && value[i].val ? value[i].val : ""
+                    }
+                    placeholder={
+                      input.placeholder ? input.placeholder : placeholder
+                    }
+                    required={isRequired}
+                    autoComplete="off"
+                    onChange={(event) => {
+                      field.subId = i;
+                      updateForm(event, field);
+                      unsetError(id);
+                    }}
+                    onBlur={(event) => {
+                      field.subId = i;
+                      updateForm(event, field);
+                      setTouched(id);
+                      setFocusClass(
+                        value &&
+                          value[i] &&
+                          value[i].val &&
+                          value[i].val !== "",
+                        i
+                      );
+                    }}
+                    onFocus={() => setFocusClass(true, i)}
+                    aria-label={label}
+                    aria-describedby={`error_${formId}_${input.id}_${i}`}
+                    aria-invalid={!!validationMessage && touched}
+                  />
+                </span>
+              ))}
           </>
         ) : (
           <>
@@ -105,7 +132,7 @@ export default ({
               id={`input_${formId}_${id}`}
               name={customName || `input_${id}`}
               type={type}
-              value={!value ? '' : value}
+              value={!value ? "" : value}
               placeholder={placeholder}
               maxLength={maxLength}
               required={isRequired}
@@ -116,7 +143,7 @@ export default ({
               onBlur={(event) => {
                 updateForm(event, field);
                 setTouched(id);
-                setFocusClass(value !== '');
+                setFocusClass(value !== "");
               }}
               onFocus={() => setFocusClass(true)}
               aria-label={label}
@@ -125,7 +152,9 @@ export default ({
             />
           </>
         )}
-        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+        {descriptionPlacement !== "above" && description && (
+          <div className="description">{description}</div>
+        )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}
