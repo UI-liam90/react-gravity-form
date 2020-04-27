@@ -1,18 +1,26 @@
-import React from 'react';
+import React from "react";
 
-const Submit = ({ Button, Loading, formData, isDisabled, submitting, prevStep, Component }) => {
-  const SButton = Button || 'button';
+const Submit = ({
+  Button,
+  Loading,
+  formData,
+  isDisabled,
+  submitting,
+  prevStep,
+  Component,
+}) => {
+  const SButton = Button || "button";
 
   return (
     <React.Fragment>
-      <div className="footer">
+      <div className={`footer${Component ? " multiple" : undefined}`}>
         <input type="hidden" name="nonce" value={formData.nonce} />
-        {Component ? <Component submitting={submitting} /> : ''}
+        {Component ? <Component submitting={submitting} /> : ""}
         <SButton
           type="submit"
           mr={20}
           disabled={isDisabled || submitting}
-          className={submitting ? 'loading' : undefined}
+          className={submitting ? "loading" : undefined}
         >
           {formData.button.text}
         </SButton>
@@ -28,4 +36,3 @@ const Submit = ({ Button, Loading, formData, isDisabled, submitting, prevStep, C
 };
 
 export default Submit;
-
