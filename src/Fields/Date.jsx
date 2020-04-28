@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
 
 export default ({
   field,
@@ -36,14 +36,21 @@ export default ({
     datepickerOptions,
   } = field;
 
-  const { Input = 'input', Label = 'label', Box = 'div', DatePicker: SdatePicker = 'div' } =
-    styledComponents || false;
+  const {
+    Input = "input",
+    Label = "label",
+    Box = "div",
+    DatePicker: SdatePicker = "div",
+    ReactSelect,
+  } = styledComponents || false;
+
+  const RSelect = ReactSelect || Select;
 
   // conver date format
-  const format = dateFormat && dateFormat === 'dmy' ? 'dd/MM/yyyy' : false;
+  const format = dateFormat && dateFormat === "dmy" ? "dd/MM/yyyy" : false;
   let selectedValue = defaultValue ? new Date(defaultValue) : false;
   if (format && defaultValue) {
-    const dateParts = defaultValue.split('/');
+    const dateParts = defaultValue.split("/");
     const dateObject = new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0]);
     selectedValue = dateObject;
   }
@@ -51,21 +58,25 @@ export default ({
   const [startDate, setDate] = useState(selectedValue);
 
   const getFormattedInputs = (items) => {
-    if (dateType && dateType === 'datefield') {
-      // 0 - MM
-      // 1 - DD
-      // 2 - YYYY
-      switch (dateFormat) {
-        case 'dmy':
-        case 'dmy_dash':
-        case 'dmy_dot':
-          return [items[1], items[0], items[2]];
-        case 'ymd_slash':
-        case 'ymd_dash':
-        case 'ymd_dot':
-          return [items[2], items[0], items[1]];
-        default:
-          return items;
+    if (dateType) {
+      if (dateType === "datefield") {
+        // 0 - MM
+        // 1 - DD
+        // 2 - YYYY
+        switch (dateFormat) {
+          case "dmy":
+          case "dmy_dash":
+          case "dmy_dot":
+            return [items[1], items[0], items[2]];
+          case "ymd_slash":
+          case "ymd_dash":
+          case "ymd_dot":
+            return [items[2], items[0], items[1]];
+          default:
+            return items;
+        }
+      } else if (dateType === "datedropdown") {
+        return [items[1], items[0], items[2]];
       }
     }
     return items;
@@ -74,11 +85,11 @@ export default ({
   const formatedInputs = getFormattedInputs(inputs);
 
   const adjustDatePickerOptions = (options) => {
-    if (dateType && dateType === 'datepicker' && options) {
+    if (dateType && dateType === "datepicker" && options) {
       const keys = Object.keys(options);
       if (keys && keys.length > 0) {
         for (let i = 0; i < keys.length; i++) {
-          if (keys[i] === 'minDate' || keys[i] === 'maxDate') {
+          if (keys[i] === "minDate" || keys[i] === "maxDate") {
             options[keys[i]] = new Date(options[keys[i]]);
           }
         }
@@ -88,6 +99,19 @@ export default ({
   };
   const dateOptions = adjustDatePickerOptions(datepickerOptions) || {};
 
+  const get_number_dropdown = (selected_value, start_number, end_number) => {
+    const options = [];
+    const increment = start_number < end_number ? 1 : -1;
+    for (let i = start_number; i != end_number + increment; i += increment) {
+      options.push({
+        value: i,
+        label: i,
+        selected: parseInt(i) === parseInt(selected_value),
+      });
+    }
+    return options;
+  };
+
   return (
     <Box
       width={width}
@@ -96,9 +120,12 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
-      <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
+      <Label
+        htmlFor={`input_${formId}_${id}`}
+        className={`gf-label ${labelPlacement}`}
+      >
         {label}
         {isRequired ? <abbr>*</abbr> : null}
       </Label>
@@ -106,57 +133,98 @@ export default ({
         {descriptionPlacement === "above" && description && (
           <div className="description">{description}</div>
         )}
-        {dateType && dateType === 'datepicker' ? (
-          <React.Fragment>
-            <SdatePicker className="ginput_container ginput_container_date">
-              <DatePicker
-                name={`input_${id}`}
-                id={`input_${formId}_${id}`}
-                type="text"
-                className="datepicker hasDatepicker"
-                selected={startDate}
-                onChange={(date) => {
-                  setDate(date);
-                  updateForm(
-                    {
-                      target: {
-                        value: date,
+        {dateType && dateType !== "datefield" ? (
+          dateType === "datepicker" ? (
+            <React.Fragment>
+              <SdatePicker className="ginput_container ginput_container_date">
+                <DatePicker
+                  name={`input_${id}`}
+                  id={`input_${formId}_${id}`}
+                  type="text"
+                  className="datepicker hasDatepicker"
+                  selected={startDate}
+                  onChange={(date) => {
+                    setDate(date);
+                    updateForm(
+                      {
+                        target: {
+                          value: date,
+                        },
                       },
-                    },
-                    field
-                  );
-                  setTouched(id);
-                  unsetError(id);
-                  setFocusClass(date);
-                }}
-                onBlur={(e) => {
-                  updateForm(
-                    {
-                      target: {
-                        value: startDate,
+                      field
+                    );
+                    setTouched(id);
+                    unsetError(id);
+                    setFocusClass(date);
+                  }}
+                  onBlur={(e) => {
+                    updateForm(
+                      {
+                        target: {
+                          value: startDate,
+                        },
                       },
-                    },
-                    field
-                  );
-                  setTouched(id);
-                  unsetError(id);
-                  setFocusClass(startDate);
-                }}
-                dateFormat={format || undefined}
-                onFocus={() => setFocusClass(true)}
-                autoComplete="off"
-                required={isRequired}
-                placeholderText={placeholder}
-                maxDate={cssClass.includes('past') && new Date()}
-                {...dateOptions}
-              />
-            </SdatePicker>
-            {((validationMessage && touched) || error) && (
-              <span className="error-message" id={`error_${formId}_${id}`}>
-                {validationMessage || error}
-              </span>
-            )}
-          </React.Fragment>
+                      field
+                    );
+                    setTouched(id);
+                    unsetError(id);
+                    setFocusClass(startDate);
+                  }}
+                  dateFormat={format || undefined}
+                  onFocus={() => setFocusClass(true)}
+                  autoComplete="off"
+                  required={isRequired}
+                  placeholderText={placeholder}
+                  maxDate={cssClass.includes("past") && new Date()}
+                  {...dateOptions}
+                />
+              </SdatePicker>
+              {((validationMessage && touched) || error) && (
+                <span className="error-message" id={`error_${formId}_${id}`}>
+                  {validationMessage || error}
+                </span>
+              )}
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              {formatedInputs &&
+                formatedInputs.map((input, index) => (
+                  <div key={input.id} className="gfield_date_dropdown">
+                    <RSelect
+                      required={isRequired}
+                      placeholder={input.placeholder}
+                      options={
+                        index === 0
+                          ? get_number_dropdown(0, 1, 31)
+                          : index === 1
+                          ? get_number_dropdown(0, 1, 12)
+                          : get_number_dropdown(
+                              0,
+                              1920,
+                              new Date().getFullYear()
+                            )
+                      }
+                      id={`input_${formId}_${id}_${index + 1}`}
+                      name={customName || `input_${id}[]`}
+                      onBlur={(event) => {
+                        field.subId = index;
+                        field.dateLabel = input.label;
+                        updateForm(event, field);
+                        setTouched(id);
+                        unsetError(id);
+                        setFocusClass(input.value !== "");
+                      }}
+                      onFocus={() => setFocusClass(true)}
+                    />
+                  </div>
+                ))}
+              {((validationMessage && touched) || error) && (
+                <span className="error-message" id={`error_${formId}_${id}`}>
+                  {validationMessage || error}
+                </span>
+              )}
+            </React.Fragment>
+          )
         ) : (
           <React.Fragment>
             {formatedInputs &&
@@ -170,13 +238,13 @@ export default ({
                     step="1"
                     min="1"
                     max={
-                      item.label === 'MM'
+                      item.label === "MM"
                         ? 12
-                        : item.label === 'DD'
+                        : item.label === "DD"
                         ? 31
                         : new Date().getFullYear() + 1
                     }
-                    maxLength={item.label === 'YYYY' ? 4 : 2}
+                    maxLength={item.label === "YYYY" ? 4 : 2}
                     value={item.value}
                     onBlur={(event) => {
                       field.subId = index;
@@ -184,11 +252,14 @@ export default ({
                       updateForm(event, field);
                       setTouched(id);
                       unsetError(id);
-                      setFocusClass(item.value !== '');
+                      setFocusClass(item.value !== "");
                     }}
                     onFocus={() => setFocusClass(true)}
                   />
-                  <label htmlFor={`input_${formId}_${id}_${index}`} className="hide-label">
+                  <label
+                    htmlFor={`input_${formId}_${id}_${index}`}
+                    className="hide-label"
+                  >
                     {item.label}
                   </label>
                   {validationMessage &&
@@ -196,7 +267,10 @@ export default ({
                     validationMessage[index] &&
                     index === validationMessage[index].index &&
                     validationMessage[index].message && (
-                      <span className="error-message" id={`error_${formId}_${item.id}`}>
+                      <span
+                        className="error-message"
+                        id={`error_${formId}_${item.id}`}
+                      >
                         {validationMessage[index].message}
                       </span>
                     )}
@@ -205,7 +279,9 @@ export default ({
               ))}
           </React.Fragment>
         )}
-        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+        {descriptionPlacement !== "above" && description && (
+          <div className="description">{description}</div>
+        )}
       </div>
     </Box>
   );
