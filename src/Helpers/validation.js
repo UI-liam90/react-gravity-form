@@ -99,19 +99,27 @@ const passwordValidation = (values, field) => {
   const { inputs, isRequired: required, errorMessage } = field || false;
   const { required: requiredMsg, mismatch } = errorMessage || false;
 
+  const filteredInputs = inputs.filter((item) => !item.isHidden);
+
   // check if fields is required and isn't empty
   const isInputsEmpty =
     values && values.filter((item) => item && item.val === "").length;
 
   if (
-    ((values && values.length === 0) || isInputsEmpty === inputs.length) &&
+    ((values && values.length === 0) ||
+      isInputsEmpty === filteredInputs.length) &&
     required
   ) {
     return requiredMsg || "This field is required";
   }
 
   // if there is repeat password field => check if match
-  if (values && values.length === 2 && inputs && inputs.length === 2) {
+  if (
+    values &&
+    values.length === 2 &&
+    filteredInputs &&
+    filteredInputs.length === 2
+  ) {
     if (
       values[1] &&
       values[0] &&

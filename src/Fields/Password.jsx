@@ -97,7 +97,7 @@ export default ({
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
-        {descriptionPlacement === "above" && description && (
+        {descriptionPlacement === 'above' && description && (
           <div
             className="description"
             dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, '<br />') }}
@@ -106,43 +106,46 @@ export default ({
         <div className="ginput_container ginput_container_password">
           {inputs &&
             inputs.length &&
-            inputs.map((input, i) => (
-              <span
-                key={`input_${formId}_${input.id}`}
-                className={`${
-                  inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
-                } ${passwords[i].cssClass ? passwords[i].cssClass : ''}`}
-              >
-                <Input
-                  id={`input_${formId}_${input.id}_${i}`}
-                  name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
-                  type={type}
-                  value={value && value[i] && value[i].val ? value[i].val : ''}
-                  placeholder={input.placeholder ? input.placeholder : placeholder}
-                  required={isRequired}
-                  autoComplete="off"
-                  onChange={(event) => {
-                    field.subId = i;
-                    updateForm(event, field);
-                    unsetError(id);
-                    if (passwordStrengthEnabled && i === 0) {
-                      setGFPwdStrength(event.target.value);
-                    }
-                  }}
-                  onBlur={(event) => {
-                    field.subId = i;
-                    updateForm(event, field);
-                    setTouched(id);
-                    setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
-                  }}
-                  onFocus={() => setFocusClass(true, i)}
-                  aria-label={label}
-                  aria-describedby={`error_${formId}_${input.id}_${i}`}
-                  aria-invalid={!!validationMessage && touched}
-                />
-                <label htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}</label>
-              </span>
-            ))}
+            inputs.map(
+              (input, i) =>
+                !input.isHidden && (
+                  <span
+                    key={`input_${formId}_${input.id}`}
+                    className={`${
+                      inputs.length > 1 ? `ginput_${i === 0 ? 'left' : 'right'}` : 'medim'
+                    } ${passwords[i].cssClass ? passwords[i].cssClass : ''}`}
+                  >
+                    <Input
+                      id={`input_${formId}_${input.id}_${i}`}
+                      name={customName || `input_${id}${i === 1 ? `_${i + 1}` : ''}`}
+                      type={type}
+                      value={value && value[i] && value[i].val ? value[i].val : ''}
+                      placeholder={input.placeholder ? input.placeholder : placeholder}
+                      required={isRequired}
+                      autoComplete="off"
+                      onChange={(event) => {
+                        field.subId = i;
+                        updateForm(event, field);
+                        unsetError(id);
+                        if (passwordStrengthEnabled && i === 0) {
+                          setGFPwdStrength(event.target.value);
+                        }
+                      }}
+                      onBlur={(event) => {
+                        field.subId = i;
+                        updateForm(event, field);
+                        setTouched(id);
+                        setFocusClass(value && value[i] && value[i].val && value[i].val !== '', i);
+                      }}
+                      onFocus={() => setFocusClass(true, i)}
+                      aria-label={label}
+                      aria-describedby={`error_${formId}_${input.id}_${i}`}
+                      aria-invalid={!!validationMessage && touched}
+                    />
+                    <label htmlFor={`input_${formId}_${input.id}_${i}`}>{input.label}</label>
+                  </span>
+                )
+            )}
         </div>
         {((validationMessage && touched) || error) && (
           <span
@@ -151,7 +154,7 @@ export default ({
             dangerouslySetInnerHTML={{ __html: validationMessage || error }}
           />
         )}
-        {descriptionPlacement !== "above" && description && (
+        {descriptionPlacement !== 'above' && description && (
           <div
             className="description"
             dangerouslySetInnerHTML={{ __html: description.replace(/\n/g, '<br />') }}
@@ -180,3 +183,4 @@ export default ({
     </Box>
   );
 };
+
