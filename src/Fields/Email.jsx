@@ -12,6 +12,7 @@ export default ({
   error,
   unsetError,
   cssClass,
+  setFocusClass,
   ...props
 }) => {
   const {
@@ -33,13 +34,13 @@ export default ({
 
   const [emails, setEmails] = useState(inputs);
 
-  const setFocusClass = (action, i) => {
+  const setFocusClassMultiple = (action, i) => {
     const email = { ...emails };
     if (!email[i]) return;
     if (action && email && !!email.length > 0) {
-      email[i].cssClass = 'filled';
+      email[i].cssClass = "filled";
     } else {
-      email[i].cssClass = '';
+      email[i].cssClass = "";
     }
     setEmails(email);
   };
@@ -110,7 +111,7 @@ export default ({
                       field.subId = i;
                       updateForm(event, field);
                       setTouched(id);
-                      setFocusClass(
+                      setFocusClassMultiple(
                         value &&
                           value[i] &&
                           value[i].val &&
@@ -118,7 +119,7 @@ export default ({
                         i
                       );
                     }}
-                    onFocus={() => setFocusClass(true, i)}
+                    onFocus={() => setFocusClassMultiple(true, i)}
                     aria-label={label}
                     aria-describedby={`error_${formId}_${input.id}_${i}`}
                     aria-invalid={!!validationMessage && touched}
