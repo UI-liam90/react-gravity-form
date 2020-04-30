@@ -64,6 +64,7 @@ export default ({
     };
     updateForm(event, field);
     setTouched(id);
+    setFocusClass(selectedOption && selectedOption.value);
   };
   const { ReactSelect, Label = "label", Box = "div" } =
     styledComponents || false;
