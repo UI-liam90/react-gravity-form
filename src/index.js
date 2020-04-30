@@ -473,6 +473,7 @@ class GravityForm extends Component {
       customComponents,
       errorMessage,
       dropzoneText,
+      loadingSpinner,
     } = this.props;
     const { Button, Loading, GFWrapper = "div", FormError: SFormError } =
       styledComponents || false;
@@ -565,6 +566,7 @@ class GravityForm extends Component {
                   isDisabled={isDisabled}
                   submitting={submitting}
                   prevStep={this.prevStep}
+                  loadingSpinner={loadingSpinner}
                 />
               )}
             </div>
