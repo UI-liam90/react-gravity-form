@@ -378,6 +378,9 @@ class GravityForm extends Component {
           submitFailed: true,
           errorMessages,
         });
+        if (jumpToConfirmation) {
+          this.scrollToConfirmation();
+        }
       });
   };
 
