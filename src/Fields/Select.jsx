@@ -105,7 +105,7 @@ export default ({
           placeholder={placeholder}
           options={options}
           className="form-select"
-
+          autoFocus={false}
           // styles={customStyles}
           inputId={`input_${formId}_${id}`}
         />

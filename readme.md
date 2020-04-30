@@ -39,26 +39,6 @@ Please take into account you have to create your own endpoint in the backend to 
 
 ### Custom component
 
-If you want to inject your custom component inside a Gravity form you have to create any field you want in your form and replace the type of this field within `gform_pre_render` hook
-
-```php
-<?php
-add_filter( 'gform_pre_render', 'replace_field_type' );
-function replace_field_type($form){
-	foreach( $form['fields'] as &$field )  {
-					//NOTE: replace 3 with your field id
-					$field_id = 3;
-					if ( $field->id != $field_id ) {
-							continue;
-					}
-					$field->type="custom"
-	}
-	return $form;
-}
-```
-
-Now you have to pass your custom component instead of the current field on frontend:
-
 ```javascript
 import ComponentName from 'ComponentName';
 
