@@ -23,17 +23,23 @@ class GravityForm extends Component {
       activePage: false,
       conditionFields: {},
       conditioanlIds: {},
-      isMultipart: false
+      isMultipart: false,
     };
   }
 
   async componentDidMount() {
-    const { formID, backendUrl, populatedFields, populatedEntry, fetchOptions } = this.props;
+    const {
+      formID,
+      backendUrl,
+      populatedFields,
+      populatedEntry,
+      fetchOptions,
+    } = this.props;
     this._isMounted = true;
     let isMultipart = false;
     const form = await fetch(`${backendUrl}/${formID}`, fetchOptions)
-      .then(resp => resp.json())
-      .then(response => response)
+      .then((resp) => resp.json())
+      .then((response) => response)
       .catch(() => false);
 
     if (form && this._isMounted) {
@@ -52,7 +58,7 @@ class GravityForm extends Component {
         if (populatedEntry && populatedEntry[field.id]) {
           hasPopulatedEntry = true;
         } else if (populatedEntry && field.inputs) {
-          field.inputs.some(input => {
+          field.inputs.some((input) => {
             if (populatedEntry[input.id]) {
               hasPopulatedEntry = true;
             }
@@ -61,33 +67,35 @@ class GravityForm extends Component {
 
         if (field.type === "checkbox") {
           value = field.choices
-            .filter(choice =>
+            .filter((choice) =>
               hasPopulation
                 ? choice.value === populatedFields[field.inputName]
                 : choice.isSelected
             )
-            .map(choice => choice.value);
+            .map((choice) => choice.value);
 
           if (hasPopulatedEntry) {
             value = field.inputs
-            .filter(choice => populatedEntry[choice.id])
-            .map(choice => choice.label);
+              .filter((choice) => populatedEntry[choice.id])
+              .map((choice) => choice.label);
           }
         } else if (field.type === "radio") {
           if (hasPopulation) {
             value = populatedFields[field.inputName];
           } else {
-            const preselected = field.choices.find(choice => choice.isSelected);
+            const preselected = field.choices.find(
+              (choice) => choice.isSelected
+            );
             value = preselected ? preselected.value : "";
           }
         } else if (field.type === "select") {
           const selectedOption = field.choices
-            .filter(choice =>
+            .filter((choice) =>
               hasPopulation
                 ? choice.value === populatedFields[field.inputName]
                 : choice.isSelected
             )
-            .map(item => ({ value: item.value, label: item.text }));
+            .map((item) => ({ value: item.value, label: item.text }));
           value =
             selectedOption && selectedOption.length > 0
               ? selectedOption[0]
@@ -95,7 +103,9 @@ class GravityForm extends Component {
         } else {
           value = hasPopulation
             ? populatedFields[field.inputName]
-            : hasPopulatedEntry ? populatedEntry[field.id] : field.defaultValue;
+            : hasPopulatedEntry
+            ? populatedEntry[field.id]
+            : field.defaultValue;
           if (field.type === "fileupload") {
             isMultipart = true;
           }
@@ -105,9 +115,9 @@ class GravityForm extends Component {
         if (field.conditionalLogic) {
           const tmpField = {
             id: field.id,
-            conditionalLogic: field.conditionalLogic
+            conditionalLogic: field.conditionalLogic,
           };
-          const ids = field.conditionalLogic.rules.map(item => item.fieldId);
+          const ids = field.conditionalLogic.rules.map((item) => item.fieldId);
           for (let i = 0; i < ids.length; i++) {
             const id = parseInt(ids[i]);
             if (conditioanlIds.indexOf(id) === -1) {
@@ -123,7 +133,7 @@ class GravityForm extends Component {
           label: field.label,
           pageNumber: field.pageNumber,
           cssClass: field.cssClass,
-          isRequired: field.isRequired
+          isRequired: field.isRequired,
         };
       }
       // check condition logic
@@ -136,26 +146,29 @@ class GravityForm extends Component {
         );
       }
 
-      this.setState({
-        formData: form,
-        formValues,
-        activePage: form.pagination ? 1 : false,
-        conditionFields,
-        conditioanlIds,
-        isMultipart
-      }, () => {
-        // pass state to parent component
-        const { nextStep, prevStep, activePage } = this.props;
-        if (nextStep) {
-          nextStep(() => this.nextStep);
+      this.setState(
+        {
+          formData: form,
+          formValues,
+          activePage: form.pagination ? 1 : false,
+          conditionFields,
+          conditioanlIds,
+          isMultipart,
+        },
+        () => {
+          // pass state to parent component
+          const { nextStep, prevStep, activePage } = this.props;
+          if (nextStep) {
+            nextStep(() => this.nextStep);
+          }
+          if (prevStep) {
+            prevStep(() => this.prevStep);
+          }
+          if (activePage) {
+            activePage(this.state.activePage);
+          }
         }
-        if (prevStep) {
-          prevStep(() => this.prevStep);
-        }
-        if (activePage) {
-          activePage(this.state.activePage);
-        }
-      });
+      );
     }
   }
 
@@ -163,13 +176,13 @@ class GravityForm extends Component {
     this._isMounted = false;
   }
 
-  setTouched = id => {
+  setTouched = (id) => {
     this.setState({
-      touched: { ...this.state.touched, [id]: true }
+      touched: { ...this.state.touched, [id]: true },
     });
   };
 
-  unsetError = id => {
+  unsetError = (id) => {
     const { errorMessages } = this.state;
     if (!errorMessages) return;
 
@@ -199,19 +212,22 @@ class GravityForm extends Component {
       const values = [...formValues[field.id].value];
       values[subId] = {
         val: event.target.value,
-        label: dateLabel
+        label: dateLabel,
       };
       value = values;
     } else if (field.type == "consent") {
       value = event.target ? event.target.checked : "null";
-    } else if (field.type === "password" || (field.type === "email" && field.emailConfirmEnabled)) {
+    } else if (
+      field.type === "password" ||
+      (field.type === "email" && field.emailConfirmEnabled)
+    ) {
       const { subId } = field;
       const values =
         formValues[field.id] && formValues[field.id].value
           ? [...formValues[field.id].value]
           : [];
       values[subId] = {
-        val: event.target.value
+        val: event.target.value,
       };
       value = values;
     } else {
@@ -256,9 +272,9 @@ class GravityForm extends Component {
             label: field.label,
             pageNumber: field.pageNumber,
             cssClass: field.cssClass,
-            isRequired: field.isRequired
-          }
-        }
+            isRequired: field.isRequired,
+          },
+        },
       },
       () => {
         // pass state to parent component
@@ -275,8 +291,8 @@ class GravityForm extends Component {
               label: field.label,
               pageNumber: field.pageNumber,
               cssClass: field.cssClass,
-              isRequired: field.isRequired
-            }
+              isRequired: field.isRequired,
+            },
           });
         }
       }
@@ -291,25 +307,25 @@ class GravityForm extends Component {
       const scrollTop =
         window.pageYOffset || document.documentElement.scrollTop;
       window.scrollTo({
-        top: scrollTop + rect.top - 100
+        top: scrollTop + rect.top - 100,
       });
     }
   };
 
-  onSubmit = async event => {
+  onSubmit = async (event) => {
     event.preventDefault();
     this.setState({
       submitting: true,
       submitSuccess: false,
       submitFailed: false,
       confirmationMessage: false,
-      errorMessages: false
+      errorMessages: false,
     });
     const {
       formID,
       backendUrl,
       jumpToConfirmation,
-      onSubmitSuccess
+      onSubmitSuccess,
     } = this.props;
     const gfSubmissionUrl = backendUrl.substring(
       0,
@@ -319,10 +335,10 @@ class GravityForm extends Component {
 
     fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
       method: "POST",
-      body: data
+      body: data,
     })
-      .then(resp => resp.json())
-      .then(response => {
+      .then((resp) => resp.json())
+      .then((response) => {
         if (response && response.is_valid) {
           if (onSubmitSuccess) {
             const res = onSubmitSuccess(response);
@@ -341,29 +357,31 @@ class GravityForm extends Component {
           this.setState({
             submitting: false,
             submitSuccess: true,
-            confirmationMessage: response.confirmation_message
+            confirmationMessage: response.confirmation_message,
           });
           if (jumpToConfirmation) {
             this.scrollToConfirmation();
           }
         } else {
-          this.setState({
-            submitting: false,
-            submitFailed: true,
-            errorMessages: "Something went wrong"
-          });
+          throw {
+            response,
+          };
         }
       })
-      .catch(error => {
+      .catch((error) => {
+        const errorMessages =
+          error && error.response && error.response.validation_messages
+            ? error.response.validation_messages
+            : "Something went wrong";
         this.setState({
           submitting: false,
           submitFailed: true,
-          errorMessages: error.response.validation_messages
+          errorMessages,
         });
       });
   };
 
-  nextStep = e => {
+  nextStep = (e) => {
     e && e.preventDefault();
     const { activePage } = this.state;
     const { activePage: setActive } = this.props;
@@ -371,13 +389,13 @@ class GravityForm extends Component {
     setActive && setActive(activePage + 1);
     this.setState(
       {
-        activePage: activePage + 1
+        activePage: activePage + 1,
       },
       () => this.scrollToConfirmation()
     );
   };
 
-  prevStep = e => {
+  prevStep = (e) => {
     e && e.preventDefault();
     const { activePage } = this.state;
     const { activePage: setActive } = this.props;
@@ -385,7 +403,7 @@ class GravityForm extends Component {
     setActive && setActive(activePage - 1);
     this.setState(
       {
-        activePage: activePage - 1
+        activePage: activePage - 1,
       },
       () => this.scrollToConfirmation()
     );
@@ -430,7 +448,7 @@ class GravityForm extends Component {
         hideBasedOnRules[i] = !hideBasedOnRules[i];
       }
     }
-    hideField = hideBasedOnRules.every(i => i === true);
+    hideField = hideBasedOnRules.every((i) => i === true);
     // formValues[id].hideField = hideField;
     // this.setState({ formValues });
     return hideField;
@@ -445,7 +463,7 @@ class GravityForm extends Component {
       touched,
       submitting,
       activePage,
-      isMultipart
+      isMultipart,
     } = this.state;
     const {
       title,
@@ -455,6 +473,7 @@ class GravityForm extends Component {
       customComponents,
       errorMessage,
       dropzoneText,
+      loadingSpinner,
     } = this.props;
     const { Button, Loading, GFWrapper = "div", FormError: SFormError } =
       styledComponents || false;
@@ -462,11 +481,11 @@ class GravityForm extends Component {
     const { cssClass } = formData;
 
     const isDisabled = Object.keys(formValues).some(
-      x => !formValues[x].hideField && formValues[x].valid
+      (x) => !formValues[x].hideField && formValues[x].valid
     );
     const isNextDisabled = activePage
       ? Object.keys(formValues).some(
-          x =>
+          (x) =>
             formValues[x].pageNumber === activePage &&
             !formValues[x].hideField &&
             formValues[x].valid
@@ -475,7 +494,7 @@ class GravityForm extends Component {
 
     return (
       <GFWrapper
-        ref={el => (this.wrapperRef = el)}
+        ref={(el) => (this.wrapperRef = el)}
         className="form-wrapper"
         css={{ position: "relative" }}
         id={`gravity_form_${this.props.formID}`}
@@ -497,7 +516,7 @@ class GravityForm extends Component {
 
         {!submitSuccess && formData.fields ? (
           <form
-            onSubmit={e => this.onSubmit(e)}
+            onSubmit={(e) => this.onSubmit(e)}
             className={cssClass}
             encType={isMultipart ? "multipart/form-data" : undefined}
             noValidate
@@ -547,6 +566,7 @@ class GravityForm extends Component {
                   isDisabled={isDisabled}
                   submitting={submitting}
                   prevStep={this.prevStep}
+                  loadingSpinner={loadingSpinner}
                 />
               )}
             </div>
@@ -563,7 +583,7 @@ GravityForm.defaultProps = {
   title: true,
   submitIcon: false,
   saveStateToHtmlField: false,
-  jumpToConfirmation: true
+  jumpToConfirmation: true,
 };
 
 export { validateField, FormConfirmation, FormError, RenderFields, Submit };
