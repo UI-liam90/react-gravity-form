@@ -71,7 +71,12 @@ const RenderField = ({
   unsetError,
   dropzoneText,
 }) => {
-  const FormComponent = customComponents && customComponents[field.id] ? FormFields[formatComponentName('custom')] : FormFields[formatComponentName(field.type)];
+  let FormComponent = FormFields[formatComponentName(field.type)];
+
+  if (customComponents && (customComponents[field.id] || customComponents[field.cssClass])) {
+    FormComponent = FormFields[formatComponentName('custom')];
+  }
+
   const { cleanedCssClass, width } = formatWidthFromCss(field.cssClass);
   if (width) {
     field.cssClass = cleanedCssClass;
@@ -130,7 +135,7 @@ const RenderField = ({
       styledComponents={styledComponents}
       cssClass={fieldClassName}
       setFocusClass={setFocusClass}
-      component={customComponents && customComponents[field.id]}
+      component={customComponents && (customComponents[field.id] || customComponents[field.cssClass])}
       dropzoneText={dropzoneText}
     />
   );
