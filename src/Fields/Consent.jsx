@@ -49,7 +49,7 @@ export default ({
         {descriptionPlacement === "above" && description && (
           <div className="description">{description}</div>
         )}
-        {inputs.map((input, i) => (
+        {inputs.filter(s => !s.isHidden).map((input, i) => (
           <React.Fragment key={`input_${formId}_${id}_${i}`}>
             {i === 0 && (
               <React.Fragment>
