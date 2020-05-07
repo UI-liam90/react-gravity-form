@@ -313,75 +313,82 @@ class GravityForm extends Component {
   };
 
   onSubmit = async (event) => {
-    event.preventDefault();
-    this.setState({
-      submitting: true,
-      submitSuccess: false,
-      submitFailed: false,
-      confirmationMessage: false,
-      errorMessages: false,
-    });
-    const {
-      formID,
-      backendUrl,
-      jumpToConfirmation,
-      onSubmitSuccess,
-    } = this.props;
-    const gfSubmissionUrl = backendUrl.substring(
-      0,
-      backendUrl.indexOf("/wp-json")
-    );
-    const data = new FormData(event.target);
+    const { onSubmit: customOnSubmit } = this.props;
 
-    fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
-      method: "POST",
-      body: data,
-    })
-      .then((resp) => resp.json())
-      .then((response) => {
-        if (response && response.is_valid) {
-          if (onSubmitSuccess) {
-            const res = onSubmitSuccess(response);
-            if (!res) {
-              return false;
+    event.preventDefault();
+
+    if (customOnSubmit) {
+      customOnSubmit(formData);
+    } else {
+      this.setState({
+        submitting: true,
+        submitSuccess: false,
+        submitFailed: false,
+        confirmationMessage: false,
+        errorMessages: false,
+      });
+      const {
+        formID,
+        backendUrl,
+        jumpToConfirmation,
+        onSubmitSuccess,
+      } = this.props;
+      const gfSubmissionUrl = backendUrl.substring(
+        0,
+        backendUrl.indexOf("/wp-json")
+      );
+      const data = new FormData(event.target);
+
+      fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
+        method: "POST",
+        body: data,
+      })
+        .then((resp) => resp.json())
+        .then((response) => {
+          if (response && response.is_valid) {
+            if (onSubmitSuccess) {
+              const res = onSubmitSuccess(response);
+              if (!res) {
+                return false;
+              }
             }
-          }
-          const confirmationMessage = response.confirmation_message;
-          const { type, link } = confirmationMessage || false;
-          if (type && link && type === "redirect") {
-            if (typeof window !== "undefined") {
-              window.location.replace(link);
-              return false;
+            const confirmationMessage = response.confirmation_message;
+            const { type, link } = confirmationMessage || false;
+            if (type && link && type === "redirect") {
+              if (typeof window !== "undefined") {
+                window.location.replace(link);
+                return false;
+              }
             }
+            this.setState({
+              submitting: false,
+              submitSuccess: true,
+              confirmationMessage: response.confirmation_message,
+            });
+            if (jumpToConfirmation) {
+              this.scrollToConfirmation();
+            }
+          } else {
+            throw {
+              response,
+            };
           }
+        })
+        .catch((error) => {
+          const errorMessages =
+            error && error.response && error.response.validation_messages
+              ? error.response.validation_messages
+              : "Something went wrong";
           this.setState({
             submitting: false,
-            submitSuccess: true,
-            confirmationMessage: response.confirmation_message,
+            submitFailed: true,
+            errorMessages,
           });
           if (jumpToConfirmation) {
             this.scrollToConfirmation();
           }
-        } else {
-          throw {
-            response,
-          };
-        }
-      })
-      .catch((error) => {
-        const errorMessages =
-          error && error.response && error.response.validation_messages
-            ? error.response.validation_messages
-            : "Something went wrong";
-        this.setState({
-          submitting: false,
-          submitFailed: true,
-          errorMessages,
         });
-        if (jumpToConfirmation) {
-          this.scrollToConfirmation();
-        }
-      });
+    }
   };
 
   nextStep = (e) => {
