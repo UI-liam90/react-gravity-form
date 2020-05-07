@@ -314,6 +314,7 @@ class GravityForm extends Component {
 
   onSubmit = async (event) => {
     const { onSubmit: customOnSubmit } = this.props;
+    const formData = new FormData(event.target);
 
     event.preventDefault();
 
@@ -337,11 +338,10 @@ class GravityForm extends Component {
         0,
         backendUrl.indexOf("/wp-json")
       );
-      const data = new FormData(event.target);
 
       fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
         method: "POST",
-        body: data,
+        body: formData,
       })
         .then((resp) => resp.json())
         .then((response) => {
