@@ -118,6 +118,21 @@ export default ({
     return options;
   };
 
+  const handleChange = (value, field, index) => {
+    const tmp = startDate;
+    const key = index === 0 ? 2 : index === 2 ? 0 : 1;
+    tmp[key] = value.value;
+
+    setDate(tmp);
+
+    const event = {
+      target: {
+        value: value.value,
+      },
+    };
+    updateForm(event, field);
+  };
+
   return (
     <Box
       width={width}
@@ -210,7 +225,7 @@ export default ({
                             : index === 1
                             ? { value: startDate[1], label: startDate[1] }
                             : { value: startDate[0], label: startDate[0] }
-                          : undefined
+                          : ''
                       }
                       id={`input_${formId}_${id}_${index + 1}`}
                       name={customName || `input_${id}[]`}
@@ -221,6 +236,10 @@ export default ({
                         setTouched(id);
                         unsetError(id);
                         setFocusClass(input.value !== '');
+                      }}
+                      onChange={(option) => {
+                        handleChange(option, field, index);
+                        unsetError(id);
                       }}
                       onFocus={() => setFocusClass(true)}
                     />
