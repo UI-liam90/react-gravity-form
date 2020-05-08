@@ -7,7 +7,7 @@ export default ({
 	hideField,
 	styledComponents
 }) => {
-	let { content, cssClass, width } = field;
+	let { content, label, cssClass, width } = field;
 
 	// only for UAF project
 	// you can remove it
@@ -38,7 +38,7 @@ export default ({
 		}
 	}
 
-	const { Box = "div" } = styledComponents || false;
+	const { Box = "div", Label = "label" } = styledComponents || false;
 
 	return (
 		// eslint-disable-next-line
@@ -47,6 +47,9 @@ export default ({
 			className={`form-field ${cssClass}`}
 			style={{ display: hideField ? "none" : undefined }}
 		>
+			<Label className="gf-label">
+				{label}
+			</Label>
 			<div
 				className="html-content"
 				dangerouslySetInnerHTML={{ __html: content }}
