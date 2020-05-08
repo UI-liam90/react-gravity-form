@@ -148,7 +148,7 @@ export default props => {
                   error={errors && errors[field.id] ? errors[field.id] : false}
                   unsetError={unsetError}
                   dropzoneText={dropzoneText}
- 		  customComponents={customComponents}
+ 		              customComponents={customComponents}
                 />
               )
           )}

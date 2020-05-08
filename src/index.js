@@ -34,6 +34,7 @@ class GravityForm extends Component {
       populatedFields,
       populatedEntry,
       fetchOptions,
+      initialPage,
     } = this.props;
     this._isMounted = true;
     let isMultipart = false;
@@ -150,7 +151,7 @@ class GravityForm extends Component {
         {
           formData: form,
           formValues,
-          activePage: form.pagination ? 1 : false,
+          activePage: initialPage ? initialPage : form.pagination ? 1 : false,
           conditionFields,
           conditioanlIds,
           isMultipart,
