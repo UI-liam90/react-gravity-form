@@ -32,6 +32,7 @@ Include the component anywhere inside your own components:
 	populatedFields={{parameterName: "Value"}}
 	jumpToConfirmation={false} // optional, default is equal to true
 	submitComponent={Component} // optional - pass your <Component/> (like loading, another button...) to render in front of the submit button
+	getParams={{}} // optional - pass an Object with your params to send the GF request with query string included
 />
 ```
 
