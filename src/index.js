@@ -35,10 +35,21 @@ class GravityForm extends Component {
       populatedEntry,
       fetchOptions,
       initialPage,
+      getParams,
     } = this.props;
     this._isMounted = true;
     let isMultipart = false;
-    const form = await fetch(`${backendUrl}/${formID}`, fetchOptions)
+
+    const queryString = getParams
+      ? Object.keys(getParams)
+          .map((key) => key + "=" + getParams[key])
+          .join("&")
+      : "";
+    const requestUrl = `${backendUrl}/${formID}${
+      queryString ? `?${queryString}` : ""
+    }`;
+
+    const form = await fetch(requestUrl, fetchOptions)
       .then((resp) => resp.json())
       .then((response) => response)
       .catch(() => false);
