@@ -450,6 +450,8 @@ class GravityForm extends Component {
         }
       } else if (stringValue && value == stringValue) {
         hideBasedOnRules[i] = actionType === "hide";
+      } else if (stringValue && stringValue.includes(value)) {
+        hideBasedOnRules[i] = actionType === "hide";
       } else {
         hideBasedOnRules[i] = actionType !== "hide";
       }
@@ -459,6 +461,7 @@ class GravityForm extends Component {
         hideBasedOnRules[i] = !hideBasedOnRules[i];
       }
     }
+
     hideField = hideBasedOnRules.every((i) => i === true);
     // formValues[id].hideField = hideField;
     // this.setState({ formValues });
