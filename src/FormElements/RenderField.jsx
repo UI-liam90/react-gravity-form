@@ -88,7 +88,7 @@ const RenderField = ({
   const [fieldClassName, setFieldClassName] = useState(
     `${field.cssClass}${
       field.type === "select"
-        ? value.value !== ""
+        ? value.value && value.value !== ''
           ? " filled"
           : ""
         : value && value !== ""
