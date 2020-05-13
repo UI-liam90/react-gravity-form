@@ -32,7 +32,7 @@ const Submit = ({
           </SButton>
         )}
       </div>
-      {Loading && <Loading isLoading={submitting} />}
+      {Loading && !loadingSpinner && <Loading isLoading={submitting} />}
     </React.Fragment>
   );
 };
