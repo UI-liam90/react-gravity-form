@@ -119,7 +119,7 @@ export default ({
   };
 
   const handleChange = (value, field, index) => {
-    const tmp = startDate;
+    const tmp = startDate || [];
     const key = index === 0 ? 2 : index === 2 ? 0 : 1;
     tmp[key] = value.value;
 
@@ -219,13 +219,15 @@ export default ({
                           : get_number_dropdown(0, 1920, new Date().getFullYear())
                       }
                       value={
-                        startDate && startDate[0] && startDate[1] && startDate[2]
-                          ? index === 0
+                        startDate
+                          ? index === 0 && startDate[2]
                             ? { value: startDate[2], label: startDate[2] }
-                            : index === 1
+                            : index === 1 && startDate[1]
                             ? { value: startDate[1], label: startDate[1] }
-                            : { value: startDate[0], label: startDate[0] }
-                          : ''
+                            : startDate[0]
+                            ? { value: startDate[0], label: startDate[0] }
+                            : undefined
+                          : undefined
                       }
                       id={`input_${formId}_${id}_${index + 1}`}
                       name={customName || `input_${id}[]`}
