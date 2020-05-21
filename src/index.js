@@ -510,6 +510,7 @@ class GravityForm extends Component {
       errorMessage,
       dropzoneText,
       loadingSpinner,
+      onError,
     } = this.props;
     const { Button, Loading, GFWrapper = "div", FormError: SFormError } =
       styledComponents || false;
@@ -537,7 +538,7 @@ class GravityForm extends Component {
       >
         {formData.title ? null : Loading && <Loading isLoading />}
 
-        {submitFailed && !submitSuccess && (
+        {submitFailed && !submitSuccess && !onError && (
           <FormError
             SFormError={SFormError || false}
             errorMessage={
