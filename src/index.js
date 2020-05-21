@@ -512,8 +512,13 @@ class GravityForm extends Component {
       loadingSpinner,
       onError,
     } = this.props;
-    const { Button, Loading, GFWrapper = "div", FormError: SFormError } =
-      styledComponents || false;
+    const {
+      Button,
+      Loading,
+      GFWrapper = "div",
+      FormError: SFormError,
+      FormConfirmation: SFormConfirmation,
+    } = styledComponents || false;
 
     const { cssClass } = formData;
 
@@ -548,7 +553,10 @@ class GravityForm extends Component {
         )}
 
         {submitSuccess && this.state.confirmationMessage && (
-          <FormConfirmation confirmation={this.state.confirmationMessage} />
+          <FormConfirmation
+            confirmation={this.state.confirmationMessage}
+            SFormConfirmation={SFormConfirmation}
+          />
         )}
 
         {!submitSuccess && formData.fields ? (

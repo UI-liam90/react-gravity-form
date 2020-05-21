@@ -18,7 +18,14 @@ class Confirmation extends React.Component {
 
   render() {
     const { confirmation } = this.state;
-    return <div className="form-confirmation" dangerouslySetInnerHTML={{ __html: confirmation }} />;
+    const { SFormConfirmation } = this.props;
+
+    return SFormConfirmation ? (
+      <SFormConfirmation success message={confirmation} />
+    ) : (
+      <div className="form-confirmation" dangerouslySetInnerHTML={{ __html: confirmation }} />
+    );
   }
 }
 export default Confirmation;
+
