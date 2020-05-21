@@ -42,7 +42,7 @@ class GravityForm extends Component {
 
     const queryString = getParams
       ? Object.keys(getParams)
-          .map((key) => key + "=" + getParams[key])
+          .map((key) => `${key}=${getParams[key]}`)
           .join("&")
       : "";
     const requestUrl = `${backendUrl}/${formID}${
@@ -162,7 +162,7 @@ class GravityForm extends Component {
         {
           formData: form,
           formValues,
-          activePage: initialPage ? initialPage : form.pagination ? 1 : false,
+          activePage: initialPage || (form.pagination ? 1 : false),
           conditionFields,
           conditioanlIds,
           isMultipart,
@@ -345,6 +345,7 @@ class GravityForm extends Component {
         backendUrl,
         jumpToConfirmation,
         onSubmitSuccess,
+        onError,
       } = this.props;
       const gfSubmissionUrl = backendUrl.substring(
         0,
@@ -391,11 +392,21 @@ class GravityForm extends Component {
             error && error.response && error.response.validation_messages
               ? error.response.validation_messages
               : "Something went wrong";
-          this.setState({
-            submitting: false,
-            submitFailed: true,
-            errorMessages,
-          });
+
+          if (onError) {
+            onError(errorMessages);
+            this.setState({
+              submitting: false,
+              submitFailed: true,
+            });
+          } else {
+            this.setState({
+              submitting: false,
+              submitFailed: true,
+              errorMessages,
+            });
+          }
+
           if (jumpToConfirmation) {
             this.scrollToConfirmation();
           }

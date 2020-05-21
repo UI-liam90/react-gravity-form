@@ -28,6 +28,7 @@ Include the component anywhere inside your own components:
 	formID="1"
 	onChange={someFunction} // optional
 	onSubmitSuccess={someFunction} // optional - calls after form has been submitted successfully
+	onError={handlerFunction} // optional - fires on GF error (gform_validation hook)
 	styledComponents={{Button, Loading, Input...}} // optional
 	populatedFields={{parameterName: "Value"}}
 	jumpToConfirmation={false} // optional, default is equal to true
