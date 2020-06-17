@@ -460,7 +460,7 @@ class GravityForm extends Component {
     const { activePage, formValues } = this.state;
     const { activePage: setActive, beforeNextPage } = this.props;
     if (beforeNextPage) {
-      beforeNextPage(formValues);
+      beforeNextPage(activePage, formValues);
     }
 
     const nextPage = this.getNextStep(activePage);
