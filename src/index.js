@@ -325,6 +325,11 @@ class GravityForm extends Component {
   };
 
   scrollToConfirmation = () => {
+    // handler on change page
+    const { onChangePage } = this.props;
+    if (onChangePage) {
+      onChangePage();
+    }
     const rect = this.wrapperRef
       ? this.wrapperRef.getBoundingClientRect()
       : false;
