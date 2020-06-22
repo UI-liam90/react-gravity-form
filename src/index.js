@@ -151,6 +151,7 @@ class GravityForm extends Component {
           pageNumber: field.pageNumber,
           cssClass: field.cssClass,
           isRequired: field.isRequired,
+          type: field.type,
         };
       }
 
@@ -551,6 +552,38 @@ class GravityForm extends Component {
     return hideField;
   };
 
+  /**
+   * Check if field is disabled (valid)
+   */
+  isFieldDisabled = (formValues) => {
+    const { formData } = this.state;
+
+    const keys = Object.keys(formValues);
+    const isDisabled = keys.some((x) => {
+      // if pagination enabled
+      if (formData && formData.pagination) {
+        // check if field is valid and if page field belongs to was visible (hideField === false)
+        const fieldPage = formValues[x].pageNumber;
+        const curFieldPage = keys.filter(
+          (key) =>
+            formValues[key].type === "page" &&
+            formValues[key].pageNumber == fieldPage
+        );
+
+        if (curFieldPage && curFieldPage.length > 0) {
+          return (
+            !formValues[x].hideField &&
+            formValues[x].valid &&
+            !formValues[curFieldPage[0]].hideField
+          );
+        }
+      }
+
+      return !formValues[x].hideField && formValues[x].valid;
+    });
+    return isDisabled;
+  };
+
   render() {
     const {
       formData,
@@ -583,9 +616,7 @@ class GravityForm extends Component {
 
     const { cssClass } = formData;
 
-    const isDisabled = Object.keys(formValues).some(
-      (x) => !formValues[x].hideField && formValues[x].valid
-    );
+    const isDisabled = this.isFieldDisabled(formValues);
     const isNextDisabled = activePage
       ? Object.keys(formValues).some(
           (x) =>
