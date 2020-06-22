@@ -440,6 +440,11 @@ class GravityForm extends Component {
 
     const nextPageId = pages[activePage - 1];
 
+    // if no next page
+    if (!formValues[nextPageId]) {
+      return false;
+    }
+
     // if there is conditional login
     if (formValues[nextPageId].hideField === true) {
       nextPage = this.getNextStep(nextPage);
@@ -466,11 +471,12 @@ class GravityForm extends Component {
     e && e.preventDefault();
     const { activePage, formValues } = this.state;
     const { activePage: setActive, beforeNextPage } = this.props;
-    if (beforeNextPage) {
-      beforeNextPage(activePage, formValues);
-    }
 
     const nextPage = this.getNextStep(activePage);
+
+    if (beforeNextPage) {
+      beforeNextPage(activePage, formValues, nextPage);
+    }
 
     setActive && setActive(nextPage);
     this.setState(
