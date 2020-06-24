@@ -4,6 +4,7 @@ import RenderFields from "./FormElements/RenderFields";
 import FormError from "./FormElements/FormError";
 import FormConfirmation from "./FormElements/FormConfirmation";
 import { validateField } from "./Helpers/validation";
+import { equalShallow } from "./Helpers/utils";
 import Submit from "./FormElements/Submit";
 
 class GravityForm extends Component {
@@ -62,70 +63,19 @@ class GravityForm extends Component {
       // eslint-disable-next-line no-restricted-syntax
       for (const field of form.fields) {
         let value;
-        let hasPopulatedEntry = false;
-        const hasPopulation =
-          field.inputName &&
-          populatedFields &&
-          populatedFields[field.inputName];
-
-        if (populatedEntry && populatedEntry[field.id]) {
-          hasPopulatedEntry = true;
-        } else if (populatedEntry && field.inputs) {
-          field.inputs.some((input) => {
-            if (populatedEntry[input.id]) {
-              hasPopulatedEntry = true;
-            }
-          });
-        }
 
         if (field.type === "page") {
           pages.push(field.id);
         }
 
-        if (field.type === "checkbox") {
-          value = field.choices
-            .filter((choice) =>
-              hasPopulation
-                ? choice.value === populatedFields[field.inputName]
-                : choice.isSelected
-            )
-            .map((choice) => choice.value);
+        value = this.getFieldPrepopulatedValue(
+          field,
+          populatedFields,
+          populatedEntry
+        );
 
-          if (hasPopulatedEntry) {
-            value = field.inputs
-              .filter((choice) => populatedEntry[choice.id])
-              .map((choice) => choice.label);
-          }
-        } else if (field.type === "radio") {
-          if (hasPopulation) {
-            value = populatedFields[field.inputName];
-          } else {
-            const preselected = field.choices.find(
-              (choice) => choice.isSelected
-            );
-            value = preselected ? preselected.value : "";
-          }
-        } else if (field.type === "select") {
-          const selectedOption = field.choices
-            .filter((choice) =>
-              hasPopulation
-                ? choice.value === populatedFields[field.inputName]
-                : choice.isSelected
-            )
-            .map((item) => ({ value: item.value, label: item.text }));
-          value =
-            selectedOption && selectedOption.length > 0
-              ? selectedOption[0]
-              : "";
-        } else {
-          value = hasPopulation
-            ? populatedFields[field.inputName]
-            : hasPopulatedEntry
-            ? populatedEntry[field.id]
-            : field.defaultValue;
-          if (field.type === "fileupload") {
-            isMultipart = true;
-          }
+        if (field.type === "fileupload") {
+          isMultipart = true;
         }
 
         // grab all conditional logic fields
@@ -180,6 +130,7 @@ class GravityForm extends Component {
           conditioanlIds,
           isMultipart,
           pages: pages,
+          populatedEntry: populatedEntry || false,
         },
         () => {
           // pass state to parent component
@@ -195,6 +146,120 @@ class GravityForm extends Component {
           }
         }
       );
+    }
+  }
+
+  getFieldPrepopulatedValue = (field, populatedFields, populatedEntry) => {
+    let value;
+    let hasPopulatedEntry = false;
+    const hasPopulation =
+      field.inputName && populatedFields && populatedFields[field.inputName];
+
+    if (populatedEntry && populatedEntry[field.id]) {
+      hasPopulatedEntry = true;
+    } else if (populatedEntry && field.inputs) {
+      field.inputs.some((input) => {
+        if (populatedEntry[input.id]) {
+          hasPopulatedEntry = true;
+        }
+      });
+    }
+
+    if (field.type === "checkbox") {
+      value = field.choices
+        .filter((choice) =>
+          hasPopulation
+            ? choice.value === populatedFields[field.inputName]
+            : choice.isSelected
+        )
+        .map((choice) => choice.value);
+
+      if (hasPopulatedEntry) {
+        value = field.inputs
+          .filter((choice) => populatedEntry[choice.id])
+          .map((choice) => choice.label);
+      }
+    } else if (field.type === "radio") {
+      if (hasPopulation) {
+        value = populatedFields[field.inputName];
+      } else {
+        const preselected = field.choices.find((choice) => choice.isSelected);
+        value = preselected ? preselected.value : "";
+      }
+    } else if (field.type === "select") {
+      const selectedOption = field.choices
+        .filter((choice) =>
+          hasPopulation
+            ? choice.value === populatedFields[field.inputName]
+            : choice.isSelected
+        )
+        .map((item) => ({ value: item.value, label: item.text }));
+      value =
+        selectedOption && selectedOption.length > 0 ? selectedOption[0] : "";
+    } else {
+      value = hasPopulation
+        ? populatedFields[field.inputName]
+        : hasPopulatedEntry
+        ? populatedEntry[field.id]
+        : field.defaultValue;
+    }
+    return value;
+  };
+
+  /**
+   * Update field values based on new props coming
+   */
+  updateFieldsValuesBasedOnEntry = (populatedEntry) => {
+    const { formValues, formData } = this.state;
+    console.log("populatedEntry", populatedEntry);
+    const keys = Object.keys(formValues);
+    console.log("keys", keys);
+    console.log("formValues", formValues);
+
+    let changed = false;
+    const tmpValues = { ...formValues };
+
+    for (let i = 0; i < keys.length; i++) {
+      const id = keys[i];
+      if (populatedEntry[id]) {
+        const field = formData.fields.filter((item) => item.id == id);
+        if (!field[0]) {
+          continue;
+        }
+        const value = this.getFieldPrepopulatedValue(
+          field[0],
+          [],
+          populatedEntry
+        );
+        if (
+          value &&
+          formValues[id] &&
+          formValues[id].value &&
+          formValues[id].value != value
+        ) {
+          console.log(`${id}`, value);
+          tmpValues[id].value = value;
+          changed = true;
+        }
+      }
+    }
+    if (changed) {
+      console.log("changed", changed);
+      this.setState({
+        formValues: tmpValues,
+      });
+    }
+  };
+
+  componentDidUpdate(prevProps) {
+    const { populatedEntry } = this.props;
+    const { populatedEntry: prevPopulatedEntry } = prevProps;
+    if (
+      populatedEntry &&
+      prevPopulatedEntry &&
+      !equalShallow(populatedEntry, prevPopulatedEntry)
+    ) {
+      this.updateFieldsValuesBasedOnEntry(populatedEntry);
     }
   }
 
