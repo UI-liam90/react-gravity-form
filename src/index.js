@@ -107,12 +107,6 @@ class GravityForm extends Component {
 
       // check condition logic
       for (let i = 0; i < conditionFields.length; i++) {
-        console.log(
-          this.checkConditionalLogic(
-            conditionFields[i].conditionalLogic,
-            formValues
-          )
-        );
         formValues[
           conditionFields[i].id
         ].hideField = this.checkConditionalLogic(
@@ -211,10 +205,7 @@ class GravityForm extends Component {
    */
   updateFieldsValuesBasedOnEntry = (populatedEntry) => {
     const { formValues, formData } = this.state;
-    console.log("populatedEntry", populatedEntry);
     const keys = Object.keys(formValues);
-    console.log("keys", keys);
-    console.log("formValues", formValues);
 
     let changed = false;
     const tmpValues = { ...formValues };
@@ -237,14 +228,12 @@ class GravityForm extends Component {
           formValues[id].value &&
           formValues[id].value != value
         ) {
-          console.log(`${id}`, value);
           tmpValues[id].value = value;
           changed = true;
         }
       }
     }
     if (changed) {
-      console.log("changed", changed);
       this.setState({
         formValues: tmpValues,
       });
