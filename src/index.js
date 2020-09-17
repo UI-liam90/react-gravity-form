@@ -240,16 +240,19 @@ class GravityForm extends Component {
     }
   };
 
-  componentDidUpdate(prevProps) {
-    const { populatedEntry } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    const { populatedEntry, initialPage } = this.props;
     const { populatedEntry: prevPopulatedEntry } = prevProps;
     if (
       populatedEntry &&
       prevPopulatedEntry &&
       !equalShallow(populatedEntry, prevPopulatedEntry)
     ) {
-      //populate entry
       this.updateFieldsValuesBasedOnEntry(populatedEntry);
+    }
+
+    if (initialPage && initialPage !== this.state.activePage) {
+      this.setState({ activePage: initialPage });
     }
   }
 
