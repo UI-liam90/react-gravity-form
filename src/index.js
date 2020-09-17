@@ -248,6 +248,7 @@ class GravityForm extends Component {
       prevPopulatedEntry &&
       !equalShallow(populatedEntry, prevPopulatedEntry)
     ) {
+      //populate entry
       this.updateFieldsValuesBasedOnEntry(populatedEntry);
     }
   }
