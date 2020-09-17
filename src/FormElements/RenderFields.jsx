@@ -75,6 +75,7 @@ export default (props) => {
     unsetError,
     errors,
     dropzoneText,
+    pageClicked,
   } = props;
 
   // get page indexes
@@ -93,7 +94,9 @@ export default (props) => {
   return (
     <div
       className={`form-fields${
-        pagination && pagination.pages.length > 1 ? ` hasPages` : ""
+        pagination && pagination.pages.length > 1
+          ? ` hasPages ${!pageClicked ? " noPageClicked" : ""}`
+          : ""
       }`}
     >
       {pagination && pagination.pages.length > 1

@@ -25,6 +25,7 @@ class GravityForm extends Component {
       conditionFields: {},
       conditioanlIds: {},
       isMultipart: false,
+      pageClicked: false,
     };
   }
 
@@ -541,6 +542,7 @@ class GravityForm extends Component {
     this.setState(
       {
         activePage: nextPage,
+        pageClicked: true,
       },
       () => this.scrollToConfirmation()
     );
@@ -557,6 +559,7 @@ class GravityForm extends Component {
     this.setState(
       {
         activePage: prevPage,
+        pageClicked: true,
       },
       () => this.scrollToConfirmation()
     );
@@ -652,6 +655,7 @@ class GravityForm extends Component {
       submitting,
       activePage,
       isMultipart,
+      pageClicked,
     } = this.state;
     const {
       title,
@@ -749,6 +753,7 @@ class GravityForm extends Component {
                 errors={this.state.errorMessages}
                 unsetError={this.unsetError}
                 dropzoneText={dropzoneText}
+                pageClicked={pageClicked}
               />
               {(!formData.pagination ||
                 (formData.pagination &&
