@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import RenderField from "./RenderField";
 
 const divideFieldsIntoPages = (fields, pages) => {
-  const tmpFields = pages.map(item => []);
+  const tmpFields = pages.map((item) => []);
 
   for (let i = 0; i < fields.length; i++) {
     const arr = tmpFields[fields[i].pageNumber];
@@ -18,7 +18,7 @@ const divideFieldsIntoPages = (fields, pages) => {
   return tmpFields;
 };
 
-const getMaxFieldId = fields => {
+const getMaxFieldId = (fields) => {
   let max = 0;
   for (let i = 0; i < fields.length; i++) {
     if (parseInt(fields[i].id) > max) {
@@ -47,13 +47,13 @@ const fieldTypes = [
   "consent",
   "password",
   "section",
-  "custom"
+  "custom",
 ];
 
 const honeyPotLables = ["Name", "Email", "Phone", "Comments"];
 const honeypotLabel = honeyPotLables[Math.floor(Math.random() * Math.floor(4))];
 
-export default props => {
+export default (props) => {
   const {
     fields,
     formValues,
@@ -74,7 +74,7 @@ export default props => {
     customComponents,
     unsetError,
     errors,
-    dropzoneText
+    dropzoneText,
   } = props;
 
   // get page indexes
@@ -87,7 +87,9 @@ export default props => {
   return (
     <div
       className={`form-fields${
-        pagination && pagination.pages.length > 1 ? " hasPages" : ""
+        pagination && pagination.pages.length > 1
+          ? ` hasPages${!activePage ? " not-active" : ""}`
+          : ""
       }`}
     >
       {pagination && pagination.pages.length > 1
@@ -102,7 +104,7 @@ export default props => {
                 </div>
               )}
               {dividedFields[index].map(
-                field =>
+                (field) =>
                   fieldTypes.includes(field.type) && (
                     <RenderField
                       key={field.id}
@@ -132,7 +134,7 @@ export default props => {
             </div>
           ))
         : fields.map(
-            field =>
+            (field) =>
               fieldTypes.includes(field.type) && (
                 <RenderField
                   key={field.id}
@@ -148,7 +150,7 @@ export default props => {
                   error={errors && errors[field.id] ? errors[field.id] : false}
                   unsetError={unsetError}
                   dropzoneText={dropzoneText}
- 		              customComponents={customComponents}
+                  customComponents={customComponents}
                 />
               )
           )}
@@ -162,7 +164,7 @@ export default props => {
             name={`input_${maxID}`}
             id={`input_${maxID}`}
             value={honeypotValue}
-            onChange={e => setHoneypotValue(e.target.value)}
+            onChange={(e) => setHoneypotValue(e.target.value)}
             autoComplete="off"
           />
         </div>
