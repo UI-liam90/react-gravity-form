@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import RenderField from "./RenderField";
 
 const divideFieldsIntoPages = (fields, pages) => {
@@ -75,7 +75,6 @@ export default (props) => {
     unsetError,
     errors,
     dropzoneText,
-    pageClicked,
   } = props;
 
   // get page indexes
@@ -85,18 +84,29 @@ export default (props) => {
   const maxID = getMaxFieldId(fields);
   const [honeypotValue, setHoneypotValue] = useState("");
 
+  const prevSteptRef = useRef();
+  useEffect(() => {
+    prevSteptRef.current = activePage;
+  });
+  const prevCount = prevSteptRef.current;
+
   return (
     <div
       className={`form-fields${
-        pagination && pagination.pages.length > 1
-          ? ` hasPages${!pageClicked ? " notClicked" : ""}`
-          : ""
+        pagination && pagination.pages.length > 1 ? ` hasPages` : ""
       }`}
     >
       {pagination && pagination.pages.length > 1
         ? pagination.pages.map((page, index) => (
             <div
-              className={`page${activePage === index + 1 ? " active" : ""}`}
+              className={`page${activePage === index + 1 ? " active" : ""}${
+                prevCount &&
+                index === prevCount &&
+                activePage !== index + 1 &&
+                prevCount !== activePage
+                  ? " prevStep"
+                  : ""
+              }`}
               key={`page-${index}`}
             >
               {page && (
