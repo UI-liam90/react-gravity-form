@@ -19,10 +19,10 @@ const isEmail = (email, message) => {
 const isUrl = (str, message) => {
   const pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
-    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
       "(\\#[-a-z\\d_]*)?$",
     "i"
   ); // fragment locator
@@ -133,8 +133,34 @@ const passwordValidation = (values, field) => {
   return false;
 };
 
+const validateDateTypeDrowdown = (values, required, requiredMsg) => {
+  if (!required || !values) return false;
+
+  const keys = Object.keys(values);
+  let isValid = true;
+  if (keys && keys.length === 3) {
+    for (let i = 0; i < keys.length; i++) {
+      const { val } = values[i];
+      if (val === "") {
+        isValid = false;
+        break;
+      }
+    }
+  }
+  return !isValid ? requiredMsg || "This field is required" : false;
+};
+
 const isDate = (values, field) => {
   const validation = [];
+
+  if (field.dateType === "datedropdown") {
+    return validateDateTypeDrowdown(
+      values,
+      field.isRequired,
+      field.errorMessage
+    );
+  }
+
   for (let i = 0; i < values.length; i++) {
     if (values[i]) {
       const { val, label } = values[i];

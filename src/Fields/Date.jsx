@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
 
 export default ({
   field,
@@ -37,22 +37,24 @@ export default ({
   } = field;
 
   const {
-    Input = 'input',
-    Label = 'label',
-    Box = 'div',
-    DatePicker: SdatePicker = 'div',
+    Input = "input",
+    Label = "label",
+    Box = "div",
+    DatePicker: SdatePicker = "div",
     ReactSelect,
   } = styledComponents || false;
 
   const RSelect = ReactSelect || Select;
 
   // conver date format
-  const format = dateFormat && dateFormat === 'dmy' ? 'dd/MM/yyyy' : false;
+  const format = dateFormat && dateFormat === "dmy" ? "dd/MM/yyyy" : false;
 
   let selectedValue = defaultValue ? new Date(defaultValue) : false;
   if (format && defaultValue) {
-    const tmpFormat = defaultValue.indexOf('/') > -1;
-    const dateParts = tmpFormat ? defaultValue.split('/') : defaultValue.split('-');
+    const tmpFormat = defaultValue.indexOf("/") > -1;
+    const dateParts = tmpFormat
+      ? defaultValue.split("/")
+      : defaultValue.split("-");
 
     const dateObject = tmpFormat
       ? new Date(+dateParts[2], dateParts[1] - 1, +dateParts[0])
@@ -65,23 +67,23 @@ export default ({
 
   const getFormattedInputs = (items) => {
     if (dateType) {
-      if (dateType === 'datefield') {
+      if (dateType === "datefield") {
         // 0 - MM
         // 1 - DD
         // 2 - YYYY
         switch (dateFormat) {
-          case 'dmy':
-          case 'dmy_dash':
-          case 'dmy_dot':
+          case "dmy":
+          case "dmy_dash":
+          case "dmy_dot":
             return [items[1], items[0], items[2]];
-          case 'ymd_slash':
-          case 'ymd_dash':
-          case 'ymd_dot':
+          case "ymd_slash":
+          case "ymd_dash":
+          case "ymd_dot":
             return [items[2], items[0], items[1]];
           default:
             return items;
         }
-      } else if (dateType === 'datedropdown') {
+      } else if (dateType === "datedropdown") {
         return [items[1], items[0], items[2]];
       }
     }
@@ -91,11 +93,11 @@ export default ({
   const formatedInputs = getFormattedInputs(inputs);
 
   const adjustDatePickerOptions = (options) => {
-    if (dateType && dateType === 'datepicker' && options) {
+    if (dateType && dateType === "datepicker" && options) {
       const keys = Object.keys(options);
       if (keys && keys.length > 0) {
         for (let i = 0; i < keys.length; i++) {
-          if (keys[i] === 'minDate' || keys[i] === 'maxDate') {
+          if (keys[i] === "minDate" || keys[i] === "maxDate") {
             options[keys[i]] = new Date(options[keys[i]]);
           }
         }
@@ -133,6 +135,24 @@ export default ({
     updateForm(event, field);
   };
 
+  const getValueByIndex = (index) => {
+    if (!startDate) return;
+
+    const i = index === 0 ? 2 : index === 1 ? 1 : 0;
+
+    return startDate[i]
+      ? { value: startDate[i], label: startDate[i] }
+      : undefined;
+
+    // index === 0 && startDate['2']
+    //   ? { value: startDate['2'], label: startDate['2'] }
+    //   : index === 1 && startDate['1']
+    //   ? { value: startDate['1'], label: startDate['1'] }
+    //   : startDate['0']
+    //   ? { value: startDate['0'], label: startDate['0'] }
+    //   : undefined;
+  };
+
   return (
     <Box
       width={width}
@@ -141,19 +161,22 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
-      <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
+      <Label
+        htmlFor={`input_${formId}_${id}`}
+        className={`gf-label ${labelPlacement}`}
+      >
         {label}
         {isRequired ? <abbr>*</abbr> : null}
       </Label>
       <div className={type}>
-        {descriptionPlacement === 'above' && description && (
+        {descriptionPlacement === "above" && description && (
           <div className="description">{description}</div>
         )}
-        {dateType && dateType !== 'datefield' ? (
-          dateType === 'datepicker' ? (
-            <React.Fragment>
+        {dateType && dateType !== "datefield" ? (
+          dateType === "datepicker" ? (
+            <>
               <SdatePicker className="ginput_container ginput_container_date">
                 <DatePicker
                   name={`input_${id}`}
@@ -193,7 +216,7 @@ export default ({
                   autoComplete="off"
                   required={isRequired}
                   placeholderText={placeholder}
-                  maxDate={cssClass.includes('past') && new Date()}
+                  maxDate={cssClass.includes("past") && new Date()}
                   {...dateOptions}
                 />
               </SdatePicker>
@@ -202,9 +225,9 @@ export default ({
                   {validationMessage || error}
                 </span>
               )}
-            </React.Fragment>
+            </>
           ) : (
-            <React.Fragment>
+            <>
               {formatedInputs &&
                 formatedInputs.map((input, index) => (
                   <div key={input.id} className="gfield_date_dropdown">
@@ -216,31 +239,36 @@ export default ({
                           ? get_number_dropdown(1, 1, 31)
                           : index === 1
                           ? get_number_dropdown(3, 1, 12)
-                          : get_number_dropdown(0, 1920, new Date().getFullYear())
+                          : get_number_dropdown(
+                              0,
+                              1920,
+                              new Date().getFullYear()
+                            )
                       }
-                      value={
-                        startDate
-                          ? index === 0 && startDate[2]
-                            ? { value: startDate[2], label: startDate[2] }
-                            : index === 1 && startDate[1]
-                            ? { value: startDate[1], label: startDate[1] }
-                            : startDate[0]
-                            ? { value: startDate[0], label: startDate[0] }
-                            : undefined
-                          : undefined
-                      }
+                      value={getValueByIndex(index)}
                       id={`input_${formId}_${id}_${index + 1}`}
                       name={customName || `input_${id}[]`}
                       onBlur={(event) => {
-                        field.subId = index;
-                        field.dateLabel = input.label;
-                        updateForm(event, field);
+                        const value = getValueByIndex(index);
+                        if (!value) {
+                          const tmpState = {
+                            ...field,
+                            subId: index,
+                            dateLabel: input.label,
+                          };
+                          handleChange({ value: "" }, tmpState, index);
+                        }
                         setTouched(id);
                         unsetError(id);
-                        setFocusClass(input.value !== '');
+                        setFocusClass(input.value !== "");
                       }}
                       onChange={(option) => {
-                        handleChange(option, field, index);
+                        const tmpState = {
+                          ...field,
+                          subId: index,
+                          dateLabel: input.label,
+                        };
+                        handleChange(option, tmpState, index);
                         unsetError(id);
                       }}
                       onFocus={() => setFocusClass(true)}
@@ -252,10 +280,10 @@ export default ({
                   {validationMessage || error}
                 </span>
               )}
-            </React.Fragment>
+            </>
           )
         ) : (
-          <React.Fragment>
+          <>
             {formatedInputs &&
               formatedInputs.map((item, index) => (
                 <div className={type} key={item.id}>
@@ -267,13 +295,13 @@ export default ({
                     step="1"
                     min="1"
                     max={
-                      item.label === 'MM'
+                      item.label === "MM"
                         ? 12
-                        : item.label === 'DD'
+                        : item.label === "DD"
                         ? 31
                         : new Date().getFullYear() + 1
                     }
-                    maxLength={item.label === 'YYYY' ? 4 : 2}
+                    maxLength={item.label === "YYYY" ? 4 : 2}
                     value={item.value}
                     onBlur={(event) => {
                       field.subId = index;
@@ -281,11 +309,14 @@ export default ({
                       updateForm(event, field);
                       setTouched(id);
                       unsetError(id);
-                      setFocusClass(item.value !== '');
+                      setFocusClass(item.value !== "");
                     }}
                     onFocus={() => setFocusClass(true)}
                   />
-                  <label htmlFor={`input_${formId}_${id}_${index}`} className="hide-label">
+                  <label
+                    htmlFor={`input_${formId}_${id}_${index}`}
+                    className="hide-label"
+                  >
                     {item.label}
                   </label>
                   {validationMessage &&
@@ -293,20 +324,22 @@ export default ({
                     validationMessage[index] &&
                     index === validationMessage[index].index &&
                     validationMessage[index].message && (
-                      <span className="error-message" id={`error_${formId}_${item.id}`}>
+                      <span
+                        className="error-message"
+                        id={`error_${formId}_${item.id}`}
+                      >
                         {validationMessage[index].message}
                       </span>
                     )}
                   {error && <span className="error-message">{error}</span>}
                 </div>
               ))}
-          </React.Fragment>
+          </>
         )}
-        {descriptionPlacement !== 'above' && description && (
+        {descriptionPlacement !== "above" && description && (
           <div className="description">{description}</div>
         )}
       </div>
     </Box>
   );
 };
-
