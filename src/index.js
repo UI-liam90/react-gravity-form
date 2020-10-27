@@ -26,6 +26,7 @@ class GravityForm extends Component {
       conditioanlIds: {},
       isMultipart: false,
       pageClicked: false,
+      showPageValidationMsg: false,
     };
   }
 
@@ -44,8 +45,8 @@ class GravityForm extends Component {
 
     const queryString = getParams
       ? Object.keys(getParams)
-          .map((key) => `${key}=${getParams[key]}`)
-          .join("&")
+        .map((key) => `${key}=${getParams[key]}`)
+        .join("&")
       : "";
     const requestUrl = `${backendUrl}/${formID}${
       queryString ? `?${queryString}` : ""
@@ -110,7 +111,7 @@ class GravityForm extends Component {
       for (let i = 0; i < conditionFields.length; i++) {
         formValues[
           conditionFields[i].id
-        ].hideField = this.checkConditionalLogic(
+          ].hideField = this.checkConditionalLogic(
           conditionFields[i].conditionalLogic,
           formValues
         );
@@ -195,8 +196,8 @@ class GravityForm extends Component {
       value = hasPopulation
         ? populatedFields[field.inputName]
         : hasPopulatedEntry
-        ? populatedEntry[field.id]
-        : field.defaultValue;
+          ? populatedEntry[field.id]
+          : field.defaultValue;
     }
     return value;
   };
@@ -271,9 +272,10 @@ class GravityForm extends Component {
     const { errorMessages } = this.state;
     if (!errorMessages) return;
 
-    if (errorMessages[id]) {
-      delete errorMessages[id];
-      this.setState({ errorMessages });
+    if (errorMessages) {
+      if (typeof errorMessages === 'object' && errorMessages[id]) {
+        delete errorMessages[id];
+      }
     }
   };
 
@@ -404,11 +406,29 @@ class GravityForm extends Component {
     }
   };
 
+  setActivePage = () => {
+    // check if form is multipages
+    const { activePage, errorMessages, formData } = this.state;
+
+    if (!activePage) return false;
+    const keys = errorMessages ? Object.keys(errorMessages) : false;
+    if (keys && keys.length > 0) {
+      const field = formData.fields.filter((item) => item.id == keys[0]);
+      if (field && field.length > 0 && field[0].pageNumber) {
+        this.setState({ activePage: field[0].pageNumber });
+      }
+    }
+  };
+
   onSubmit = async (event) => {
     const { onSubmit: customOnSubmit } = this.props;
     const formData = new FormData(event.target);
 
     event.preventDefault();
+
+    const { activePage } = this.state;
+    const isPageValid = this.forceValidationOfCurrentPage(activePage);
+    if (!isPageValid) return false;
 
     if (customOnSubmit) {
       customOnSubmit(formData);
@@ -527,10 +547,46 @@ class GravityForm extends Component {
     return prevPage;
   };
 
+  /**
+   * Force validate current page fields
+   * @param {number} page
+   */
+  forceValidationOfCurrentPage = (page) => {
+    const { formValues } = this.state;
+
+    // check if current oage has required fields
+    const isPageDisabled = page
+      ? Object.keys(formValues).some(
+        (x) =>
+          formValues[x].pageNumber === page && !formValues[x].hideField && formValues[x].valid
+      )
+      : false;
+    if (isPageDisabled) {
+      // make all fields of current page to e touched to trigger field validation
+      const currentPageTouched = Object.keys(formValues)
+        .filter((x) => formValues[x].pageNumber === page)
+        .reduce((currentTouched, x) => {
+          currentTouched = { ...currentTouched, [x]: true };
+          return currentTouched;
+        }, {});
+
+      this.setState({
+        showPageValidationMsg: true, // show custom validation message
+        touched: currentPageTouched,
+      });
+
+      return false;
+    }
+    return true;
+  };
+
   nextStep = (e) => {
     e && e.preventDefault();
     const { activePage, formValues } = this.state;
     const { activePage: setActive, beforeNextPage } = this.props;
+
+    const isPageValidated = this.forceValidationOfCurrentPage(activePage);
+    if (!isPageValidated) return false;
 
     const nextPage = this.getNextStep(activePage);
 
@@ -543,6 +599,7 @@ class GravityForm extends Component {
       {
         activePage: nextPage,
         pageClicked: true,
+        showPageValidationMsg: false,
       },
       () => this.scrollToConfirmation()
     );
@@ -656,6 +713,7 @@ class GravityForm extends Component {
       activePage,
       isMultipart,
       pageClicked,
+      showPageValidationMsg,
     } = this.state;
     const {
       title,
@@ -678,18 +736,8 @@ class GravityForm extends Component {
 
     const { cssClass } = formData;
 
-    const isDisabled = this.isFieldDisabled(formValues);
-    const isNextDisabled = activePage
-      ? Object.keys(formValues).some(
-          (x) =>
-            formValues[x].pageNumber === activePage &&
-            !formValues[x].hideField &&
-            formValues[x].valid
-        )
-      : false;
-
     return (
-      <GFWrapper
+      <div
         ref={(el) => (this.wrapperRef = el)}
         className="form-wrapper"
         css={{ position: "relative" }}
@@ -730,7 +778,6 @@ class GravityForm extends Component {
                 ) : null}
               </div>
             )}
-
             <div className="form-wrapper">
               <RenderFields
                 styledComponents={styledComponents}
@@ -746,7 +793,6 @@ class GravityForm extends Component {
                 activePage={activePage}
                 prevStep={this.prevStep}
                 nextStep={this.nextStep}
-                isNextDisabled={isNextDisabled}
                 checkConditionalLogic={this.checkConditionalLogic}
                 saveStateToHtmlField={saveStateToHtmlField}
                 enableHoneypot={formData.enableHoneypot}
@@ -763,7 +809,6 @@ class GravityForm extends Component {
                   Loading={Loading}
                   formData={formData}
                   submitIcon={submitIcon}
-                  isDisabled={isDisabled}
                   submitting={submitting}
                   prevStep={this.prevStep}
                   loadingSpinner={loadingSpinner}
@@ -774,7 +819,7 @@ class GravityForm extends Component {
         ) : (
           ""
         )}
-      </GFWrapper>
+      </div>
     );
   }
 }
