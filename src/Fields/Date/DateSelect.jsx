@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactSelect from 'react-select';
+import ValidationMessage from '../../FormElements/ValidationMessage'
 
 export default ({
   startDate,
   defaultProps,
 }) => {
-
   const {
     field,
     value,
@@ -26,14 +26,22 @@ export default ({
 
   const RSelect = ReactSelect || 'select';
 
-  const getNumberDropdown = (selected_value, start_number, end_number) => {
+  const getNumberDropdown = (i) => {
     const options = [];
-    const increment = start_number < end_number ? 1 : -1;
-    for (let i = start_number; i != end_number + increment; i += increment) {
+
+    const dayDropdownID = 0;
+    const monthDropdownID = 1;
+
+    const startNumber = i === dayDropdownID || i === monthDropdownID ? 1 : 1920;
+    const endNumber = i === dayDropdownID ? 31 : i === monthDropdownID ? 12 : new Date().getFullYear();
+    const selectedValue = i === dayDropdownID ? 1 : i === monthDropdownID ? 3 : 0;
+
+    const increment = startNumber < endNumber ? 1 : -1;
+    for (let i = startNumber; i !== endNumber + increment; i += increment) {
       options.push({
         value: i,
         label: i,
-        selected: parseInt(i) === parseInt(selected_value),
+        selected: parseInt(i) === parseInt(selectedValue),
       });
     }
     return options;
@@ -72,17 +80,7 @@ export default ({
           <RSelect
             required={isRequired}
             placeholder={input.placeholder}
-            options={
-              index === 0
-                ? getNumberDropdown(1, 1, 31)
-                : index === 1
-                  ? getNumberDropdown(3, 1, 12)
-                  : getNumberDropdown(
-                    0,
-                    1920,
-                    new Date().getFullYear(),
-                  )
-            }
+            options={getNumberDropdown(index)}
             value={getValueByIndex(index)}
             id={`input_${formId}_${id}_${index + 1}`}
             name={customName || `input_${id}[]`}
@@ -114,9 +112,7 @@ export default ({
         </div>
       ))}
       {((validationMessage && touched) || error) && (
-        <span className="error-message" id={`error_${formId}_${id}`}>
-          {validationMessage || error}
-        </span>
+        <ValidationMessage validationMessage={validationMessage} error={error} id={id} />
       )}
     </>
   );

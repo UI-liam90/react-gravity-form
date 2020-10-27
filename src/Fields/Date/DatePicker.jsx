@@ -1,13 +1,14 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import ReactSelect from 'react-select'
+import 'react-datepicker/dist/react-datepicker.css';
+
+import ValidationMessage from '../../FormElements/ValidationMessage';
 
 export default ({
   startDate,
   format,
   defaultProps,
 }) => {
-
   const {
     field,
     value,
@@ -15,14 +16,13 @@ export default ({
     touched,
     setTouched,
     updateForm,
-    formatedInputs,
     error,
     unsetError,
     setFocusClass,
     setDate,
     styledComponents,
   } = defaultProps;
-
+  
   const {
     id, isRequired, formId, placeholder, cssClass, datepickerOptions, dateType,
   } = field;
@@ -91,9 +91,7 @@ export default ({
         />
       </SDatePicker>
       {((validationMessage && touched) || error) && (
-        <span className="error-message" id={`error_${formId}_${id}`}>
-          {validationMessage || error}
-        </span>
+        <ValidationMessage validationMessage={validationMessage} error={error} id={id} />
       )}
     </>
   );
