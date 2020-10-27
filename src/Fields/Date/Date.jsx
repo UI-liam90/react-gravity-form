@@ -37,7 +37,6 @@ export default ({
   } = field;
 
   const {
-    Input = 'input',
     Label = 'label',
     Box = 'div',
   } = styledComponents || false;
@@ -58,6 +57,20 @@ export default ({
 
     selectedValue = dateObject;
   }
+
+  const adjustDatePickerOptions = (options) => {
+    if (dateType && dateType === 'datepicker' && options) {
+      const keys = Object.keys(options);
+      if (keys && keys.length > 0) {
+        for (let i = 0; i < keys.length; i++) {
+          if (keys[i] === 'minDate' || keys[i] === 'maxDate') {
+            options[keys[i]] = new Date(options[keys[i]]);
+          }
+        }
+      }
+    }
+    return options;
+  };
 
   const [startDate, setDate] = useState(selectedValue);
 
@@ -86,7 +99,6 @@ export default ({
   const formattedInputs = getFormattedInputs(inputs);
 
   const defaultProps = {
-    validationMessage,
     id,
     field,
     format,
@@ -98,17 +110,19 @@ export default ({
     setFocusClass,
     error,
     unsetError,
+    validationMessage,
     styledComponents,
+    ...props,
   };
 
   const renderDateField = (dateType) => {
     switch (dateType) {
       case 'datepicker':
-        return <DatePicker defaultProps={defaultProps}/>;
+        return <DatePicker defaultProps={defaultProps} />;
       case 'datedropdown':
-        return <DateSelect defaultProps={defaultProps}/>;
+        return <DateSelect defaultProps={defaultProps} />;
       default:
-        return <DateInput defaultProps={defaultProps}/>;
+        return <DateInput defaultProps={defaultProps} />;
     }
   };
 

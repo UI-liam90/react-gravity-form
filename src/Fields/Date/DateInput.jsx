@@ -18,11 +18,8 @@ export default ({ defaultProps}) => {
   const {
     id, isRequired, formId, type, customName,
   } = field;
-  const {
-    Input = 'input',
-    Label = 'label',
-    Box = 'div',
-  } = styledComponents || false;
+
+  const { Input = 'input'} = styledComponents || false;
 
   return (
     <>

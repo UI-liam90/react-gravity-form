@@ -1,11 +1,10 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+// import 'react-datepicker/dist/react-datepicker.css';
 
 import ValidationMessage from '../../FormElements/ValidationMessage';
 
 export default ({
-  startDate,
   format,
   defaultProps,
 }) => {
@@ -20,14 +19,18 @@ export default ({
     unsetError,
     setFocusClass,
     setDate,
+    startDate,
     styledComponents,
+    ...props
   } = defaultProps;
-  
+
   const {
     id, isRequired, formId, placeholder, cssClass, datepickerOptions, dateType,
   } = field;
 
-  const SDatePicker = DatePicker || 'div';
+  const {
+    DatePicker: SdatePicker = "div",
+  } = styledComponents || false;
 
   const adjustDatePickerOptions = (options) => {
     if (dateType && dateType === 'datepicker' && options) {
@@ -47,7 +50,7 @@ export default ({
 
   return (
     <>
-      <SDatePicker className="ginput_container ginput_container_date">
+      <SdatePicker className="ginput_container ginput_container_date">
         <DatePicker
           name={`input_${id}`}
           id={`input_${formId}_${id}`}
@@ -89,7 +92,7 @@ export default ({
           maxDate={cssClass.includes('past') && new Date()}
           {...dateOptions}
         />
-      </SDatePicker>
+      </SdatePicker>
       {((validationMessage && touched) || error) && (
         <ValidationMessage validationMessage={validationMessage} error={error} id={id} />
       )}
