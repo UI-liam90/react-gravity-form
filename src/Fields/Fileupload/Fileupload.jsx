@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import GFDropzone from './GFDropzone';
+import InputLabel from '../../FormElements/InputLabel'
 
 class Fileupload extends Component {
   state = {
@@ -109,10 +110,14 @@ class Fileupload extends Component {
         style={{ display: hideField ? 'none' : undefined }}
       >
         <FileWrapper className={type}>
-          <Label htmlFor={`input_${formID}_${id}`} className={`gf-label ${labelPlacement}`}>
-            {label}
-            {isRequired ? <abbr>*</abbr> : null}
-          </Label>
+          <InputLabel
+            formId={formID}
+            id={id}
+            label={label}
+            labelPlacement={labelPlacement}
+            isRequired={isRequired}
+            styledComponent={styledComponents}
+          />
           {descriptionPlacement === 'above' && description ? (
             description && <div className="description">{description}</div>
           ) : hasDropzone ? (

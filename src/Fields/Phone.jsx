@@ -1,4 +1,5 @@
 import React from 'react';
+import InputLabel from '../FormElements/InputLabel'
 
 export default ({
   field,
@@ -42,10 +43,14 @@ export default ({
       style={{ display: hideField ? 'none' : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
-          {label}
-          {isRequired ? <abbr>*</abbr> : null}
-        </Label>
+        <InputLabel
+          formId={formId}
+          id={id}
+          label={label}
+          labelPlacement={labelPlacement}
+          isRequired={isRequired}
+          styledComponent={styledComponents}
+        />
         {descriptionPlacement === "above" && description && (
           <div className="description">{description}</div>
         )}

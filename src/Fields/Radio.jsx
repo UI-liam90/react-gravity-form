@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import InputLabel from '../FormElements/InputLabel'
 
 function formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
   try {
@@ -114,10 +115,14 @@ class Radio extends Component {
         style={{ display: hideField ? "none" : undefined }}
       >
         <Radiogroup className="radios">
-          <Label as="legend" className={`group-label ${labelPlacement}`}>
-            {label}
-            {isRequired ? <abbr>*</abbr> : null}
-          </Label>
+          <InputLabel
+            formId={formId}
+            id={id}
+            label={label}
+            labelPlacement={labelPlacement}
+            isRequired={isRequired}
+            styledComponent={styledComponents}
+          />
           {descriptionPlacement === "above" && description && (
             <div className="description">{description}</div>
           )}
