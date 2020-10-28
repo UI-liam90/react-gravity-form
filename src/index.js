@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RenderFields from "./FormElements/RenderFields";
-import FormError from "./FormElements/FormError";
-import FormConfirmation from "./FormElements/FormConfirmation";
+import { FormConfirmation, FormError, RenderFields, Submit } from "./FormElements";
 import {
   checkConditionalLogic,
   fetchForm,
@@ -12,9 +10,9 @@ import {
   unsetError,
   updateFieldsValuesBasedOnEntry,
   updateFormHandler} from './Helpers/form'
+
 import { validateField } from "./Helpers/validation";
 import { equalShallow } from "./Helpers/utils";
-import Submit from "./FormElements/Submit";
 
 function usePrevious(data){
   const ref = React.useRef();
@@ -43,12 +41,10 @@ const GravityForm = (props) => {
   const [ showPageValidationMsg, setShowPageValidationMsg ] = useState(false);
   const [ pages, setPages ] = useState({});
   const [ populatedEntry, setPopulatedEntry ] = useState({});
-
   const [ isMounted, setIsMounted ] = useState(false);
   const [ wrapperRef, setWrapperRef ] = useState(null);
 
   const prevProps = usePrevious(props);
-
 
   useEffect(() => {
     const {
