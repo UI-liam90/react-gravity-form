@@ -1,680 +1,142 @@
-import React, { Component } from "react";
-import fetch from "isomorphic-unfetch";
+import React, { useEffect, useState } from "react";
 import RenderFields from "./FormElements/RenderFields";
 import FormError from "./FormElements/FormError";
 import FormConfirmation from "./FormElements/FormConfirmation";
+import {
+  checkConditionalLogic,
+  fetchForm,
+  nextStep,
+  onSubmit,
+  prevStep,
+  setTouchedHandler,
+  unsetError,
+  updateFieldsValuesBasedOnEntry,
+  updateFormHandler} from './Helpers/form'
 import { validateField } from "./Helpers/validation";
 import { equalShallow } from "./Helpers/utils";
 import Submit from "./FormElements/Submit";
 
-class GravityForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      submitFailed: false,
-      errorMessages: false,
-      formValues: {},
-      loading: true,
-      submitting: false,
-      submitSuccess: false,
-      confirmationMessage: false,
-      isValid: false,
-      formData: {},
-      touched: {},
-      activePage: false,
-      conditionFields: {},
-      conditioanlIds: {},
-      isMultipart: false,
-      pageClicked: false,
-      showPageValidationMsg: false,
-    };
-  }
+function usePrevious(data){
+  const ref = React.useRef();
+  React.useEffect(()=>{
+    ref.current = data
+  }, [data])
+  return ref.current
+}
 
-  async componentDidMount() {
+const GravityForm = (props) => {
+  const [ submitFailed, setSubmitFailed ] = useState(false);
+  const [ errorMessages, setErrorMessages ] = useState(false);
+  const [ formValues, setFormValues ] = useState({});
+  const [ loading, setLoading ] = useState(true);
+  const [ submitting, setSubmitting ] = useState(false);
+  const [ submitSuccess, setSubmitSuccess ] = useState(false);
+  const [ confirmationMessage, setConfirmationMessage ] = useState(false);
+  const [ isValid, setIsValid ] = useState(false);
+  const [ formData, setFormData ] = useState({});
+  const [ touched, setTouched ] = useState({});
+  const [ activePage, setActivePage ] = useState(false);
+  const [ conditionFields, setConditionFields ] = useState({});
+  const [ conditioanlIds, setConditioanlIds ] = useState({});
+  const [ isMultipart, setIsMultiPart ] = useState(false);
+  const [ pageClicked, setPageClicked ] = useState(false);
+  const [ showPageValidationMsg, setShowPageValidationMsg ] = useState(false);
+  const [ pages, setPages ] = useState({});
+  const [ populatedEntry, setPopulatedEntry ] = useState({});
+
+  const [ isMounted, setIsMounted ] = useState(false);
+  const [ wrapperRef, setWrapperRef ] = useState(null);
+
+  const prevProps = usePrevious(props);
+
+
+  useEffect(() => {
     const {
-      formID,
       backendUrl,
       populatedFields,
       populatedEntry,
       fetchOptions,
       initialPage,
       getParams,
-    } = this.props;
-    this._isMounted = true;
-    let isMultipart = false;
+    } = props;
+      setIsMounted(true);
+      let isMultipart = false;
+      const queryString = getParams
+        ? Object.keys(getParams)
+          .map((key) => `${key}=${getParams[key]}`)
+          .join("&")
+        : "";
+      const requestUrl = `${backendUrl}/${formID}${
+        queryString ? `?${queryString}` : ""
+      }`;
 
-    const queryString = getParams
-      ? Object.keys(getParams)
-        .map((key) => `${key}=${getParams[key]}`)
-        .join("&")
-      : "";
-    const requestUrl = `${backendUrl}/${formID}${
-      queryString ? `?${queryString}` : ""
-    }`;
+    fetchForm(
+      initialPage,
+      isMultipart,
+      requestUrl,
+      fetchOptions,
+      setFormData,
+      setFormValues,
+      setActivePage,
+      setConditionFields,
+      setConditioanlIds,
+      setPages,
+      setIsMultiPart,
+      populatedFields,
+      populatedEntry,
+      setPopulatedEntry,
+      isMounted,
+      checkConditionalLogic);
 
-    const form = await fetch(requestUrl, fetchOptions)
-      .then((resp) => resp.json())
-      .then((response) => response)
-      .catch(() => false);
-
-    if (form && this._isMounted) {
-      const formValues = {};
-      const conditionFields = [];
-      const conditioanlIds = [];
-      let pages = [];
-      // eslint-disable-next-line no-restricted-syntax
-      for (const field of form.fields) {
-        let value;
-
-        if (field.type === "page") {
-          pages.push(field.id);
-        }
-
-        value = this.getFieldPrepopulatedValue(
-          field,
-          populatedFields,
-          populatedEntry
-        );
-
-        if (field.type === "fileupload") {
-          isMultipart = true;
-        }
-
-        // grab all conditional logic fields
-        if (field.conditionalLogic) {
-          const tmpField = {
-            id: field.id,
-            conditionalLogic: field.conditionalLogic,
-          };
-          const ids = field.conditionalLogic.rules.map((item) => item.fieldId);
-          for (let i = 0; i < ids.length; i++) {
-            const id = parseInt(ids[i]);
-            if (conditioanlIds.indexOf(id) === -1) {
-              conditioanlIds.push(id);
-            }
-          }
-          conditionFields.push(tmpField);
-        }
-
-        formValues[field.id] = {
-          valid: validateField(value, field),
-          value,
-          label: field.label,
-          pageNumber: field.pageNumber,
-          cssClass: field.cssClass,
-          isRequired: field.isRequired,
-          type: field.type,
-        };
-      }
-
-      // check condition logic
-      for (let i = 0; i < conditionFields.length; i++) {
-        formValues[
-          conditionFields[i].id
-          ].hideField = this.checkConditionalLogic(
-          conditionFields[i].conditionalLogic,
-          formValues
-        );
-      }
-
-      this.setState(
-        {
-          formData: form,
-          formValues,
-          activePage: initialPage || (form.pagination ? 1 : false),
-          conditionFields,
-          conditioanlIds,
-          isMultipart,
-          pages: pages,
-          populatedEntry: populatedEntry || false,
-        },
-        () => {
-          // pass state to parent component
-          const { nextStep, prevStep, activePage } = this.props;
-          if (nextStep) {
-            nextStep(() => this.nextStep);
-          }
-          if (prevStep) {
-            prevStep(() => this.prevStep);
-          }
-          if (activePage) {
-            activePage(this.state.activePage);
-          }
-        }
-      );
-    }
-  }
-
-  getFieldPrepopulatedValue = (field, populatedFields, populatedEntry) => {
-    let value;
-    let hasPopulatedEntry = false;
-    const hasPopulation =
-      field.inputName && populatedFields && populatedFields[field.inputName];
-
-    if (populatedEntry && populatedEntry[field.id]) {
-      hasPopulatedEntry = true;
-    } else if (populatedEntry && field.inputs) {
-      field.inputs.some((input) => {
-        if (populatedEntry[input.id]) {
-          hasPopulatedEntry = true;
-        }
-      });
+    if (initialPage && initialPage !== activePage) {
+      setActivePage(initialPage);
     }
 
-    if (field.type === "checkbox") {
-      value = field.choices
-        .filter((choice) =>
-          hasPopulation
-            ? choice.value === populatedFields[field.inputName]
-            : choice.isSelected
-        )
-        .map((choice) => choice.value);
-
-      if (hasPopulatedEntry) {
-        value = field.inputs
-          .filter((choice) => populatedEntry[choice.id])
-          .map((choice) => choice.label);
-      }
-    } else if (field.type === "radio") {
-      if (hasPopulation) {
-        value = populatedFields[field.inputName];
-      } else {
-        const preselected = field.choices.find((choice) => choice.isSelected);
-        value = preselected ? preselected.value : "";
-      }
-    } else if (field.type === "select") {
-      const selectedOption = field.choices
-        .filter((choice) =>
-          hasPopulation
-            ? choice.value === populatedFields[field.inputName]
-            : choice.isSelected
-        )
-        .map((item) => ({ value: item.value, label: item.text }));
-      value =
-        selectedOption && selectedOption.length > 0 ? selectedOption[0] : "";
-    } else {
-      value = hasPopulation
-        ? populatedFields[field.inputName]
-        : hasPopulatedEntry
-          ? populatedEntry[field.id]
-          : field.defaultValue;
+    return () => {
+      setIsMounted(false);
     }
-    return value;
-  };
 
-  /**
-   * Update field values based on new props coming
-   */
-  updateFieldsValuesBasedOnEntry = (populatedEntry) => {
-    const { formValues, formData } = this.state;
-    const keys = Object.keys(formValues);
-
-    let changed = false;
-    const tmpValues = { ...formValues };
-
-    for (let i = 0; i < keys.length; i++) {
-      const id = keys[i];
-      if (populatedEntry[id]) {
-        const field = formData.fields.filter((item) => item.id == id);
-        if (!field[0]) {
-          continue;
-        }
-        const value = this.getFieldPrepopulatedValue(
-          field[0],
-          [],
-          populatedEntry
-        );
-        if (
-          value &&
-          formValues[id] &&
-          formValues[id].value &&
-          formValues[id].value != value
-        ) {
-          tmpValues[id].value = value;
-          changed = true;
-        }
-      }
-    }
-    if (changed) {
-      this.setState({
-        formValues: tmpValues,
-      });
-    }
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    const { populatedEntry, initialPage } = this.props;
     const { populatedEntry: prevPopulatedEntry } = prevProps;
+
     if (
       populatedEntry &&
       prevPopulatedEntry &&
       !equalShallow(populatedEntry, prevPopulatedEntry)
     ) {
-      this.updateFieldsValuesBasedOnEntry(populatedEntry);
+      updateFieldsValuesBasedOnEntry(populatedEntry, formValues, formData, setFormValues);
     }
 
-    if (initialPage && initialPage !== this.state.activePage) {
-      this.setState({ activePage: initialPage });
-    }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  setTouched = (id) => {
-    this.setState({
-      touched: { ...this.state.touched, [id]: true },
-    });
-  };
-
-  unsetError = (id) => {
-    const { errorMessages } = this.state;
-    if (!errorMessages) return;
-
-    if (errorMessages) {
-      if (typeof errorMessages === 'object' && errorMessages[id]) {
-        delete errorMessages[id];
-      }
-    }
-  };
-
-  updateFormHandler = (event, field) => {
-    const { formValues, conditioanlIds, conditionFields } = this.state;
-    let { id, type, isRequired } = field;
-    // Set new value
-    let value;
-
-    if (field.type === "checkbox") {
-      const values = [...formValues[field.id].value];
-      const index = values.indexOf(event.target.value);
-      if (index > -1) {
-        values.splice(index, 1);
-      } else {
-        values.push(event.target.value);
-      }
-      value = values;
-    } else if (field.type == "date" && field.dateType !== "datepicker") {
-      const { subId, dateLabel } = field;
-      const values = [...formValues[field.id].value];
-      values[subId] = {
-        val: event.target.value,
-        label: dateLabel,
-      };
-      value = values;
-    } else if (field.type == "consent") {
-      value = event.target ? event.target.checked : "null";
-    } else if (
-      field.type === "password" ||
-      (field.type === "email" && field.emailConfirmEnabled)
-    ) {
-      const { subId } = field;
-      const values =
-        formValues[field.id] && formValues[field.id].value
-          ? [...formValues[field.id].value]
-          : [];
-      values[subId] = {
-        val: event.target.value,
-      };
-      value = values;
-    } else {
-      value = event.target ? event.target.value : "null";
-    }
-    // if field is IBAN
-    if (type === "text" && field.cssClass.indexOf("iban") > -1) {
-      type = "iban";
+    if (initialPage && initialPage !== activePage) {
+      setActivePage(initialPage);
     }
 
-    // Validate field
-    const valid = validateField(value, field);
-
-    // if field ID is somewhere in conditional fields
-    // recalculate all conditions
-    if (conditioanlIds.indexOf(id) !== -1) {
-      formValues[id].value = value;
-      for (let i = 0; i < conditionFields.length; i++) {
-        const { id } = conditionFields[i];
-        const hide = this.checkConditionalLogic(
-          conditionFields[i].conditionalLogic,
-          formValues
-        );
-        formValues[id].hideField = hide;
-        if (hide) {
-          if (formValues[id].isRequired && hide) {
-            formValues[id].value = "";
-          }
-          formValues[id].valid = !!formValues[id].isRequired;
-        }
-      }
+    if (nextStep) {
+      nextStep(() => nextStep);
     }
-
-    this.setState(
-      {
-        formValues: {
-          ...formValues,
-          [id]: {
-            value,
-            id,
-            valid,
-            label: field.label,
-            pageNumber: field.pageNumber,
-            cssClass: field.cssClass,
-            isRequired: field.isRequired,
-          },
-        },
-      },
-      () => {
-        // pass state to parent component
-        const { onChange, onChangeField } = this.props;
-        if (onChange) {
-          onChange(this.state.formValues);
-        }
-        if (onChangeField) {
-          onChangeField({
-            [id]: {
-              value,
-              id,
-              valid,
-              label: field.label,
-              pageNumber: field.pageNumber,
-              cssClass: field.cssClass,
-              isRequired: field.isRequired,
-            },
-          });
-        }
-      }
-    );
-  };
-
-  scrollToConfirmation = () => {
-    // handler on change page
-    const { onChangePage, jumpToConfirmation } = this.props;
-    if (onChangePage) {
-      onChangePage();
+    if (prevStep) {
+      prevStep(() => prevStep);
     }
-    if (jumpToConfirmation) {
-      const rect = this.wrapperRef
-        ? this.wrapperRef.getBoundingClientRect()
-        : false;
-      if (rect && window) {
-        const scrollTop =
-          window.pageYOffset || document.documentElement.scrollTop;
-        window.scrollTo({
-          top: scrollTop + rect.top - 100,
-        });
-      }
+    if (activePage) {
+      activePage(activePage);
     }
-  };
+  }, [isMounted])
 
-  setActivePage = () => {
+  const setActivePageHandler = () => {
     // check if form is multipages
-    const { activePage, errorMessages, formData } = this.state;
-
     if (!activePage) return false;
     const keys = errorMessages ? Object.keys(errorMessages) : false;
     if (keys && keys.length > 0) {
       const field = formData.fields.filter((item) => item.id == keys[0]);
       if (field && field.length > 0 && field[0].pageNumber) {
-        this.setState({ activePage: field[0].pageNumber });
+        setActivePage(field[0].pageNumber);
       }
     }
-  };
-
-  onSubmit = async (event) => {
-    const { onSubmit: customOnSubmit } = this.props;
-    const formData = new FormData(event.target);
-
-    event.preventDefault();
-
-    const { activePage } = this.state;
-    const isPageValid = this.forceValidationOfCurrentPage(activePage);
-    if (!isPageValid) return false;
-
-    if (customOnSubmit) {
-      customOnSubmit(formData);
-    } else {
-      this.setState({
-        submitting: true,
-        submitSuccess: false,
-        submitFailed: false,
-        confirmationMessage: false,
-        errorMessages: false,
-      });
-      const {
-        formID,
-        backendUrl,
-        jumpToConfirmation,
-        onSubmitSuccess,
-        onError,
-      } = this.props;
-      const gfSubmissionUrl = backendUrl.substring(
-        0,
-        backendUrl.indexOf("/wp-json")
-      );
-
-      fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
-        method: "POST",
-        body: formData,
-      })
-        .then((resp) => resp.json())
-        .then((response) => {
-          if (response && response.is_valid) {
-            if (onSubmitSuccess) {
-              const res = onSubmitSuccess(response);
-              if (!res) {
-                return false;
-              }
-            }
-            const confirmationMessage = response.confirmation_message;
-            const { type, link } = confirmationMessage || false;
-            if (type && link && type === "redirect") {
-              if (typeof window !== "undefined") {
-                window.location.replace(link);
-                return false;
-              }
-            }
-            this.setState({
-              submitting: false,
-              submitSuccess: true,
-              confirmationMessage: response.confirmation_message,
-            });
-            if (jumpToConfirmation) {
-              this.scrollToConfirmation();
-            }
-          } else {
-            throw {
-              response,
-            };
-          }
-        })
-        .catch((error) => {
-          const errorMessages =
-            error && error.response && error.response.validation_messages
-              ? error.response.validation_messages
-              : "Something went wrong";
-
-          if (onError) {
-            onError(errorMessages);
-            this.setState({
-              submitting: false,
-              submitFailed: true,
-            });
-          } else {
-            this.setState({
-              submitting: false,
-              submitFailed: true,
-              errorMessages,
-            });
-          }
-
-          if (jumpToConfirmation) {
-            this.scrollToConfirmation();
-          }
-        });
-    }
-  };
-
-  getNextStep = (activePage) => {
-    const { formValues, pages } = this.state;
-    let nextPage = activePage + 1;
-
-    const nextPageId = pages[activePage - 1];
-
-    // if no next page
-    if (!formValues[nextPageId]) {
-      return false;
-    }
-
-    // if there is conditional login
-    if (formValues[nextPageId].hideField === true) {
-      nextPage = this.getNextStep(nextPage);
-    }
-
-    return nextPage;
-  };
-
-  getPrevStep = (activePage) => {
-    const { formValues, pages } = this.state;
-    let prevPage = activePage - 1;
-
-    const prevPageId = pages[activePage - 3] || 0;
-
-    // if there is conditional login
-    if (formValues[prevPageId] && formValues[prevPageId].hideField === true) {
-      prevPage = this.getPrevStep(prevPage);
-    }
-
-    return prevPage;
-  };
-
-  /**
-   * Force validate current page fields
-   * @param {number} page
-   */
-  forceValidationOfCurrentPage = (page) => {
-    const { formValues } = this.state;
-
-    // check if current oage has required fields
-    const isPageDisabled = page
-      ? Object.keys(formValues).some(
-        (x) =>
-          formValues[x].pageNumber === page && !formValues[x].hideField && formValues[x].valid
-      )
-      : false;
-    if (isPageDisabled) {
-      // make all fields of current page to e touched to trigger field validation
-      const currentPageTouched = Object.keys(formValues)
-        .filter((x) => formValues[x].pageNumber === page)
-        .reduce((currentTouched, x) => {
-          currentTouched = { ...currentTouched, [x]: true };
-          return currentTouched;
-        }, {});
-
-      this.setState({
-        showPageValidationMsg: true, // show custom validation message
-        touched: currentPageTouched,
-      });
-
-      return false;
-    }
-    return true;
-  };
-
-  nextStep = (e) => {
-    e && e.preventDefault();
-    const { activePage, formValues } = this.state;
-    const { activePage: setActive, beforeNextPage } = this.props;
-
-    const isPageValidated = this.forceValidationOfCurrentPage(activePage);
-    if (!isPageValidated) return false;
-
-    const nextPage = this.getNextStep(activePage);
-
-    if (beforeNextPage) {
-      beforeNextPage(activePage, formValues, nextPage);
-    }
-
-    setActive && setActive(nextPage);
-    this.setState(
-      {
-        activePage: nextPage,
-        pageClicked: true,
-        showPageValidationMsg: false,
-      },
-      () => this.scrollToConfirmation()
-    );
-  };
-
-  prevStep = (e) => {
-    e && e.preventDefault();
-    const { activePage } = this.state;
-    const { activePage: setActive } = this.props;
-
-    const prevPage = this.getPrevStep(activePage) || 1;
-
-    setActive && setActive(prevPage);
-    this.setState(
-      {
-        activePage: prevPage,
-        pageClicked: true,
-      },
-      () => this.scrollToConfirmation()
-    );
-  };
-
-  checkConditionalLogic = (condition, fields = false) => {
-    const { rules, actionType } = condition;
-    if (!rules) return true;
-
-    const formValues = fields || this.state.formValues;
-
-    // show only if is selected "All fields" (it should be tweaked in future)
-    // works only "show/hide when field is equal to"
-    let hideField = actionType !== "hide";
-    const hideBasedOnRules = [];
-    for (let i = 0; i < rules.length; i++) {
-      const { fieldId, value, operator } = rules[i];
-      const conditionFieldValue =
-        formValues[fieldId].value && formValues[fieldId].value.value
-          ? formValues[fieldId].value.value
-          : formValues[fieldId].value || false;
-
-      const stringValue = Array.isArray(conditionFieldValue)
-        ? conditionFieldValue.join("")
-        : conditionFieldValue;
-
-      // Check if comparision value is empty
-      if (!value) {
-        if (!stringValue && !value) {
-          hideBasedOnRules[i] = actionType === "hide";
-        } else {
-          hideBasedOnRules[i] = actionType !== "hide";
-        }
-      } else if (stringValue && value == stringValue) {
-        hideBasedOnRules[i] = actionType === "hide";
-      } else if (stringValue && stringValue.includes(value)) {
-        hideBasedOnRules[i] = actionType === "hide";
-      } else {
-        hideBasedOnRules[i] = actionType !== "hide";
-      }
-
-      // If operator is 'isnot' reverse value
-      if (operator === "isnot") {
-        hideBasedOnRules[i] = !hideBasedOnRules[i];
-      }
-    }
-
-    hideField = hideBasedOnRules.every((i) => i === true);
-    // formValues[id].hideField = hideField;
-    // this.setState({ formValues });
-    return hideField;
   };
 
   /**
    * Check if field is disabled (valid)
    */
-  isFieldDisabled = (formValues) => {
-    const { formData } = this.state;
+  const isFieldDisabled = (formValues) => {
 
     const keys = Object.keys(formValues);
     const isDisabled = keys.some((x) => {
@@ -702,21 +164,9 @@ class GravityForm extends Component {
     return isDisabled;
   };
 
-  render() {
-    const {
-      formData,
-      formValues,
-      submitFailed,
-      submitSuccess,
-      touched,
-      submitting,
-      activePage,
-      isMultipart,
-      pageClicked,
-      showPageValidationMsg,
-    } = this.state;
     const {
       title,
+      formID,
       submitIcon,
       saveStateToHtmlField,
       styledComponents,
@@ -725,11 +175,11 @@ class GravityForm extends Component {
       dropzoneText,
       loadingSpinner,
       onError,
-    } = this.props;
+    } = props;
+
     const {
       Button,
       Loading,
-      GFWrapper = "div",
       FormError: SFormError,
       FormConfirmation: SFormConfirmation,
     } = styledComponents || false;
@@ -738,12 +188,12 @@ class GravityForm extends Component {
 
     return (
       <div
-        ref={(el) => (this.wrapperRef = el)}
+        ref={(el) => setWrapperRef(el)}
         className="form-wrapper"
         css={{ position: "relative" }}
-        id={`gravity_form_${this.props.formID}`}
+        id={`gravity_form_${formID}`}
       >
-        {formData.title ? null : Loading && <Loading isLoading />}
+      {formData.title ? null : Loading && <Loading isLoading />}
 
         {submitFailed && !submitSuccess && !onError && (
           <FormError
@@ -754,16 +204,29 @@ class GravityForm extends Component {
           />
         )}
 
-        {submitSuccess && this.state.confirmationMessage && (
+        {submitSuccess && confirmationMessage && (
           <FormConfirmation
-            confirmation={this.state.confirmationMessage}
+            confirmation={confirmationMessage}
             SFormConfirmation={SFormConfirmation}
           />
         )}
 
         {!submitSuccess && formData.fields ? (
           <form
-            onSubmit={(e) => this.onSubmit(e)}
+            onSubmit={(e) =>
+              onSubmit(
+              e,
+              props,
+              wrapperRef,
+              formValues,
+              activePage,
+              setShowPageValidationMsg,
+              setSubmitting,
+              setSubmitSuccess,
+              setSubmitFailed,
+              setTouched,
+              setConfirmationMessage,
+              setErrorMessages)}
             className={cssClass}
             encType={isMultipart ? "multipart/form-data" : undefined}
             noValidate
@@ -786,18 +249,18 @@ class GravityForm extends Component {
                 formValues={formValues}
                 submitFailed={submitFailed}
                 submitSuccess={submitSuccess}
-                updateForm={this.updateFormHandler}
+                updateForm={(event, field) => updateFormHandler(field, event, formValues, setFormValues, conditioanlIds, conditionFields)}
                 touched={touched}
-                setTouched={this.setTouched}
+                setTouched={(id) => setTouchedHandler(id, touched, setTouched)}
                 pagination={formData.pagination}
                 activePage={activePage}
-                prevStep={this.prevStep}
-                nextStep={this.nextStep}
-                checkConditionalLogic={this.checkConditionalLogic}
+                prevStep={(e) => prevStep(e, props, formValues, pages, activePage, setActivePage, setPageClicked)}
+                nextStep={(e) => nextStep(e, props, pages, formValues, activePage, setActivePage, setPageClicked, setTouched, setShowPageValidationMsg)}
+                checkConditionalLogic={(condition, fields) => checkConditionalLogic(condition, fields = false)}
                 saveStateToHtmlField={saveStateToHtmlField}
                 enableHoneypot={formData.enableHoneypot}
-                errors={this.state.errorMessages}
-                unsetError={this.unsetError}
+                errors={errorMessages}
+                unsetError={(id) => unsetError(id, errorMessages)}
                 dropzoneText={dropzoneText}
                 pageClicked={pageClicked}
               />
@@ -810,7 +273,7 @@ class GravityForm extends Component {
                   formData={formData}
                   submitIcon={submitIcon}
                   submitting={submitting}
-                  prevStep={this.prevStep}
+                  prevStep={prevStep}
                   loadingSpinner={loadingSpinner}
                 />
               )}
@@ -821,7 +284,6 @@ class GravityForm extends Component {
         )}
       </div>
     );
-  }
 }
 
 GravityForm.defaultProps = {
