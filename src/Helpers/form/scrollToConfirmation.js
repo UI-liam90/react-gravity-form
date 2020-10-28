@@ -4,13 +4,13 @@ export default (props, wrapperRef) => {
   if (onChangePage) {
     onChangePage();
   }
+
   if (jumpToConfirmation) {
     const rect = wrapperRef
       ? wrapperRef.getBoundingClientRect()
       : false;
     if (rect && window) {
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       window.scrollTo({
         top: scrollTop + rect.top - 100,
       });

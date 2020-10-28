@@ -42,8 +42,7 @@ export default (field, populatedFields, populatedEntry) => {
           : choice.isSelected
       )
       .map((item) => ({ value: item.value, label: item.text }));
-    value =
-      selectedOption && selectedOption.length > 0 ? selectedOption[0] : "";
+    value = selectedOption && selectedOption.length > 0 ? selectedOption[0] : "";
   } else {
     value = hasPopulation
       ? populatedFields[field.inputName]

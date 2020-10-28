@@ -1,10 +1,23 @@
-import { forceValidationOfCurrentPage, getNextStep } from './index'
+import forceValidationOfCurrentPage from './forceValidationOfCurrentPage';
+import getNextStep from './getNextStep';
 
-export default (e, props, pages, formValues, activePage, setActivePage, setPageClicked, setTouched, setShowPageValidationMsg) => {
-  e && e.preventDefault();
-  const { activePage: setActive, beforeNextPage } = props;
+export default (
+  event,
+  props,
+  pages,
+  formValues,
+  activePage,
+  setActivePage,
+  setPageClicked,
+  setTouched,
+  setShowPageValidationMsg,
+) => {
+  event.preventDefault();
+  const { activePage: beforeNextPage } = props;
 
-  const isPageValidated = forceValidationOfCurrentPage(activePage, formValues, setShowPageValidationMsg, setTouched);
+  const isPageValidated = forceValidationOfCurrentPage(
+    activePage, formValues, setShowPageValidationMsg, setTouched,
+  );
   if (!isPageValidated) return false;
 
   const nextPage = getNextStep(activePage, pages, formValues);
@@ -12,9 +25,6 @@ export default (e, props, pages, formValues, activePage, setActivePage, setPageC
   if (beforeNextPage) {
     beforeNextPage(activePage, formValues, nextPage);
   }
-
-  setActive && setActive(nextPage);
-
   setActivePage(nextPage);
   setPageClicked(true);
   setShowPageValidationMsg(false);
