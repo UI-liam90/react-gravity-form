@@ -1,7 +1,8 @@
 import { validateField } from '../validation';
+import checkConditionalLogic from './checkConditionalLogic';
 
 export default (field, event, formValues, setFormValues, conditioanlIds, conditionFields) => {
-  let { id, type, isRequired } = field;
+  const { id, type, isRequired } = field;
   // Set new value
   let value;
 
