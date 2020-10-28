@@ -1,7 +1,7 @@
 import { validateField } from '../validation';
 import checkConditionalLogic from './checkConditionalLogic';
 
-export default (field, event, formValues, setFormValues, conditioanlIds, conditionFields) => {
+export default (field, event, formValues, setFormValues, conditionalIds, conditionFields) => {
   const { id, type, isRequired } = field;
   // Set new value
   let value;
@@ -50,7 +50,7 @@ export default (field, event, formValues, setFormValues, conditioanlIds, conditi
 
   // if field ID is somewhere in conditional fields
   // recalculate all conditions
-  if (conditioanlIds.indexOf(id) !== -1) {
+  if (conditionalIds.indexOf(id) !== -1) {
     formValues[id].value = value;
     for (let i = 0; i < conditionFields.length; i++) {
       const { id } = conditionFields[i];

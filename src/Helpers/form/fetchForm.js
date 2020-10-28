@@ -11,7 +11,7 @@ async function fetchForm(
   setFormValues,
   setActivePage,
   setConditionFields,
-  setConditioanlIds,
+  setConditionalIds,
   setPages,
   setIsMultiPart,
   populatedFields,
@@ -28,7 +28,7 @@ async function fetchForm(
   if (form && isMounted) {
     const formValues = {};
     const conditionFields = [];
-    const conditioanlIds = [];
+    const conditionalIds = [];
     const pages = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const field of form.fields) {
@@ -57,8 +57,8 @@ async function fetchForm(
         const ids = field.conditionalLogic.rules.map((item) => item.fieldId);
         for (let i = 0; i < ids.length; i++) {
           const id = parseInt(ids[i]);
-          if (conditioanlIds.indexOf(id) === -1) {
-            conditioanlIds.push(id);
+          if (conditionalIds.indexOf(id) === -1) {
+            conditionalIds.push(id);
           }
         }
         conditionFields.push(tmpField);
@@ -88,7 +88,7 @@ async function fetchForm(
     setFormValues(formValues);
     setActivePage(initialPage || (form.pagination ? 1 : false));
     setConditionFields(conditionFields);
-    setConditioanlIds(conditioanlIds);
+    setConditionalIds(conditionalIds);
     setIsMultiPart(isMultipart);
     setPages(pages);
     setPopulatedEntry(populatedEntry || false);
