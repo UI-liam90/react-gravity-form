@@ -63,9 +63,7 @@ export default ({
   const selectChange = (option) => {
     selectOption(option);
   };
-
-  console.log(inputs)
-
+  
   return (
     <Box
       width={width}
