@@ -60,7 +60,7 @@ const GravityForm = (props) => {
         .map(key => `${key}=${getParams[key]}`)
         .join('&')
       : '';
-    const requestUrl = `${backendUrl}/wp-json/glamrock/v1/gf/forms/${formID}${
+    const requestUrl = `${backendUrl}/${formID}${
       queryString ? `?${queryString}` : ''
     }`;
 
