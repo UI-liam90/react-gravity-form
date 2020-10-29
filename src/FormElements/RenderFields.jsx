@@ -48,6 +48,7 @@ const fieldTypes = [
   "password",
   "section",
   "custom",
+  "name",
 ];
 
 const honeyPotLables = ["Name", "Email", "Phone", "Comments"];

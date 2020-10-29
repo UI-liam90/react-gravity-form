@@ -112,7 +112,7 @@ const RenderField = ({
       key={field.id}
       field={field}
       value={value}
-      updateForm={(event, field) => updateForm(event, field)}
+      updateForm={(event, field, inputID) => updateForm(event, field, inputID)}
       validationMessage={
         formValues[field.id] ? formValues[field.id].valid : false
       }

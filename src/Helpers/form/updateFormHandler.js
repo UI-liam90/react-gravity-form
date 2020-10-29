@@ -1,7 +1,7 @@
 import { validateField } from '../validation';
 import checkConditionalLogic from './checkConditionalLogic';
 
-export default (field, event, formValues, setFormValues, conditionalIds, conditionFields) => {
+export default (field, event, inputID, formValues, setFormValues, conditionalIds, conditionFields) => {
   const { id, type, isRequired } = field;
   // Set new value
   let value;
@@ -25,6 +25,19 @@ export default (field, event, formValues, setFormValues, conditionalIds, conditi
     value = values;
   } else if (field.type === 'consent') {
     value = event.target ? event.target.checked : 'null';
+  } else if (field.type === 'name') {
+    let values = [...formValues[field.id].value];
+
+    const index = values.indexOf(inputID);
+
+    if (index > -1) {
+      values.splice(index, 1);
+    } else {
+      values[inputID] = event.target.value;
+    }
+
+    value = event.target.value;
+
   } else if (
     field.type === 'password'
     || (field.type === 'email' && field.emailConfirmEnabled)

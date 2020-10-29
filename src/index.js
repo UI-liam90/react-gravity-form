@@ -174,10 +174,7 @@ const GravityForm = (props) => {
       })
         .then(resp => resp.json())
         .then((response) => {
-          console.log(response);
           if (response && response.is_valid) {
-            console.log('valid');
-
             if (onSubmitSuccess) {
               const res = onSubmitSuccess(response);
               if (!res) {
@@ -277,7 +274,7 @@ const GravityForm = (props) => {
               formValues={formValues}
               submitFailed={submitFailed}
               submitSuccess={submitSuccess}
-              updateForm={(event, field) => updateFormHandler(field, event, formValues, setFormValues, conditionalIds, conditionFields)}
+              updateForm={(event, field, inputID) => updateFormHandler(field, event, inputID, formValues, setFormValues, conditionalIds, conditionFields)}
               touched={touched}
               setTouched={id => setTouchedHandler(id, touched, setTouched)}
               pagination={formData.pagination}

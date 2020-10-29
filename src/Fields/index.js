@@ -17,6 +17,7 @@ import Consent from './Consent';
 import Password from './Password';
 import Section from './Section';
 import Custom from './Custom';
+import Name from './Name';
 
 export {
   Checkbox,
@@ -38,4 +39,5 @@ export {
   Password,
   Section,
   Custom,
+  Name,
 };
