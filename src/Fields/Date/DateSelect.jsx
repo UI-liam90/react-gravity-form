@@ -2,10 +2,7 @@ import React from 'react';
 import ReactSelect from 'react-select';
 import ValidationMessage from '../../FormElements/ValidationMessage'
 
-export default ({
-  startDate,
-  defaultProps,
-}) => {
+export default ({defaultProps}) => {
   const {
     field,
     value,
@@ -13,16 +10,17 @@ export default ({
     touched,
     setTouched,
     updateForm,
-    formattedInputs,
     error,
     unsetError,
     setFocusClass,
     setDate,
+    startDate,
+    styledComponents,
+    formattedInputs,
+    ...props
   } = defaultProps;
 
-  const {
-    id, isRequired, formId, type, customName,
-  } = field;
+  const { id, isRequired, formId, type, customName } = field;
 
   const RSelect = ReactSelect || 'select';
 

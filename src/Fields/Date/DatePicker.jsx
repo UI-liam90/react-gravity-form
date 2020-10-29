@@ -1,8 +1,11 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
+// components
 import ValidationMessage from '../../FormElements/ValidationMessage';
+
+// styles
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default ({
   format,

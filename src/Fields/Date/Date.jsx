@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import DatePicker from './DatePicker';
 import DateSelect from './DateSelect';
 import DateInput from './DateInput';
+import InputLabel from '../../FormElements/InputLabel';
 
 export default ({
   field,
@@ -37,7 +38,6 @@ export default ({
   } = field;
 
   const {
-    Label = 'label',
     Box = 'div',
   } = styledComponents || false;
 
@@ -57,20 +57,6 @@ export default ({
 
     selectedValue = dateObject;
   }
-
-  const adjustDatePickerOptions = (options) => {
-    if (dateType && dateType === 'datepicker' && options) {
-      const keys = Object.keys(options);
-      if (keys && keys.length > 0) {
-        for (let i = 0; i < keys.length; i++) {
-          if (keys[i] === 'minDate' || keys[i] === 'maxDate') {
-            options[keys[i]] = new Date(options[keys[i]]);
-          }
-        }
-      }
-    }
-    return options;
-  };
 
   const [startDate, setDate] = useState(selectedValue);
 
@@ -101,6 +87,7 @@ export default ({
   const defaultProps = {
     id,
     field,
+    isRequired,
     format,
     formattedInputs,
     updateForm,
@@ -136,13 +123,14 @@ export default ({
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
-      <Label
-        htmlFor={`input_${formId}_${id}`}
-        className={`gf-label ${labelPlacement}`}
-      >
-        {label}
-        {isRequired ? <abbr>*</abbr> : null}
-      </Label>
+      <InputLabel
+        formId={formId}
+        id={id}
+        label={label}
+        labelPlacement={labelPlacement}
+        isRequired={isRequired}
+        styledComponent={styledComponents}
+      />
       <div className={type}>
         {descriptionPlacement === 'above' && description && (
           <div className="description">{description}</div>

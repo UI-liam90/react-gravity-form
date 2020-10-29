@@ -1,9 +1,9 @@
 import React from 'react';
+import ValidationMessage from '../../FormElements/ValidationMessage';
 
-export default ({ defaultProps}) => {
+export default ({ defaultProps }) => {
   const {
     field,
-    value,
     validationMessage,
     touched,
     setTouched,
@@ -12,14 +12,13 @@ export default ({ defaultProps}) => {
     error,
     unsetError,
     setFocusClass,
-    setDate,
     styledComponents,
   } = defaultProps;
   const {
-    id, isRequired, formId, type, customName,
+    id, formId, type, customName,
   } = field;
 
-  const { Input = 'input'} = styledComponents || false;
+  const { Input = 'input' } = styledComponents || false;
 
   return (
     <>
@@ -63,12 +62,7 @@ export default ({ defaultProps}) => {
           && validationMessage[index]
           && index === validationMessage[index].index
           && validationMessage[index].message && (
-            <span
-              className="error-message"
-              id={`error_${formId}_${item.id}`}
-            >
-              {validationMessage[index].message}
-            </span>
+            <ValidationMessage validationMessage={validationMessage} formId={formId} error={error} id={item.id} />
           )}
           {error && <span className="error-message">{error}</span>}
         </div>
