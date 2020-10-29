@@ -25,6 +25,14 @@ export default (field, event, formValues, setFormValues, conditionalIds, conditi
     value = values;
   } else if (field.type === 'consent') {
     value = event.target ? event.target.checked : 'null';
+  } else if (field.type === 'website') {
+    function addHttp(url) {
+      if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+        url = "http://" + url;
+      }
+      return url;
+    }
+    value = addHttp(event.target ? event.target.value : 'null');
   } else if (
     field.type === 'password'
     || (field.type === 'email' && field.emailConfirmEnabled)
