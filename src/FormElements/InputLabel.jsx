@@ -1,10 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const InputLabel = ({
-  formId, id, label, isRequired, labelPlacement, styledComponents
-}) =>  {
-
+  formId, id, label, isRequired, labelPlacement, styledComponents,
+}) => {
   const {
     Label = 'label',
   } = styledComponents || false;
@@ -19,10 +17,6 @@ const InputLabel = ({
       {isRequired ? <abbr>*</abbr> : null}
     </Label>
   );
-}
-
-InputLabel.propTypes = {
-  validationMessage: PropTypes.string.isRequired,
 };
 
 export default InputLabel;
