@@ -1,4 +1,6 @@
-export default (id, errorMessages) => {
+import PropTypes from 'prop-types';
+
+const unsetError = (id, errorMessages) => {
   if (!errorMessages) return;
 
   if (errorMessages) {
@@ -6,4 +8,11 @@ export default (id, errorMessages) => {
       delete errorMessages[id];
     }
   }
+};
+
+export default unsetError;
+
+unsetError.propTypes = {
+  id: PropTypes.number.isRequired,
+  errorMessages: PropTypes.func,
 };
