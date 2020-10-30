@@ -18,6 +18,8 @@ import Password from './Password';
 import Section from './Section';
 import Custom from './Custom';
 import Name from './Name';
+import Address from './Address';
+import Buckarooideal from './Buckarooideal';
 
 export {
   Checkbox,
@@ -40,4 +42,6 @@ export {
   Section,
   Custom,
   Name,
+  Address,
+  Buckarooideal,
 };
