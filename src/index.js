@@ -14,7 +14,7 @@ import {
   unsetError,
   updateFieldsValuesBasedOnEntry,
   updateFormHandler,
-  usePrevious,
+  // usePrevious,
 } from './Helpers/form';
 
 import { validateField } from './Helpers/validation';
@@ -42,7 +42,7 @@ const GravityForm = (props) => {
   const [isMounted, setIsMounted] = useState(false);
   const [wrapperRef, setWrapperRef] = useState(null);
 
-  const prevProps = usePrevious(props);
+  // const prevProps = usePrevious(props);
 
   useEffect(() => {
     const {
@@ -127,6 +127,8 @@ const GravityForm = (props) => {
     dropzoneText,
     loadingSpinner,
     onError,
+    language,
+    postcodeApiKey,
   } = props;
 
   const {
@@ -277,6 +279,7 @@ const GravityForm = (props) => {
               updateForm={(event, field, inputID) => updateFormHandler(field, event, inputID, formValues, setFormValues, conditionalIds, conditionFields)}
               touched={touched}
               setTouched={id => setTouchedHandler(id, touched, setTouched)}
+              setErrorMessages={setErrorMessages}
               pagination={formData.pagination}
               activePage={activePage}
               prevStep={e => prevStep(e, props, formValues, pages, activePage, setActivePage, setPageClicked)}
@@ -288,6 +291,8 @@ const GravityForm = (props) => {
               unsetError={id => unsetError(id, errorMessages)}
               dropzoneText={dropzoneText}
               pageClicked={pageClicked}
+              language={language}
+              postcodeApiKey={postcodeApiKey}
             />
             {(!formData.pagination
                 || (formData.pagination

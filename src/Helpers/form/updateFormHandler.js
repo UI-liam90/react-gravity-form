@@ -25,6 +25,10 @@ export default (field, event, inputID, formValues, setFormValues, conditionalIds
     value = values;
   } else if (field.type === 'consent') {
     value = event.target ? event.target.checked : 'null';
+  } else if (field.type === 'postcode') {
+    value = event.target ? event.target.value : null;
+    Object.values(formValues).filter(item => item.cssClass === 'field--street')[0].value = event?.street;
+    Object.values(formValues).filter(item => item.cssClass === 'field--city')[0].value = event?.city;
   } else if (field.type === 'name') {
     let values = [...formValues[field.id].value];
 

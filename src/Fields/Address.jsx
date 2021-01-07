@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
+import countries from 'i18n-iso-countries';
 import InputLabel from '../FormElements/InputLabel';
+import { Flex } from '../../../styles';
 
 export default ({
   field,
@@ -15,6 +17,7 @@ export default ({
   unsetError,
   setFocusClass,
   cssClass,
+  language,
   ...props
 }) => {
   const {
@@ -32,11 +35,13 @@ export default ({
     width,
     customName,
   } = field;
+  countries.registerLocale(require(`i18n-iso-countries/langs/${language ? language : 'en'}.json`));
+
+  const countryNames = Object.values(countries.getNames(language ? language : 'en', {select: "official"})).map(a => a).sort((a, b) => a.localeCompare(b));
 
   const {
-Input = 'input', Label = 'label', Box = 'div',
+    Input = 'input', Label = 'label', Box = 'div',
   } = styledComponents || false;
-
 
   return (
     <Box
@@ -48,7 +53,7 @@ Input = 'input', Label = 'label', Box = 'div',
       }
       style={{ display: hideField ? 'none' : undefined }}
     >
-      {inputs.map(input => (
+      {inputs?.map((input, key) => (
         !input.isHidden && (
           <div className={type} key={input.id}>
             <InputLabel
@@ -62,30 +67,35 @@ Input = 'input', Label = 'label', Box = 'div',
             {descriptionPlacement === 'above' && description && (
               <div className="description">{description}</div>
             )}
-
-            <Input
-              id={`input_${formId}_${input.id}`}
-              key={input.id}
-              name={customName || `input_${input.id}`}
-              type={type}
-              value={!value ? '' : value[input.id]}
-              placeholder={input.placeholder}
-              maxLength={maxLength}
-              required={isRequired}
-              onChange={(event) => {
-                updateForm(event, field, input.id);
-                unsetError(input.id);
-              }}
-              onBlur={(event) => {
-                updateForm(event, field);
-                setTouched(input.id);
-                setFocusClass(value !== '');
-              }}
-              onFocus={() => setFocusClass(true)}
-              aria-label={input.label}
-              aria-describedby={`error_${formId}_${input.id}`}
-              aria-invalid={(!!validationMessage && touched) || !!error}
-            />
+            {key === 5 ? (
+              <select>
+                 {countryNames.map(country => <option value={country}>{country}</option>)}
+              </select>
+            ) : (
+              <Input
+                id={`input_${formId}_${input.id}`}
+                key={input.id}
+                name={customName || `input_${input.id}`}
+                type={type}
+                value={!value ? '' : value[input.id]}
+                placeholder={input.placeholder}
+                maxLength={maxLength}
+                required={isRequired}
+                onChange={(event) => {
+                  updateForm(event, field, input.id);
+                  unsetError(input.id);
+                }}
+                onBlur={(event) => {
+                  updateForm(event, field);
+                  setTouched(input.id);
+                  setFocusClass(value !== '');
+                }}
+                onFocus={() => setFocusClass(true)}
+                aria-label={input.label}
+                aria-describedby={`error_${formId}_${input.id}`}
+                aria-invalid={(!!validationMessage && touched) || !!error}
+              />
+            )}
             {descriptionPlacement !== 'above' && description && <div className="description">{description}</div>}
             {((validationMessage && touched) || error) && (
               <span className="error-message" id={`error_${formId}_${id}`}>
