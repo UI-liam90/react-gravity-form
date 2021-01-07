@@ -20,6 +20,7 @@ import Custom from './Custom';
 import Name from './Name';
 import Address from './Address';
 import Buckarooideal from './Buckarooideal';
+import Postcode from './Postcode';
 
 export {
   Checkbox,
@@ -44,4 +45,5 @@ export {
   Name,
   Address,
   Buckarooideal,
+  Postcode
 };

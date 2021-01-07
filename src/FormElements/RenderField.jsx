@@ -58,6 +58,7 @@ const RenderField = ({
   submitFailed,
   submitSuccess,
   setTouched,
+  setErrorMessages,
   touched,
   updateForm,
   pages,
@@ -70,6 +71,8 @@ const RenderField = ({
   error,
   unsetError,
   dropzoneText,
+  language,
+  postcodeApiKey
 }) => {
   let FormComponent = FormFields[formatComponentName(field.type)];
 
@@ -116,10 +119,12 @@ const RenderField = ({
       validationMessage={
         formValues[field.id] ? formValues[field.id].valid : false
       }
+      formValues={formValues}
       submitFailed={submitFailed}
       submitSuccess={submitSuccess}
       touched={touched[field.id]}
       setTouched={setTouched}
+      setErrorMessages={setErrorMessages}
       unsetError={unsetError}
       error={error}
       pages={pages}
@@ -137,6 +142,8 @@ const RenderField = ({
       setFocusClass={setFocusClass}
       component={customComponents && (customComponents[field.id] || customComponents[field.cssClass])}
       dropzoneText={dropzoneText}
+      language={language}
+      postcodeApiKey={postcodeApiKey}
     />
   );
 };

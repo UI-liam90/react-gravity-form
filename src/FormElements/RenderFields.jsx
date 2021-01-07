@@ -51,6 +51,7 @@ const fieldTypes = [
   'name',
   'address',
   'buckarooideal',
+  'postcode'
 ];
 
 const honeyPotLables = ['Name', 'Email', 'Phone', 'Comments'];
@@ -65,6 +66,7 @@ export default (props) => {
     submitSuccess,
     touched,
     setTouched,
+    setErrorMessages,
     pagination,
     activePage,
     prevStep,
@@ -79,6 +81,8 @@ export default (props) => {
     errors,
     dropzoneText,
     pageClicked,
+    language,
+    postcodeApiKey,
   } = props;
 
   // get page indexes
@@ -128,6 +132,7 @@ export default (props) => {
                   formValues={formValues}
                   submitFailed={submitFailed}
                   setTouched={setTouched}
+                  setErrorMessages={setErrorMessages}
                   submitSuccess={submitSuccess}
                   updateForm={updateForm}
                   touched={touched}
@@ -144,6 +149,8 @@ export default (props) => {
                   }
                   unsetError={unsetError}
                   dropzoneText={dropzoneText}
+                  language={language}
+                  postcodeApiKey={postcodeApiKey}
                 />
               ),
             )}
@@ -166,6 +173,8 @@ export default (props) => {
               unsetError={unsetError}
               dropzoneText={dropzoneText}
               customComponents={customComponents}
+              language={language}
+              postcodeApiKey={postcodeApiKey}
             />
           ),
         )}
