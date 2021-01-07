@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import fetch from 'isomorphic-unfetch';
 import {
-  FormConfirmation, FormError, RenderFields, Submit,
+  FormConfirmation, FormError, RenderFields, Submit, ProgressBar,
 } from './FormElements';
 
 import {
@@ -269,6 +269,11 @@ const GravityForm = (props) => {
             </div>
           )}
           <div className="form-wrapper">
+            <ProgressBar
+              pagination={formData.pagination}
+              activePage={activePage}
+              firstPageCssClass={formData.firstPageCssClass}
+            />
             <RenderFields
               styledComponents={styledComponents}
               customComponents={customComponents}
