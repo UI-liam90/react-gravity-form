@@ -1,5 +1,5 @@
 import React from 'react';
-import InputLabel from '../FormElements/InputLabel'
+import InputLabel from '../FormElements/InputLabel';
 
 export default ({
   field,
@@ -32,6 +32,8 @@ export default ({
   } = field;
   const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
 
+  const setDisabled = () => cssClass === 'field--street' || cssClass === 'field--city';
+
   return (
     <Box
       width={width}
@@ -51,7 +53,7 @@ export default ({
           isRequired={isRequired}
           styledComponent={styledComponents}
         />
-        {descriptionPlacement === "above" && description && (
+        {descriptionPlacement === 'above' && description && (
           <div className="description">{description}</div>
         )}
         <Input
@@ -71,12 +73,13 @@ export default ({
             setTouched(id);
             setFocusClass(value !== '');
           }}
+          disabled={setDisabled()}
           onFocus={() => setFocusClass(true)}
           aria-label={label}
           aria-describedby={`error_${formId}_${id}`}
           aria-invalid={(!!validationMessage && touched) || !!error}
         />
-        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+        {descriptionPlacement !== 'above' && description && <div className="description">{description}</div>}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}
