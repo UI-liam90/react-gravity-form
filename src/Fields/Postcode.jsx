@@ -30,7 +30,6 @@ export default ({
     label,
     placeholder,
     isRequired,
-    maxLength,
     description,
     descriptionPlacement,
     labelPlacement,
@@ -126,8 +125,7 @@ export default ({
           type={type}
           value={!value ? '' : value}
           placeholder={placeholder}
-          maxLength={maxLength}
-          maxlength={6}
+          maxLength={6}
           required={isRequired}
           onChange={(event) => {
             updateForm(event, field);
