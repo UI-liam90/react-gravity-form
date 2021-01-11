@@ -173,6 +173,7 @@ export default (props) => {
               unsetError={unsetError}
               dropzoneText={dropzoneText}
               customComponents={customComponents}
+              setErrorMessages={setErrorMessages}
               language={language}
               postcodeApiKey={postcodeApiKey}
             />
