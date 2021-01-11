@@ -62,7 +62,7 @@ export default ({
   async function getAddress(
     event,
   ) {
-    value = event.target ? event.target.value : null;
+    value = event.target ? event.target.value.toUpperCase() : null;
     let hasAddress;
     if (!hasAddress) {
       let response;
