@@ -51,14 +51,14 @@ const isRequired = (required, empty, message, translation) => {
 const selectValidation = (required, value, placeholder) =>
   !(value === placeholder && required);
 
-const checkboxValidation = (values, message) => {
+const checkboxValidation = (values, message, translation) => {
   if (values.length < 1) {
-    return message || "This field is required";
+    return message || translation && translation.required ? translation.required : "This field is required";
   }
   return false;
 };
 
-const emailValidation = (values, field) => {
+const emailValidation = (values, field, translation) => {
   const { inputs, isRequired: required, errorMessage } = field || false;
   const { required: requiredMsg, mismatch } = errorMessage || false;
 
@@ -67,7 +67,7 @@ const emailValidation = (values, field) => {
     values && values.filter((item) => item && item.val === "").length;
 
   if (((values && values.length < 2) || isInputsEmpty !== 0) && required) {
-    return requiredMsg || "This field is required";
+    return requiredMsg || translation && translation.required ? translation.required : "This field is required";
   }
 
   if (values && values.length > 0) {
@@ -88,14 +88,14 @@ const emailValidation = (values, field) => {
       values[1].val !== "" &&
       values[1].val !== values[0].val
     ) {
-      return mismatch || "Mismatch";
+      return mismatch || translation && translation.mismatch ? translation.mismatch : "Mismatch";
     }
   }
 
   return false;
 };
 
-const passwordValidation = (values, field) => {
+const passwordValidation = (values, field, translation) => {
   const { inputs, isRequired: required, errorMessage } = field || false;
   const { required: requiredMsg, mismatch } = errorMessage || false;
 
@@ -110,7 +110,7 @@ const passwordValidation = (values, field) => {
       isInputsEmpty === filteredInputs.length) &&
     required
   ) {
-    return requiredMsg || "This field is required";
+    return requiredMsg || translation && translation.required ? translation.required : "This field is required";
   }
 
   // if there is repeat password field => check if match
@@ -126,7 +126,7 @@ const passwordValidation = (values, field) => {
       values[1].val !== "" &&
       values[1].val !== values[0].val
     ) {
-      return mismatch || "Mismatch";
+      return mismatch || translation && translation.mismatch ? translation.mismatch : "Mismatch";
     }
   }
 
@@ -172,7 +172,7 @@ const isDate = (values, field, translation) => {
           if (val.length > maxLength || val < min || val > max) {
             validation[i] = {
               index: i,
-              message: "Enter a valid month",
+              message: translation && translation.month ? translation.month : "Enter a valid month",
             };
           }
         } else if (label === "DD") {
@@ -182,7 +182,7 @@ const isDate = (values, field, translation) => {
           if (val.length > maxLength || val < min || val > max) {
             validation[i] = {
               index: i,
-              message: "Enter a valid date",
+              message: translation && translation.date ? translation.date : "Enter a valid date",
             };
           }
         } else if (label === "YYYY") {
@@ -192,7 +192,7 @@ const isDate = (values, field, translation) => {
           if (val.length > maxLength || val < min || val > max) {
             validation[i] = {
               index: i,
-              message: "Enter a valid year",
+              message: translation && translation.year ? translation.year : "Enter a valid year",
             };
           }
         }
@@ -206,15 +206,15 @@ const validateField = (value, field, translation) => {
   const { type, isRequired: required } = field;
   // Check first if requried checkbox or radio
   if ((type === "checkbox" || type === "radio") && required) {
-    return checkboxValidation(value, field.errorMessage);
+    return checkboxValidation(value, field.errorMessage, translation);
   }
 
   if (type === "password") {
-    return passwordValidation(value, field);
+    return passwordValidation(value, field, translation);
   }
 
   if (type === "email" && field.emailConfirmEnabled) {
-    return emailValidation(value, field);
+    return emailValidation(value, field, translation);
   }
 
   // Check if empty
