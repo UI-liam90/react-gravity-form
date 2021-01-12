@@ -6,17 +6,17 @@ const getMessage = (message, type) => {
   return message;
 };
 
-const isEmail = (email, message) => {
+const isEmail = (email, message, translation) => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   if (!re.test(email)) {
     const customMessage = getMessage(message, "email");
-    return customMessage || "Enter a valid email";
+    return customMessage || translation && translation.email ? translation.email : "Enter a valid email";
   }
   return false;
 };
 
-const isUrl = (str, message) => {
+const isUrl = (str, message, translation) => {
   const pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
       "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
@@ -28,7 +28,7 @@ const isUrl = (str, message) => {
   ); // fragment locator
   if (!pattern.test(str)) {
     const customMessage = getMessage(message, "url");
-    return customMessage || "Enter a valid url";
+    return customMessage || translation && translation.url ? translation.url : "Enter a valid url";
   }
   return false;
 };
@@ -40,10 +40,10 @@ const isEmpty = (value) => {
   return false;
 };
 
-const isRequired = (required, empty, message) => {
+const isRequired = (required, empty, message, translation) => {
   if (required && empty) {
     const customMessage = getMessage(message, "required");
-    return customMessage || "This field is required";
+    return customMessage || translation && translation.required ? translation.required : "This field is required";
   }
   return false;
 };
@@ -150,7 +150,7 @@ const validateDateTypeDrowdown = (values, required, requiredMsg) => {
   return !isValid ? requiredMsg || "This field is required" : false;
 };
 
-const isDate = (values, field) => {
+const isDate = (values, field, translation) => {
   const validation = [];
 
   if (field.dateType === "datedropdown") {
@@ -202,7 +202,7 @@ const isDate = (values, field) => {
   return validation;
 };
 
-const validateField = (value, field) => {
+const validateField = (value, field, translation) => {
   const { type, isRequired: required } = field;
   // Check first if requried checkbox or radio
   if ((type === "checkbox" || type === "radio") && required) {
@@ -221,20 +221,21 @@ const validateField = (value, field) => {
   const empty = isEmpty(value);
   let validationMessage = "";
   const message = field && field.errorMessage ? field.errorMessage : false;
+
   // Set validation message if required
-  validationMessage = required ? isRequired(required, empty, message) : false;
+  validationMessage = required ? isRequired(required, empty, message, translation) : false;
   // Set other validation messages
   if (!validationMessage && !empty) {
     if (type === "email") {
-      validationMessage = isEmail(value, message);
+      validationMessage = isEmail(value, message, translation);
     } else if (type === "website") {
-      validationMessage = isUrl(value, message);
+      validationMessage = isUrl(value, message, translation);
     } else if (type === "date") {
       let isValid = true;
       if (field.dateType && field.dateType === "datepicker") {
-        isValid = required ? isRequired(required, empty, message) : false;
+        isValid = required ? isRequired(required, empty, message, translation) : false;
       } else {
-        isValid = isDate(value, field);
+        isValid = isDate(value, field, translation);
       }
       validationMessage = isValid.length > 0 ? isValid : false;
     }

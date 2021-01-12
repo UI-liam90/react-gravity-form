@@ -52,6 +52,7 @@ const GravityForm = (props) => {
       fetchOptions,
       initialPage,
       getParams,
+      translation,
     } = props;
     setIsMounted(true);
     const isMultipart = false;
@@ -81,6 +82,7 @@ const GravityForm = (props) => {
       setPopulatedEntry,
       isMounted,
       checkConditionalLogic,
+      translation,
     );
 
     if (initialPage && initialPage !== activePage) {
@@ -128,6 +130,7 @@ const GravityForm = (props) => {
     loadingSpinner,
     onError,
     language,
+    translation,
     postcodeApiKey,
   } = props;
 
@@ -283,7 +286,7 @@ const GravityForm = (props) => {
               formValues={formValues}
               submitFailed={submitFailed}
               submitSuccess={submitSuccess}
-              updateForm={(event, field, inputID) => updateFormHandler(field, event, inputID, formValues, setFormValues, conditionalIds, conditionFields)}
+              updateForm={(event, field, inputID) => updateFormHandler(field, event, inputID, formValues, setFormValues, conditionalIds, conditionFields, translation)}
               touched={touched}
               setTouched={id => setTouchedHandler(id, touched, setTouched)}
               setErrorMessages={setErrorMessages}
