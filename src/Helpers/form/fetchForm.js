@@ -19,7 +19,6 @@ async function fetchForm(
   setPopulatedEntry,
   isMounted,
   checkConditionalLogic,
-  translation,
 ) {
   const form = await fetch(requestUrl, fetchOptions)
     .then((resp) => resp.json())
@@ -66,7 +65,7 @@ async function fetchForm(
       }
 
       formValues[field.id] = {
-        valid: validateField(value, field, translation),
+        valid: validateField(value, field),
         value,
         label: field.label,
         pageNumber: field.pageNumber,
