@@ -72,7 +72,7 @@ const RenderField = ({
   unsetError,
   dropzoneText,
   language,
-  postcodeApiKey
+  apiKeys
 }) => {
   let FormComponent = FormFields[formatComponentName(field.type)];
 
@@ -143,7 +143,7 @@ const RenderField = ({
       component={customComponents && (customComponents[field.id] || customComponents[field.cssClass])}
       dropzoneText={dropzoneText}
       language={language}
-      postcodeApiKey={postcodeApiKey}
+      apiKeys={apiKeys}
     />
   );
 };

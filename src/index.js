@@ -128,7 +128,7 @@ const GravityForm = (props) => {
     loadingSpinner,
     onError,
     language,
-    postcodeApiKey,
+    apiKeys,
   } = props;
 
   const {
@@ -299,7 +299,7 @@ const GravityForm = (props) => {
               dropzoneText={dropzoneText}
               pageClicked={pageClicked}
               language={language}
-              postcodeApiKey={postcodeApiKey}
+              apiKeys={apiKeys}
             />
             {(!formData.pagination
                 || (formData.pagination

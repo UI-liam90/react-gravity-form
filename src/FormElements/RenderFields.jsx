@@ -82,7 +82,7 @@ export default (props) => {
     dropzoneText,
     pageClicked,
     language,
-    postcodeApiKey,
+    apiKeys,
   } = props;
 
   // get page indexes
@@ -150,7 +150,7 @@ export default (props) => {
                   unsetError={unsetError}
                   dropzoneText={dropzoneText}
                   language={language}
-                  postcodeApiKey={postcodeApiKey}
+                  apiKeys={apiKeys}
                 />
               ),
             )}
@@ -175,7 +175,7 @@ export default (props) => {
               customComponents={customComponents}
               setErrorMessages={setErrorMessages}
               language={language}
-              postcodeApiKey={postcodeApiKey}
+              apiKeys={apiKeys}
             />
           ),
         )}

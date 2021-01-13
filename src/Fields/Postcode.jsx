@@ -5,7 +5,6 @@ import InputLabel from '../FormElements/InputLabel';
 const postcodeApi = require('postcode-nl').promises;
 
 export default ({
-  formData,
   formValues,
   field,
   value,
@@ -20,7 +19,7 @@ export default ({
   unsetError,
   setFocusClass,
   cssClass,
-  postcodeApiKey,
+  apiKeys,
   ...props
 }) => {
   const {
@@ -41,7 +40,7 @@ export default ({
   const getAddressByPostalCode = (postalCode) => {
     const options = {
       returnRateLimit: true,
-      apiKey: postcodeApiKey,
+      apiKey: apiKeys.postcode,
     };
     const query = {
       postcode: postalCode,
@@ -65,12 +64,7 @@ export default ({
     let hasAddress;
     if (!hasAddress) {
       let response;
-      let postalcodeError = 'Ongeldige postcode.';
       response = await getAddressByPostalCode(value).catch((err) => {
-        formValues[id].valid = postalcodeError;
-        setErrorMessages({
-          [id]: postalcodeError,
-        });
         hasAddress = false;
       });
 
@@ -86,11 +80,6 @@ export default ({
           },
           field,
         );
-      } else {
-        formValues[id].valid = postalcodeError;
-        setErrorMessages({
-          [id]: postalcodeError,
-        });
       }
     } else {
       hasAddress = false;

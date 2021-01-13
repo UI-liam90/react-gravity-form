@@ -136,6 +136,16 @@ const passwordValidation = (values, field) => {
   return false;
 };
 
+const isPostcode = (postcode, field, message) => {
+  const re = /^[1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2}$/i;
+
+    if (!re.test(postcode)) {
+    const customMessage = getMessage(message, 'email');
+    return customMessage || "Enter a valid postcode";
+  }
+  return false;
+};
+
 const isDate = (values, field) => {
   const validation = [];
   for (let i = 0; i < values.length; i++) {
@@ -201,7 +211,6 @@ const validateField = (value, field) => {
   const empty = isEmpty(value);
   let validationMessage = '';
   const message = field && field.errorMessage ? field.errorMessage : false;
-
   // Set validation message if required
   validationMessage = required ? isRequired(required, empty, message) : false;
   // Set other validation messages
@@ -218,6 +227,8 @@ const validateField = (value, field) => {
         isValid = isDate(value, field);
       }
       validationMessage = isValid.length > 0 ? isValid : false;
+    } else if (type === 'postcode') {
+      validationMessage = isPostcode(value, field, message);
     }
   }
   return validationMessage;
