@@ -80,6 +80,29 @@ function adjust_date_field($form){
 					}
 	}
 	return $form;
-
 }
 ```
+
+### Postcode field
+
+To include Dutch zipcodes you need a field of the type 'postcode' and an api key of the Postcode.nl service. Pass this key as a prop to your form component.
+Example:
+```javascript
+<GravityForm apiKeys={{ postcode: [APIKEY] }} {...props} />
+```
+
+Add two single text input fields your form and set the following css classes:
+
+Input 1:
+```
+field--street
+```
+
+Input 2:
+```
+field--city
+```
+
+### Roadmap
+
+- Extended the validation functionality with validating attribute values (for example min and max amounts.
