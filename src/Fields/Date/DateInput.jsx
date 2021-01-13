@@ -57,12 +57,17 @@ export default ({ defaultProps }) => {
           >
             {item.label}
           </label>
-          {validationMessage
-          && touched
-          && validationMessage[index]
-          && index === validationMessage[index].index
-          && validationMessage[index].message && (
-            <ValidationMessage validationMessage={validationMessage} formId={formId} error={error} id={item.id} />
+          {validationMessage &&
+          touched &&
+          validationMessage[index] &&
+          index === validationMessage[index].index &&
+          validationMessage[index].message && (
+            <span
+              className="error-message"
+              id={`error_${formId}_${item.id}`}
+            >
+                        {validationMessage[index].message}
+                      </span>
           )}
           {error && <span className="error-message">{error}</span>}
         </div>

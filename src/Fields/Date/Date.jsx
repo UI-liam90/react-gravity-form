@@ -99,6 +99,7 @@ export default ({
     unsetError,
     validationMessage,
     styledComponents,
+    touched,
     ...props,
   };
 
