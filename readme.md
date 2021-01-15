@@ -103,6 +103,49 @@ Input 2:
 field--city
 ```
 
+### Change validation messages from backend
+Y
+```php
+<?php
+add_filter( 'gform_pre_render', 'change_error_messages' );
+function change_error_messages( $form ) {
+
+		function setErrorMsg($fields, $customMessage) {
+			$errorMgs = [
+							'custom' => $customMessage,
+							'required' => esc_html__('This field is required', 'gravityforms')
+			];
+
+			if($fields === 'required') {
+				return $errorMgs;
+			} else {
+				$data = [];
+				foreach ($fields as $fieldName) {
+					$data[$fieldName] = $fieldName === 'mismatch' ? esc_html__('Mismatch', 'gravityforms') : esc_html__('Enter a valid ' . $fieldName, 'gravityforms');
+				}
+				return array_merge($errorMgs, $data);
+			}
+		}
+
+		foreach( $form['fields'] as &$field )  {
+			switch ($field['type']) {
+				case 'date':
+					$field['errorMessage'] = setErrorMsg(['date', 'month', 'year'], $field['errorMessage']);
+					break;
+				case 'email':
+					$field['errorMessage'] = setErrorMsg(['email', 'mismatch'], $field['errorMessage']);
+					break;
+				default:
+					$field['errorMessage'] = setErrorMsg('required',  $field['errorMessage']);
+			}
+		}
+		return $form;
+	}
+```
+
+
+
 ### Roadmap
 
 - Extended the validation functionality with validating attribute values (for example min and max amounts.
+- Allow fields to be prepopulated
