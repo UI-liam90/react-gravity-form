@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import Select from 'react-select';
+import React from 'react';
 import countries from 'i18n-iso-countries';
 import InputLabel from '../FormElements/InputLabel';
-import { Flex } from '../../../styles';
-
+  
 export default ({
   field,
   value,
