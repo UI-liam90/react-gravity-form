@@ -269,7 +269,7 @@ const GravityForm = (props) => {
             </div>
           )}
           <div className="form-wrapper">
-            {formData?.pagination.pages && (
+            {formData?.pagination?.pages && (
               <ProgressBar
                 pagination={formData.pagination}
                 activePage={activePage}
