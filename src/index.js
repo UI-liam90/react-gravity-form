@@ -1,24 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import fetch from 'isomorphic-unfetch';
+import React, { useEffect, useState } from "react";
+import fetch from "isomorphic-unfetch";
 import {
-  FormConfirmation, FormError, RenderFields, Submit, ProgressBar,
-} from './FormElements';
+  FormConfirmation,
+  FormError,
+  RenderFields,
+  Submit,
+  ProgressBar,
+} from "./FormElements";
 
 import {
   checkConditionalLogic,
   fetchForm,
   forceValidationOfCurrentPage,
   nextStep,
-  prevStep, scrollToConfirmation,
+  prevStep,
+  scrollToConfirmation,
   setTouchedHandler,
   unsetError,
   updateFieldsValuesBasedOnEntry,
   updateFormHandler,
   // usePrevious,
-} from './Helpers/form';
+} from "./Helpers/form";
 
-import { validateField } from './Helpers/validation';
-import { equalShallow } from './Helpers/utils';
+import { validateField } from "./Helpers/validation";
+import { equalShallow } from "./Helpers/utils";
 
 const GravityForm = (props) => {
   const [submitFailed, setSubmitFailed] = useState(false);
@@ -57,11 +62,11 @@ const GravityForm = (props) => {
     const isMultipart = false;
     const queryString = getParams
       ? Object.keys(getParams)
-        .map(key => `${key}=${getParams[key]}`)
-        .join('&')
-      : '';
+          .map((key) => `${key}=${getParams[key]}`)
+          .join("&")
+      : "";
     const requestUrl = `${backendUrl}/${formID}${
-      queryString ? `?${queryString}` : ''
+      queryString ? `?${queryString}` : ""
     }`;
 
     fetchForm(
@@ -80,7 +85,7 @@ const GravityForm = (props) => {
       populatedEntry,
       setPopulatedEntry,
       isMounted,
-      checkConditionalLogic,
+      checkConditionalLogic
     );
 
     if (initialPage && initialPage !== activePage) {
@@ -94,11 +99,16 @@ const GravityForm = (props) => {
     const { populatedEntry: prevPopulatedEntry } = prevProps;
 
     if (
-      populatedEntry
-      && prevPopulatedEntry
-      && !equalShallow(populatedEntry, prevPopulatedEntry)
+      populatedEntry &&
+      prevPopulatedEntry &&
+      !equalShallow(populatedEntry, prevPopulatedEntry)
     ) {
-      updateFieldsValuesBasedOnEntry(populatedEntry, formValues, formData, setFormValues);
+      updateFieldsValuesBasedOnEntry(
+        populatedEntry,
+        formValues,
+        formData,
+        setFormValues
+      );
     }
 
     if (initialPage && initialPage !== activePage) {
@@ -136,6 +146,7 @@ const GravityForm = (props) => {
     Loading,
     FormError: SFormError,
     FormConfirmation: SFormConfirmation,
+    GFWrapper = "div",
   } = styledComponents || false;
 
   const { cssClass } = formData;
@@ -146,7 +157,12 @@ const GravityForm = (props) => {
 
     event.preventDefault();
 
-    const isPageValid = forceValidationOfCurrentPage(activePage, formValues, setShowPageValidationMsg, setTouched);
+    const isPageValid = forceValidationOfCurrentPage(
+      activePage,
+      formValues,
+      setShowPageValidationMsg,
+      setTouched
+    );
     if (!isPageValid) return false;
 
     if (customOnSubmit) {
@@ -167,14 +183,14 @@ const GravityForm = (props) => {
       } = props;
       const gfSubmissionUrl = backendUrl.substring(
         0,
-        backendUrl.indexOf('/wp-json'),
+        backendUrl.indexOf("/wp-json")
       );
 
       fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       })
-        .then(resp => resp.json())
+        .then((resp) => resp.json())
         .then((response) => {
           if (response && response.is_valid) {
             if (onSubmitSuccess) {
@@ -185,8 +201,8 @@ const GravityForm = (props) => {
             }
             const confirmationMessage = response.confirmation_message;
             const { type, link } = confirmationMessage || false;
-            if (type && link && type === 'redirect') {
-              if (typeof window !== 'undefined') {
+            if (type && link && type === "redirect") {
+              if (typeof window !== "undefined") {
                 window.location.replace(link);
                 return false;
               }
@@ -205,9 +221,10 @@ const GravityForm = (props) => {
           }
         })
         .catch((error) => {
-          const errorMessages = error && error.response && error.response.validation_messages
-            ? error.response.validation_messages
-            : 'Something went wrong';
+          const errorMessages =
+            error && error.response && error.response.validation_messages
+              ? error.response.validation_messages
+              : "Something went wrong";
 
           if (onError) {
             onError(errorMessages);
@@ -227,10 +244,9 @@ const GravityForm = (props) => {
   };
 
   return (
-    <div
-      ref={el => setWrapperRef(el)}
+    <GFWrapper
+      ref={(el) => setWrapperRef(el)}
       className="form-wrapper"
-      css={{ position: 'relative' }}
       id={`gravity_form_${formID}`}
     >
       {formData.title ? null : Loading && <Loading isLoading />}
@@ -239,7 +255,7 @@ const GravityForm = (props) => {
         <FormError
           SFormError={SFormError || false}
           errorMessage={
-            errorMessage || 'There was a problem with your submission'
+            errorMessage || "There was a problem with your submission"
           }
         />
       )}
@@ -253,9 +269,9 @@ const GravityForm = (props) => {
 
       {!submitSuccess && formData.fields ? (
         <form
-          onSubmit={event => onSubmit(event)}
+          onSubmit={(event) => onSubmit(event)}
           className={cssClass}
-          encType={isMultipart ? 'multipart/form-data' : undefined}
+          encType={isMultipart ? "multipart/form-data" : undefined}
           noValidate
         >
           {(formData.title || formData.description) && (
@@ -283,43 +299,77 @@ const GravityForm = (props) => {
               formValues={formValues}
               submitFailed={submitFailed}
               submitSuccess={submitSuccess}
-              updateForm={(event, field, inputID) => updateFormHandler(field, event, inputID, formValues, setFormValues, conditionalIds, conditionFields)}
+              updateForm={(event, field, inputID) =>
+                updateFormHandler(
+                  field,
+                  event,
+                  inputID,
+                  formValues,
+                  setFormValues,
+                  conditionalIds,
+                  conditionFields
+                )
+              }
               touched={touched}
-              setTouched={id => setTouchedHandler(id, touched, setTouched)}
+              setTouched={(id) => setTouchedHandler(id, touched, setTouched)}
               setErrorMessages={setErrorMessages}
               pagination={formData.pagination}
               activePage={activePage}
-              prevStep={e => prevStep(e, props, formValues, pages, activePage, setActivePage, setPageClicked)}
-              nextStep={e => nextStep(e, props, pages, formValues, activePage, setActivePage, setPageClicked, setTouched, setShowPageValidationMsg)}
-              checkConditionalLogic={(condition, fields) => checkConditionalLogic(condition, fields = false)}
+              prevStep={(e) =>
+                prevStep(
+                  e,
+                  props,
+                  formValues,
+                  pages,
+                  activePage,
+                  setActivePage,
+                  setPageClicked
+                )
+              }
+              nextStep={(e) =>
+                nextStep(
+                  e,
+                  props,
+                  pages,
+                  formValues,
+                  activePage,
+                  setActivePage,
+                  setPageClicked,
+                  setTouched,
+                  setShowPageValidationMsg
+                )
+              }
+              checkConditionalLogic={(condition, fields) =>
+                checkConditionalLogic(condition, (fields = false))
+              }
               saveStateToHtmlField={saveStateToHtmlField}
               enableHoneypot={formData.enableHoneypot}
               errors={errorMessages}
-              unsetError={id => unsetError(id, errorMessages)}
+              unsetError={(id) => unsetError(id, errorMessages)}
               dropzoneText={dropzoneText}
               pageClicked={pageClicked}
               language={language}
               apiKeys={apiKeys}
             />
-            {(!formData.pagination
-                || (formData.pagination
-                  && formData.pagination.pages.length === activePage)) && (
+            {(!formData.pagination ||
+              (formData.pagination &&
+                formData.pagination.pages.length === activePage)) && (
               <Submit
-                    Button={Button}
-                    Loading={Loading}
-                    formData={formData}
-                    submitIcon={submitIcon}
-                    submitting={submitting}
-                    prevStep={prevStep}
-                    loadingSpinner={loadingSpinner}
-                  />
+                Button={Button}
+                Loading={Loading}
+                formData={formData}
+                submitIcon={submitIcon}
+                submitting={submitting}
+                prevStep={prevStep}
+                loadingSpinner={loadingSpinner}
+              />
             )}
           </div>
         </form>
       ) : (
-        ''
+        ""
       )}
-    </div>
+    </GFWrapper>
   );
 };
 
@@ -330,8 +380,6 @@ GravityForm.defaultProps = {
   jumpToConfirmation: true,
 };
 
-export {
-  validateField, FormConfirmation, FormError, RenderFields, Submit,
-};
+export { validateField, FormConfirmation, FormError, RenderFields, Submit };
 
 export default GravityForm;

@@ -1,11 +1,7 @@
 import React from 'react';
 
-const InputLabel = ({
-  formId, id, label, isRequired, labelPlacement, styledComponents,
-}) => {
-  const {
-    Label = 'label',
-  } = styledComponents || false;
+const InputLabel = ({ formId, id, label, isRequired, labelPlacement, styledComponent }) => {
+  const { Label = 'label' } = styledComponent || false;
 
   return (
     <Label
@@ -20,3 +16,4 @@ const InputLabel = ({
 };
 
 export default InputLabel;
+
