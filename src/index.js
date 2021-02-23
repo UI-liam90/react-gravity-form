@@ -5,7 +5,7 @@ import { FormConfirmation, FormError, RenderFields, Submit, ProgressBar } from '
 import {
   checkConditionalLogic,
   fetchForm,
-  forceValidationOfCurrentPage,
+  forceValidation,
   nextStep,
   prevStep,
   scrollToConfirmation,
@@ -105,13 +105,14 @@ const GravityForm = (props) => {
 
     event.preventDefault();
 
-    const isPageValid = forceValidationOfCurrentPage(
+    const isFormValid = forceValidation(
       activePage,
       formValues,
       setShowPageValidationMsg,
       setTouched
     );
-    if (!isPageValid) return false;
+
+    if (!isFormValid) return false;
 
     if (customOnSubmit) {
       customOnSubmit(formData);

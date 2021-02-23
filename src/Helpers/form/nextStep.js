@@ -1,4 +1,4 @@
-import forceValidationOfCurrentPage from './forceValidationOfCurrentPage';
+import forceValidation from './forceValidation';
 import getNextStep from './getNextStep';
 
 export default (
@@ -10,13 +10,16 @@ export default (
   setActivePage,
   setPageClicked,
   setTouched,
-  setShowPageValidationMsg,
+  setShowPageValidationMsg
 ) => {
   event.preventDefault();
   const { activePage: beforeNextPage } = props;
 
-  const isPageValidated = forceValidationOfCurrentPage(
-    activePage, formValues, setShowPageValidationMsg, setTouched,
+  const isPageValidated = forceValidation(
+    activePage,
+    formValues,
+    setShowPageValidationMsg,
+    setTouched
   );
   if (!isPageValidated) return false;
 

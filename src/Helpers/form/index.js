@@ -1,6 +1,6 @@
 import checkConditionalLogic from './checkConditionalLogic';
 import fetchForm from './fetchForm';
-import forceValidationOfCurrentPage from './forceValidationOfCurrentPage';
+import forceValidation from './forceValidation';
 import getFieldPrepopulatedValue from './getFieldPrepopulatedValue';
 import getNextStep from './getNextStep';
 import getPrevStep from './getPrevStep';
@@ -17,7 +17,7 @@ import usePrevious from './usePrevious';
 export {
   checkConditionalLogic,
   fetchForm,
-  forceValidationOfCurrentPage,
+  forceValidation,
   getFieldPrepopulatedValue,
   getNextStep,
   getPrevStep,

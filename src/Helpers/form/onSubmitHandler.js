@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch';
-import { forceValidationOfCurrentPage, scrollToConfirmation } from './index';
+import { forceValidation, scrollToConfirmation } from './index';
 
 async function onSubmit(
   event,
@@ -14,14 +14,14 @@ async function onSubmit(
   setShowPageValidationMsg,
   setTouched,
   setConfirmationMessage,
-  setErrorMessages,
+  setErrorMessages
 ) {
   const { onSubmit: customOnSubmit } = props;
   const formData = new FormData(event.target);
 
   event.preventDefault();
 
-  const isPageValid = forceValidationOfCurrentPage(activePage, formValues, setShowPageValidationMsg, setTouched);
+  const isPageValid = forceValidation(activePage, formValues, setShowPageValidationMsg, setTouched);
   if (!isPageValid) return false;
 
   if (customOnSubmit) {
@@ -33,23 +33,14 @@ async function onSubmit(
     setConfirmationMessage(false);
     setErrorMessages(false);
 
-    const {
-      formID,
-      backendUrl,
-      jumpToConfirmation,
-      onSubmitSuccess,
-      onError,
-    } = props;
-    const gfSubmissionUrl = backendUrl.substring(
-      0,
-      backendUrl.indexOf('/wp-json'),
-    );
+    const { formID, backendUrl, jumpToConfirmation, onSubmitSuccess, onError } = props;
+    const gfSubmissionUrl = backendUrl.substring(0, backendUrl.indexOf('/wp-json'));
 
     fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
       method: 'POST',
       body: formData,
     })
-      .then(resp => resp.json())
+      .then((resp) => resp.json())
       .then((response) => {
         console.log(response);
         if (response && response.is_valid) {
@@ -85,9 +76,10 @@ async function onSubmit(
         }
       })
       .catch((error) => {
-        const errorMessages = error && error.response && error.response.validation_messages
-          ? error.response.validation_messages
-          : 'Something went wrong';
+        const errorMessages =
+          error && error.response && error.response.validation_messages
+            ? error.response.validation_messages
+            : 'Something went wrong';
 
         if (onError) {
           onError(errorMessages);
