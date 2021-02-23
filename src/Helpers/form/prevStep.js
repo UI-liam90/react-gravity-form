@@ -1,7 +1,6 @@
 import getPrevStep from './getPrevStep';
 
-export default (event, props, formValues, pages, activePage, setActivePage, setPageClicked) => {
-  event.preventDefault();
+export default (formValues, pages, activePage, setActivePage, setPageClicked) => {
   const prevPage = getPrevStep(activePage, pages, formValues) || 1;
   setActivePage(prevPage);
   setPageClicked(true);

@@ -1,11 +1,10 @@
 import fetch from 'isomorphic-unfetch';
 import { getFieldPrepopulatedValue } from './index';
 import { validateField } from '../validation';
+import checkConditionalLogic from './checkConditionalLogic';
 
-async function fetchForm(
+async function fetchForm({
   initialPage,
-  isMultipart,
-  requestUrl,
   fetchOptions,
   setFormData,
   setFormValues,
@@ -16,16 +15,25 @@ async function fetchForm(
   setIsMultiPart,
   populatedFields,
   populatedEntry,
-  setPopulatedEntry,
-  isMounted,
-  checkConditionalLogic,
-) {
+  getParams,
+  backendUrl,
+  formID,
+}) {
+  let isMultipart = false;
+
+  const queryString = getParams
+    ? Object.keys(getParams)
+        .map((key) => `${key}=${getParams[key]}`)
+        .join('&')
+    : '';
+  const requestUrl = `${backendUrl}/${formID}${queryString ? `?${queryString}` : ''}`;
+
   const form = await fetch(requestUrl, fetchOptions)
     .then((resp) => resp.json())
     .then((response) => response)
     .catch(() => false);
 
-  if (form && isMounted) {
+  if (form) {
     const formValues = {};
     const conditionFields = [];
     const conditionalIds = [];
@@ -38,13 +46,9 @@ async function fetchForm(
         pages.push(field.id);
       }
 
-      value = getFieldPrepopulatedValue(
-        field,
-        populatedFields,
-        populatedEntry
-      );
+      value = getFieldPrepopulatedValue(field, populatedFields, populatedEntry);
 
-      if (field.type === "fileupload") {
+      if (field.type === 'fileupload') {
         isMultipart = true;
       }
 
@@ -77,9 +81,7 @@ async function fetchForm(
 
     // check condition logic
     for (let i = 0; i < conditionFields.length; i++) {
-      formValues[
-        conditionFields[i].id
-        ].hideField = checkConditionalLogic(
+      formValues[conditionFields[i].id].hideField = checkConditionalLogic(
         conditionFields[i].conditionalLogic,
         formValues
       );
@@ -89,10 +91,11 @@ async function fetchForm(
     setActivePage(initialPage || (form.pagination ? 1 : false));
     setConditionFields(conditionFields);
     setConditionalIds(conditionalIds);
-    setIsMultiPart(isMultipart);
-    setPages(pages);
-    setPopulatedEntry(populatedEntry || false);
+
+    if (isMultipart) setIsMultiPart(isMultipart);
+
+    if (!!pages.length) setPages(pages);
   }
-};
+}
 
 export default fetchForm;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Submit = ({
   Button,
@@ -10,24 +10,24 @@ const Submit = ({
   Component,
   loadingSpinner,
 }) => {
-  const SButton = Button || "button";
+  const SButton = Button || 'button';
 
   return (
     <React.Fragment>
-      <div className={`footer${Component ? " multiple" : ''}`}>
+      <div className={`footer${Component ? ' multiple' : ''}`}>
         <input type="hidden" name="nonce" value={formData.nonce} />
-        {Component ? <Component submitting={submitting} /> : ""}
+        {Component ? <Component submitting={submitting} /> : ''}
         <SButton
           type="submit"
           mr={20}
           disabled={isDisabled || submitting}
-          className={submitting ? "loading" : undefined}
+          className={submitting ? 'loading' : undefined}
         >
           {formData.button.text}
-          {loadingSpinner ? <span /> : ""}
+          {loadingSpinner ? <span /> : ''}
         </SButton>
         {formData.lastPageButton && (
-          <SButton className="prev" onClick={(e) => prevStep(e)}>
+          <SButton className="prev" onClick={prevStep}>
             {formData.lastPageButton.text}
           </SButton>
         )}

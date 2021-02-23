@@ -16,4 +16,3 @@ const InputLabel = ({ formId, id, label, isRequired, labelPlacement, styledCompo
 };
 
 export default InputLabel;
-

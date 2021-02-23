@@ -79,7 +79,9 @@ export default ({
           aria-describedby={`error_${formId}_${id}`}
           aria-invalid={(!!validationMessage && touched) || !!error}
         />
-        {descriptionPlacement !== 'above' && description && <div className="description">{description}</div>}
+        {descriptionPlacement !== 'above' && description && (
+          <div className="description">{description}</div>
+        )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}
