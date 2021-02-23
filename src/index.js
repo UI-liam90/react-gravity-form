@@ -112,6 +112,8 @@ const GravityForm = (props) => {
       setTouched
     );
 
+    console.log('isFormValid', isFormValid);
+
     if (!isFormValid) return false;
 
     if (customOnSubmit) {

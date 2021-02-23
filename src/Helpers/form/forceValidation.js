@@ -5,23 +5,19 @@
 
 const forceValidation = (page, formValues, setShowPageValidationMsg, setTouched) => {
   // check if current oage has required fields
-  const isPageDisabled = page
+  const notValid = page
     ? Object.keys(formValues).some(
         (x) => formValues[x].pageNumber === page && !formValues[x].hideField && formValues[x].valid
       )
-    : false;
-  if (isPageDisabled) {
+    : Object.keys(formValues).some((x) => !formValues[x].hideField && formValues[x].valid);
+
+  if (notValid) {
     // make all fields of current page to be touched to trigger field validation
-    const fields = Object.keys(formValues).filter((x) => formValues[x].pageNumber === page);
+    const fields = page
+      ? Object.keys(formValues).filter((x) => formValues[x].pageNumber === page)
+      : Object.keys(formValues);
     setTouchedFields(fields, setShowPageValidationMsg, setTouched);
 
-    return false;
-  }
-
-  // if non pages form
-  if (!page) {
-    const fields = Object.keys(formValues);
-    setTouchedFields(fields, setShowPageValidationMsg, setTouched);
     return false;
   }
 
