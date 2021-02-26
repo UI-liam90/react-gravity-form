@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import fetch from 'isomorphic-unfetch';
 import { FormConfirmation, FormError, RenderFields, Submit, ProgressBar } from './FormElements';
 
@@ -13,7 +13,6 @@ import {
   unsetError,
   updateFieldsValuesBasedOnEntry,
   updateFormHandler,
-  // usePrevious,
 } from './Helpers/form';
 
 import { validateField } from './Helpers/validation';
@@ -24,11 +23,9 @@ const GravityForm = (props) => {
   const [submitFailed, setSubmitFailed] = useState(false);
   const [errorMessages, setErrorMessages] = useState(false);
   const [formValues, setFormValues] = useState({});
-  // const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState(false);
-  // const [isValid, setIsValid] = useState(false);
   const [formData, setFormData] = useState({});
   const [touched, setTouched] = useState({});
   const [activePage, setActivePage] = useState(initialPage || 1);
@@ -38,7 +35,8 @@ const GravityForm = (props) => {
   const [pageClicked, setPageClicked] = useState(false);
   const [showPageValidationMsg, setShowPageValidationMsg] = useState(false);
   const [pages, setPages] = useState({});
-  const [wrapperRef, setWrapperRef] = useState(null);
+
+  const wrapperRef = useRef(null);
 
   const updateEntryFields = useCallback((populatedEntry) => {
     updateFieldsValuesBasedOnEntry(populatedEntry);
@@ -68,6 +66,18 @@ const GravityForm = (props) => {
       updateEntryFields(populatedEntry);
     }
   }, [populatedEntry]);
+
+  /**
+   * Scroll page to the first not valid field
+   */
+  const scrollToFirstInvalidField = () => {
+    if (!wrapperRef) return;
+
+    const firstErrEl = wrapperRef.current.querySelector('.form-field.error');
+    if (firstErrEl) {
+      firstErrEl.scrollIntoView();
+    }
+  };
 
   const {
     title,
@@ -112,9 +122,10 @@ const GravityForm = (props) => {
       setTouched
     );
 
-    console.log('isFormValid', isFormValid);
-
-    if (!isFormValid) return false;
+    if (!isFormValid) {
+      scrollToFirstInvalidField();
+      return false;
+    }
 
     if (customOnSubmit) {
       customOnSubmit(formData);
@@ -186,11 +197,7 @@ const GravityForm = (props) => {
   };
 
   return (
-    <GFWrapper
-      ref={(el) => setWrapperRef(el)}
-      className="form-wrapper"
-      id={`gravity_form_${formID}`}
-    >
+    <GFWrapper ref={wrapperRef} className="form-wrapper" id={`gravity_form_${formID}`}>
       {formData.title ? null : Loading && <Loading isLoading />}
 
       {submitFailed && !submitSuccess && !onError && (

@@ -28,7 +28,7 @@ Include the component anywhere inside your own components:
 
 ```javascript
 <GravityForm
-	backendUrl="https://www.example.com/wp-json/v1/gravityforms"
+	backendUrl="https://www.example.com/wp-json/glamrock/v1/gf/forms/1"
 	formID="1"
 	onChange={someFunction} // optional
 	onSubmitSuccess={someFunction} // optional - calls after form has been submitted successfully
@@ -40,8 +40,6 @@ Include the component anywhere inside your own components:
 	getParams={{}} // optional - pass an Object with your params to send the GF request with query string included
 />
 ```
-
-Please take into account you have to create your own endpoint in the backend to pass the gravity form data
 
 ### Custom component
 

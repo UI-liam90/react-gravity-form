@@ -6,9 +6,7 @@ export default (props, wrapperRef) => {
   }
 
   if (jumpToConfirmation) {
-    const rect = wrapperRef
-      ? wrapperRef.getBoundingClientRect()
-      : false;
+    const rect = wrapperRef ? wrapperRef.current.getBoundingClientRect() : false;
     if (rect && window) {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       window.scrollTo({

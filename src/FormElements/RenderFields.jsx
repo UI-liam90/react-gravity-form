@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import RenderField from './RenderField';
 
 const divideFieldsIntoPages = (fields, pages) => {
-  const tmpFields = pages.map(item => []);
+  const tmpFields = pages.map((item) => []);
 
   for (let i = 0; i < fields.length; i++) {
     const arr = tmpFields[fields[i].pageNumber];
@@ -51,7 +51,7 @@ const fieldTypes = [
   'name',
   'address',
   'buckarooideal',
-  'postcode'
+  'postcode',
 ];
 
 const honeyPotLables = ['Name', 'Email', 'Phone', 'Comments'];
@@ -86,9 +86,7 @@ export default (props) => {
   } = props;
 
   // get page indexes
-  const dividedFields = pagination
-    ? divideFieldsIntoPages(fields, pagination.pages)
-    : undefined;
+  const dividedFields = pagination ? divideFieldsIntoPages(fields, pagination.pages) : undefined;
   const maxID = getMaxFieldId(fields);
   const [honeypotValue, setHoneypotValue] = useState('');
 
@@ -97,6 +95,35 @@ export default (props) => {
     prevSteptRef.current = activePage;
   });
   const prevCount = prevSteptRef.current;
+
+  function renderFiled(field) {
+    return (
+      <RenderField
+        key={field.id}
+        field={field}
+        formValues={formValues}
+        submitFailed={submitFailed}
+        setTouched={setTouched}
+        setErrorMessages={setErrorMessages}
+        submitSuccess={submitSuccess}
+        updateForm={updateForm}
+        touched={touched}
+        pages={pagination && pagination.pages.length}
+        prevStep={prevStep}
+        nextStep={nextStep}
+        isNextDisabled={isNextDisabled}
+        checkConditionalLogic={checkConditionalLogic}
+        saveStateToHtmlField={saveStateToHtmlField}
+        styledComponents={styledComponents}
+        customComponents={customComponents}
+        error={errors && errors[field.id] ? errors[field.id] : false}
+        unsetError={unsetError}
+        dropzoneText={dropzoneText}
+        language={language}
+        apiKeys={apiKeys}
+      />
+    );
+  }
 
   return (
     <div
@@ -108,77 +135,28 @@ export default (props) => {
     >
       {pagination && pagination.pages.length > 1
         ? pagination.pages.map((page, index) => (
-          <div
-            className={`page${activePage === index + 1 ? ' active' : ''}${
-              prevCount
-                && index === prevCount
-                && activePage !== index + 1
-                && prevCount !== activePage
-                ? ' prevStep'
-                : ''
-            }`}
-            key={`page-${index}`}
-          >
-            {page && (
-              <div className="gf_step">
-                <span>{page}</span>
-              </div>
-            )}
-            {dividedFields[index].map(
-              field => fieldTypes.includes(field.type) && (
-                <RenderField
-                  key={field.id}
-                  field={field}
-                  formValues={formValues}
-                  submitFailed={submitFailed}
-                  setTouched={setTouched}
-                  setErrorMessages={setErrorMessages}
-                  submitSuccess={submitSuccess}
-                  updateForm={updateForm}
-                  touched={touched}
-                  pages={pagination.pages.length}
-                  prevStep={prevStep}
-                  nextStep={nextStep}
-                  isNextDisabled={isNextDisabled}
-                  checkConditionalLogic={checkConditionalLogic}
-                  saveStateToHtmlField={saveStateToHtmlField}
-                  styledComponents={styledComponents}
-                  customComponents={customComponents}
-                  error={
-                    errors && errors[field.id] ? errors[field.id] : false
-                  }
-                  unsetError={unsetError}
-                  dropzoneText={dropzoneText}
-                  language={language}
-                  apiKeys={apiKeys}
-                />
-              ),
-            )}
-          </div>
-        ))
-        : fields.map(
-          field => fieldTypes.includes(field.type) && (
-            <RenderField
-              key={field.id}
-              field={field}
-              formValues={formValues}
-              submitFailed={submitFailed}
-              setTouched={setTouched}
-              submitSuccess={submitSuccess}
-              updateForm={updateForm}
-              touched={touched}
-              checkConditionalLogic={checkConditionalLogic}
-              styledComponents={styledComponents}
-              error={errors && errors[field.id] ? errors[field.id] : false}
-              unsetError={unsetError}
-              dropzoneText={dropzoneText}
-              customComponents={customComponents}
-              setErrorMessages={setErrorMessages}
-              language={language}
-              apiKeys={apiKeys}
-            />
-          ),
-        )}
+            <div
+              className={`page${activePage === index + 1 ? ' active' : ''}${
+                prevCount &&
+                index === prevCount &&
+                activePage !== index + 1 &&
+                prevCount !== activePage
+                  ? ' prevStep'
+                  : ''
+              }`}
+              key={`page-${index}`}
+            >
+              {page && (
+                <div className="gf_step">
+                  <span>{page}</span>
+                </div>
+              )}
+              {dividedFields[index].map(
+                (field) => fieldTypes.includes(field.type) && renderFiled(field)
+              )}
+            </div>
+          ))
+        : fields.map((field) => fieldTypes.includes(field.type) && renderFiled(field))}
       {enableHoneypot && (
         <div className="form-field gform_validation_container">
           <label htmlFor={`input_${maxID}`} className="gf-label ">
@@ -189,7 +167,7 @@ export default (props) => {
             name={`input_${maxID}`}
             id={`input_${maxID}`}
             value={honeypotValue}
-            onChange={e => setHoneypotValue(e.target.value)}
+            onChange={(e) => setHoneypotValue(e.target.value)}
             autoComplete="off"
           />
         </div>
