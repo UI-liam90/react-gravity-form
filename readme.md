@@ -10,6 +10,10 @@ This module includes a react component for dropping Gravity Forms from your Word
 $ npm install --save react-gravity-form
 ```
 
+### Backend
+
+Make sure to create a custom GF endpoint to fetch the form. See [example](https://bitbucket.org/gohike/gravity-forms/src/devweek/gravityforms.php)
+
 ## Usage
 
 ### The GravityForm Component
@@ -84,7 +88,9 @@ function adjust_date_field($form){
 ```
 
 ### Change validation messages from backend
+
 Y
+
 ```php
 <?php
 add_filter( 'gform_pre_render', 'change_error_messages' );
