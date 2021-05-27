@@ -60,7 +60,7 @@ class GravityForm extends Component {
       const formValues = {};
       const conditionFields = [];
       const conditioanlIds = [];
-      let pages = [];
+      const pages = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const field of form.fields) {
         let value;
@@ -124,7 +124,7 @@ class GravityForm extends Component {
           conditionFields,
           conditioanlIds,
           isMultipart,
-          pages: pages,
+          pages,
           populatedEntry: populatedEntry || false,
         },
         () => {
@@ -277,7 +277,43 @@ class GravityForm extends Component {
     }
   };
 
-  updateFormHandler = (event, field) => {
+  /**
+   * Check input mask
+   * if not valid return empty value
+   * if valid return value
+   * @param {string} value
+   * @param {object} field
+   * @returns
+   */
+  checkInputMaskValue = (value, field) => {
+    const { inputMaskValue, inputMask } = field;
+    if (!inputMaskValue || !inputMask) return value;
+
+    const tests = [];
+    const defs = {
+      9: "[0-9]",
+      a: "[A-Za-z]",
+      A: "[A-Z]",
+      "*": "[A-Za-z0-9]",
+    };
+
+    inputMaskValue.split("")?.map((c) => {
+      if (defs[c]) {
+        tests.push(new RegExp(defs[c]));
+      } else {
+        tests.push(null);
+      }
+    });
+
+    // if regex doesn't match return empty value in order to clear field
+    const isValid =
+      tests?.length > 0 &&
+      value.split("").every((c, i) => tests[i] === null || tests[i].test(c));
+
+    return isValid ? value : "";
+  };
+
+  updateFormHandler = (event, field, checkMask = false) => {
     const { formValues, conditioanlIds, conditionFields } = this.state;
     let { id, type, isRequired } = field;
     // Set new value
@@ -345,6 +381,8 @@ class GravityForm extends Component {
         }
       }
     }
+
+    value = checkMask ? this.checkInputMaskValue(value, field) : value;
 
     this.setState(
       {

@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import InputMask from "react-input-mask";
 
 export default ({
   field,
@@ -28,8 +29,11 @@ export default ({
     labelPlacement,
     width,
     customName,
+    inputMask,
+    inputMaskValue,
   } = field;
-  const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
+  const { Input = "input", Label = "label", Box = "div" } =
+    styledComponents || false;
 
   return (
     <Box
@@ -39,39 +43,53 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
+        <Label
+          htmlFor={`input_${formId}_${id}`}
+          className={`gf-label ${labelPlacement}`}
+        >
           {label}
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
         {descriptionPlacement === "above" && description && (
           <div className="description">{description}</div>
         )}
-        <Input
-          id={`input_${formId}_${id}`}
-          name={customName || `input_${id}`}
-          type={type}
-          value={!value ? '' : value}
-          placeholder={placeholder}
-          maxLength={maxLength}
-          required={isRequired}
+
+        <InputMask
+          value={!value ? "" : value}
+          mask={inputMask && inputMaskValue}
           onChange={(event) => {
             updateForm(event, field);
             unsetError(id);
           }}
           onBlur={(event) => {
-            updateForm(event, field);
+            updateForm(event, field, true);
             setTouched(id);
-            setFocusClass(value !== '');
+            setFocusClass(value !== "");
           }}
           onFocus={() => setFocusClass(true)}
-          aria-label={label}
-          aria-describedby={`error_${formId}_${id}`}
-          aria-invalid={(!!validationMessage && touched) || !!error}
-        />
-        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+        >
+          {(inputProps) => (
+            <Input
+              {...inputProps}
+              id={`input_${formId}_${id}`}
+              name={customName || `input_${id}`}
+              type={type}
+              placeholder={placeholder}
+              maxLength={maxLength}
+              required={isRequired}
+              aria-label={label}
+              aria-describedby={`error_${formId}_${id}`}
+              aria-invalid={(!!validationMessage && touched) || !!error}
+            />
+          )}
+        </InputMask>
+
+        {descriptionPlacement !== "above" && description && (
+          <div className="description">{description}</div>
+        )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}
