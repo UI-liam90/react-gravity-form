@@ -73,8 +73,11 @@ const RenderField = ({
 }) => {
   let FormComponent = FormFields[formatComponentName(field.type)];
 
-  if (customComponents && (customComponents[field.id] || customComponents[field.cssClass])) {
-    FormComponent = FormFields[formatComponentName('custom')];
+  if (
+    customComponents &&
+    (customComponents[field.id] || customComponents[field.cssClass])
+  ) {
+    FormComponent = FormFields[formatComponentName("custom")];
   }
 
   const { cleanedCssClass, width } = formatWidthFromCss(field.cssClass);
@@ -88,7 +91,7 @@ const RenderField = ({
   const [fieldClassName, setFieldClassName] = useState(
     `${field.cssClass}${
       field.type === "select"
-        ? value.value && value.value !== ''
+        ? value.value && value.value !== ""
           ? " filled"
           : ""
         : value && value !== ""
@@ -112,7 +115,7 @@ const RenderField = ({
       key={field.id}
       field={field}
       value={value}
-      updateForm={(event, field) => updateForm(event, field)}
+      updateForm={updateForm}
       validationMessage={
         formValues[field.id] ? formValues[field.id].valid : false
       }
@@ -135,7 +138,10 @@ const RenderField = ({
       styledComponents={styledComponents}
       cssClass={fieldClassName}
       setFocusClass={setFocusClass}
-      component={customComponents && (customComponents[field.id] || customComponents[field.cssClass])}
+      component={
+        customComponents &&
+        (customComponents[field.id] || customComponents[field.cssClass])
+      }
       dropzoneText={dropzoneText}
     />
   );
