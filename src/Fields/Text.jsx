@@ -14,6 +14,7 @@ export default ({
   unsetError,
   setFocusClass,
   cssClass,
+  formatChars,
   ...props
 }) => {
   const {
@@ -58,6 +59,7 @@ export default ({
         )}
 
         <InputMask
+          formatChars={formatChars}
           value={!value ? "" : value}
           mask={inputMask && inputMaskValue}
           onChange={(event) => {

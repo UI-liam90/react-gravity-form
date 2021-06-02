@@ -26,6 +26,12 @@ class GravityForm extends Component {
       conditioanlIds: {},
       isMultipart: false,
       pageClicked: false,
+      formatChars: {
+        9: "[0-9]",
+        a: "[A-Za-z]",
+        "*": "[A-Za-z0-9]",
+        A: "[A-Z]",
+      },
     };
   }
 
@@ -288,18 +294,13 @@ class GravityForm extends Component {
   checkInputMaskValue = (value, field) => {
     const { inputMaskValue, inputMask } = field;
     if (!inputMaskValue || !inputMask) return value;
+    const { formatChars } = this.state;
 
     const tests = [];
-    const defs = {
-      9: "[0-9]",
-      a: "[A-Za-z]",
-      A: "[A-Z]",
-      "*": "[A-Za-z0-9]",
-    };
 
     inputMaskValue.split("")?.map((c) => {
-      if (defs[c]) {
-        tests.push(new RegExp(defs[c]));
+      if (formatChars[c]) {
+        tests.push(new RegExp(formatChars[c]));
       } else {
         tests.push(null);
       }
@@ -792,6 +793,7 @@ class GravityForm extends Component {
                 unsetError={this.unsetError}
                 dropzoneText={dropzoneText}
                 pageClicked={pageClicked}
+                formatChars={this.state.formatChars}
               />
               {(!formData.pagination ||
                 (formData.pagination &&

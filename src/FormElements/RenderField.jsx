@@ -70,6 +70,7 @@ const RenderField = ({
   error,
   unsetError,
   dropzoneText,
+  formatChars,
 }) => {
   let FormComponent = FormFields[formatComponentName(field.type)];
 
@@ -143,6 +144,7 @@ const RenderField = ({
         (customComponents[field.id] || customComponents[field.cssClass])
       }
       dropzoneText={dropzoneText}
+      formatChars={formatChars}
     />
   );
 };
