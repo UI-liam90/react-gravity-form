@@ -67,6 +67,19 @@ class Fileupload extends Component {
     this.inputFile.current.click();
   };
 
+  removeFile = (e, field) => {
+    e.preventDefault();
+    const { updateForm } = this.props;
+    updateForm({ target: { value: "" } }, field);
+    this.inputFile.current.value = "";
+    this.setState({
+      imagePreviewUrl: false,
+      selectedFile: false,
+      previewID: false,
+      uploadFileText: "No file chosen",
+    });
+  };
+
   render() {
     const {
       selectedFile,
@@ -220,8 +233,21 @@ class Fileupload extends Component {
                 <Button color="yellow" tabIndex="-1" type="button">
                   {buttonText || "Choose a file"}
                 </Button>
-                <span>{uploadFileText}</span>
+                {!selectedFile && (
+                  <span className="no-file">{uploadFileText}</span>
+                )}
               </div>
+              {selectedFile && (
+                <div>
+                  <button
+                    type="button"
+                    onClick={(e) => this.removeFile(e, field)}
+                  >
+                    remove file
+                  </button>
+                  <span>{uploadFileText}</span>
+                </div>
+              )}
 
               {description && <div className="description">{description}</div>}
             </>
