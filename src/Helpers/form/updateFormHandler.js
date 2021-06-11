@@ -1,12 +1,22 @@
-import { validateField } from '../validation';
-import checkConditionalLogic from './checkConditionalLogic';
+import { validateField } from "../validation";
+import checkConditionalLogic from "./checkConditionalLogic";
 
-export default (field, event, inputID, formValues, setFormValues, conditionalIds, conditionFields) => {
+export default (
+  field,
+  event,
+  inputID,
+  formValues,
+  setFormValues,
+  conditionalIds,
+  conditionFields,
+  ...props
+) => {
+  const { onChange } = props;
   const { id, type, isRequired } = field;
   // Set new value
   let value;
 
-  if (field.type === 'checkbox') {
+  if (field.type === "checkbox") {
     const values = [...formValues[field.id].value];
     const index = values.indexOf(event.target.value);
     if (index > -1) {
@@ -15,7 +25,7 @@ export default (field, event, inputID, formValues, setFormValues, conditionalIds
       values.push(event.target.value);
     }
     value = values;
-  } else if (field.type == 'date' && field.dateType !== 'datepicker') {
+  } else if (field.type == "date" && field.dateType !== "datepicker") {
     const { subId, dateLabel } = field;
     const values = [...formValues[field.id].value];
     values[subId] = {
@@ -23,13 +33,17 @@ export default (field, event, inputID, formValues, setFormValues, conditionalIds
       label: dateLabel,
     };
     value = values;
-  } else if (field.type === 'consent') {
-    value = event.target ? event.target.checked : 'null';
-  } else if (field.type === 'postcode') {
+  } else if (field.type === "consent") {
+    value = event.target ? event.target.checked : "null";
+  } else if (field.type === "postcode") {
     value = event.target ? event.target.value : null;
-    Object.values(formValues).filter(item => item.cssClass === 'field--street')[0].value = event?.street;
-    Object.values(formValues).filter(item => item.cssClass === 'field--city')[0].value = event?.city;
-  } else if (field.type === 'name') {
+    Object.values(formValues).filter(
+      (item) => item.cssClass === "field--street"
+    )[0].value = event?.street;
+    Object.values(formValues).filter(
+      (item) => item.cssClass === "field--city"
+    )[0].value = event?.city;
+  } else if (field.type === "name") {
     let values = [...formValues[field.id].value];
 
     const index = values.indexOf(inputID);
@@ -41,25 +55,25 @@ export default (field, event, inputID, formValues, setFormValues, conditionalIds
     }
 
     value = event.target.value;
-
   } else if (
-    field.type === 'password'
-    || (field.type === 'email' && field.emailConfirmEnabled)
+    field.type === "password" ||
+    (field.type === "email" && field.emailConfirmEnabled)
   ) {
     const { subId } = field;
-    const values = formValues[field.id] && formValues[field.id].value
-      ? [...formValues[field.id].value]
-      : [];
+    const values =
+      formValues[field.id] && formValues[field.id].value
+        ? [...formValues[field.id].value]
+        : [];
     values[subId] = {
       val: event.target.value,
     };
     value = values;
   } else {
-    value = event.target ? event.target.value : 'null';
+    value = event.target ? event.target.value : "null";
   }
   // if field is IBAN
-  if (type === 'text' && field.cssClass.indexOf('iban') > -1) {
-    type = 'iban';
+  if (type === "text" && field.cssClass.indexOf("iban") > -1) {
+    type = "iban";
   }
 
   // Validate field
@@ -73,19 +87,19 @@ export default (field, event, inputID, formValues, setFormValues, conditionalIds
       const { id } = conditionFields[i];
       const hide = checkConditionalLogic(
         conditionFields[i].conditionalLogic,
-        formValues,
+        formValues
       );
       formValues[id].hideField = hide;
       if (hide) {
         if (formValues[id].isRequired && hide) {
-          formValues[id].value = '';
+          formValues[id].value = "";
         }
         formValues[id].valid = !!formValues[id].isRequired;
       }
     }
   }
 
-  setFormValues({
+  const newValues = {
     ...formValues,
     [id]: {
       value,
@@ -96,5 +110,13 @@ export default (field, event, inputID, formValues, setFormValues, conditionalIds
       cssClass: field.cssClass,
       isRequired: field.isRequired,
     },
+  };
+
+  setFormValues({
+    ...newValues,
   });
+
+  if (onChange) {
+    onChange(newValues);
+  }
 };
