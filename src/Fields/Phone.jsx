@@ -1,4 +1,5 @@
 import React from "react";
+import InputMask from "react-input-mask";
 
 export default ({
   field,
@@ -13,6 +14,7 @@ export default ({
   unsetError,
   setFocusClass,
   cssClass,
+  formatChars,
   ...props
 }) => {
   const {
@@ -28,6 +30,7 @@ export default ({
     labelPlacement,
     width,
     customName,
+    phoneFormat,
   } = field;
 
   const { Input = "input", Label = "label", Box = "div" } =
@@ -53,28 +56,42 @@ export default ({
         {descriptionPlacement === "above" && description && (
           <div className="description">{description}</div>
         )}
-        <Input
-          id={`input_${formId}_${id}`}
-          name={customName || `input_${id}`}
-          className="phone"
-          type={type}
+
+        <InputMask
+          mask={
+            phoneFormat && phoneFormat === "standard"
+              ? "(999) 999-9999"
+              : undefined
+          }
+          formatChars={formatChars}
           value={!value ? "" : value}
-          placeholder={placeholder}
-          maxLength={maxLength}
-          required={isRequired}
           onChange={(event) => {
             updateForm(event, field);
             unsetError(id);
           }}
           onBlur={(event) => {
-            updateForm(event, field);
+            updateForm(event, field, true);
             setTouched(id);
             setFocusClass(value !== "");
           }}
           onFocus={() => setFocusClass(true)}
-          aria-describedby={`error_${formId}_${id}`}
-          aria-invalid={(!!validationMessage && touched) || !!error}
-        />
+        >
+          {(inputProps) => (
+            <Input
+              {...inputProps}
+              id={`input_${formId}_${id}`}
+              name={customName || `input_${id}`}
+              type={type}
+              placeholder={placeholder}
+              maxLength={maxLength}
+              required={isRequired}
+              aria-label={label}
+              aria-describedby={`error_${formId}_${id}`}
+              aria-invalid={(!!validationMessage && touched) || !!error}
+            />
+          )}
+        </InputMask>
+
         {descriptionPlacement !== "above" && description && (
           <div className="description">{description}</div>
         )}

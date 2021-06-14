@@ -36,6 +36,14 @@ export default ({
   const { Input = "input", Label = "label", Box = "div" } =
     styledComponents || false;
 
+  const beforeMaskedValueChange = (newState, oldState, userInput) => {
+    // if input mask is Zip code -> make last chars uppercase automatically
+    if (inputMask && inputMaskValue === "9999 aa") {
+      newState.value = newState.value.toUpperCase();
+    }
+    return newState;
+  };
+
   return (
     <Box
       width={width}
@@ -71,6 +79,7 @@ export default ({
             setTouched(id);
             setFocusClass(value !== "");
           }}
+          beforeMaskedValueChange={beforeMaskedValueChange}
           onFocus={() => setFocusClass(true)}
         >
           {(inputProps) => (
