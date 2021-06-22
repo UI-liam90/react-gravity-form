@@ -113,7 +113,7 @@ const RenderField = ({
 
   return (
     <FormComponent
-      key={field.id}
+      key={`el-${field.formId}-${field.id}`}
       field={field}
       value={value}
       updateForm={updateForm}

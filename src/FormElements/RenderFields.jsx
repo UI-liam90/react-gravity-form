@@ -122,7 +122,7 @@ export default (props) => {
                 (field) =>
                   fieldTypes.includes(field.type) && (
                     <RenderField
-                      key={field.id}
+                      key={`${field.formId}-${field.id}`}
                       field={field}
                       formValues={formValues}
                       submitFailed={submitFailed}
@@ -153,7 +153,7 @@ export default (props) => {
             (field) =>
               fieldTypes.includes(field.type) && (
                 <RenderField
-                  key={field.id}
+                  key={`${field.formId}-${field.id}`}
                   field={field}
                   formValues={formValues}
                   submitFailed={submitFailed}
