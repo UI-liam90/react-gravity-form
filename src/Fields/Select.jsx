@@ -28,15 +28,16 @@ export default ({
     descriptionPlacement,
     labelPlacement,
     width,
-    customName
+    customName,
+    isDisabled,
   } = field;
 
-  let selected = '';
+  let selected = "";
   // Map options
-  const options = choices.map(choice => {
+  const options = choices.map((choice) => {
     const item = {
       value: choice.value,
-      label: choice.text
+      label: choice.text,
     };
     if (choice.isSelected) {
       selected = item;
@@ -46,12 +47,12 @@ export default ({
   // Handle State
   const [selectedOption, selectOption] = useState(value || selected);
   // Handle change
-  const handleChange = option => {
+  const handleChange = (option) => {
     selectOption(option);
     const event = {
       target: {
-        value: option
-      }
+        value: option,
+      },
     };
     updateForm(event, field);
   };
@@ -59,8 +60,8 @@ export default ({
   const handleBlur = () => {
     const event = {
       target: {
-        value: selectedOption
-      }
+        value: selectedOption,
+      },
     };
     updateForm(event, field);
     setTouched(id);
@@ -95,8 +96,8 @@ export default ({
         <RSelect
           name={customName || `input_${id}`}
           required={isRequired}
-          value={selectedOption && selectedOption.value ? selectedOption : ''}
-          onChange={option => {
+          value={selectedOption && selectedOption.value ? selectedOption : ""}
+          onChange={(option) => {
             handleChange(option, field);
             unsetError(id);
           }}
@@ -108,8 +109,11 @@ export default ({
           autoFocus={false}
           // styles={customStyles}
           inputId={`input_${formId}_${id}`}
+          isDisabled={isDisabled}
         />
-        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+        {descriptionPlacement !== "above" && description && (
+          <div className="description">{description}</div>
+        )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}
