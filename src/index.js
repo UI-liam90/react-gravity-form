@@ -375,15 +375,17 @@ class GravityForm extends Component {
         );
         formValues[id].hideField = hide;
         if (hide) {
-          if (formValues[id].isRequired && hide) {
-            formValues[id].value = "";
-          }
+          // if (formValues[id].isRequired && hide) {
+          //   formValues[id].value = "";
+          // }
           formValues[id].valid = !!formValues[id].isRequired;
         }
       }
     }
 
     value = checkMask ? this.checkInputMaskValue(value, field) : value;
+
+    console.log("formValues", formValues);
 
     this.setState(
       {
