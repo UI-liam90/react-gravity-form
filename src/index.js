@@ -760,14 +760,18 @@ class GravityForm extends Component {
             noValidate
           >
             {(formData.title || formData.description) && (
-              <div>
-                {formData.title && title ? (
+              <>
+                {formData.title && title && (
                   <h3 className="form-title">{formData.title}</h3>
-                ) : null}
+                )}
                 {formData.description ? (
-                  <p className="form-description">{formData.description}</p>
+                  <div className="form-description">
+                    <p
+                      dangerouslySetInnerHTML={{ __html: formData.description }}
+                    />
+                  </div>
                 ) : null}
-              </div>
+              </>
             )}
 
             <div className="form-wrapper">
