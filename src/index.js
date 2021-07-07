@@ -102,7 +102,9 @@ class GravityForm extends Component {
         }
 
         formValues[field.id] = {
-          valid: validateField(value, field),
+          valid: field.customValidateField
+            ? field.customValidateField(value, field)
+            : validateField(value, field),
           value,
           label: field.label,
           pageNumber: field.pageNumber,
@@ -361,7 +363,9 @@ class GravityForm extends Component {
     }
 
     // Validate field
-    const valid = validateField(value, field);
+    const valid = field.customValidateField
+      ? field.customValidateField(value, field)
+      : validateField(value, field);
 
     // if field ID is somewhere in conditional fields
     // recalculate all conditions

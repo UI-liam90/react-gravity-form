@@ -76,7 +76,9 @@ const RenderField = ({
 
   if (
     customComponents &&
-    (customComponents[field.id] || customComponents[field.cssClass])
+    (customComponents[field.id] ||
+      customComponents[field.cssClass] ||
+      customComponents[field.inputName])
   ) {
     FormComponent = FormFields[formatComponentName("custom")];
   }
