@@ -378,12 +378,6 @@ class GravityForm extends Component {
           formValues
         );
         formValues[id].hideField = hide;
-        if (hide) {
-          // if (formValues[id].isRequired && hide) {
-          //   formValues[id].value = "";
-          // }
-          formValues[id].valid = !!formValues[id].isRequired;
-        }
       }
     }
 
