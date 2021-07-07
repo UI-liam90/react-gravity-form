@@ -79,6 +79,7 @@ export default ({
           {(inputProps) => (
             <Input
               {...inputProps}
+              value={!value ? "" : value}
               id={`input_${formId}_${id}`}
               name={customName || `input_${id}`}
               type={type}
