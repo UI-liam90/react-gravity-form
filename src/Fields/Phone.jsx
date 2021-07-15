@@ -33,8 +33,11 @@ export default ({
     phoneFormat,
   } = field;
 
-  const { Input = "input", Label = "label", Box = "div" } =
-    styledComponents || false;
+  const {
+    Input = "input",
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
   return (
     <Box
       width={width}
@@ -64,6 +67,7 @@ export default ({
               : undefined
           }
           formatChars={formatChars}
+          defaultValue={!value ? "" : value}
           value={!value ? "" : value}
           onChange={(event) => {
             updateForm(event, field);
@@ -79,7 +83,6 @@ export default ({
           {(inputProps) => (
             <Input
               {...inputProps}
-              value={!value ? "" : value}
               id={`input_${formId}_${id}`}
               name={customName || `input_${id}`}
               type={type}

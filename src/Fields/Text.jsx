@@ -68,7 +68,8 @@ export default ({
 
         <InputMask
           formatChars={formatChars}
-          value={!value ? "" : value}
+          value={!value ? '' : value}
+          defaultValue={!value ? '' : value}
           mask={inputMask && inputMaskValue}
           onChange={(event) => {
             updateForm(event, field);
@@ -85,7 +86,6 @@ export default ({
           {(inputProps) => (
             <Input
               {...inputProps}
-              value={!value ? "" : value}
               id={`input_${formId}_${id}`}
               name={customName || `input_${id}`}
               type={type}
