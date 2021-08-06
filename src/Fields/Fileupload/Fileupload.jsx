@@ -81,12 +81,8 @@ class Fileupload extends Component {
   };
 
   render() {
-    const {
-      selectedFile,
-      uploadFileText,
-      imagePreviewUrl,
-      previewID,
-    } = this.state;
+    const { selectedFile, uploadFileText, imagePreviewUrl, previewID } =
+      this.state;
 
     const {
       field,
@@ -127,6 +123,7 @@ class Fileupload extends Component {
 
     const hasDropzone = cssClass.indexOf("dropzone") > -1;
 
+    console.log("hasDropzone", hasDropzone);
     return (
       <Box
         width={width}
@@ -146,9 +143,10 @@ class Fileupload extends Component {
             isRequired={isRequired}
             styledComponent={styledComponents}
           />
-          {descriptionPlacement === "above" && description ? (
-            description && <div className="description">{description}</div>
-          ) : hasDropzone ? (
+          {descriptionPlacement === "above" && description && description && (
+            <div className="description">{description}</div>
+          )}
+          {hasDropzone ? (
             <GFDropzone
               dropzoneText={dropzoneText}
               field={field}
@@ -248,8 +246,9 @@ class Fileupload extends Component {
                   <span>{uploadFileText}</span>
                 </div>
               )}
-
-              {description && <div className="description">{description}</div>}
+              {description && descriptionPlacement !== "above" && (
+                <div className="description">{description}</div>
+              )}
             </>
           )}
           {((validationMessage && touched) || error) && (
