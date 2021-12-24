@@ -189,7 +189,7 @@ const GravityForm = (props) => {
             setConfirmationMessage(confirmationMessage);
 
             if (jumpToConfirmation) {
-              scrollToConfirmation(props, wrapperRef);
+              scrollToConfirmation(props, wrapperRef, jumpToConfirmation);
             }
           } else {
             throw {
