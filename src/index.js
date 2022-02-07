@@ -128,7 +128,7 @@ const GravityForm = props => {
     const { onSubmit: customOnSubmit, filterFormData } = props;
     let formData = new FormData(event.target);
 
-    if (filterFormData) formData = filterFormData(formData);
+    if (filterFormData) formData = filterFormData(formData, formValues);
 
     event.preventDefault();
 
