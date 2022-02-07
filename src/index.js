@@ -23,7 +23,7 @@ import {
 
 import { validateField } from "./Helpers/validation";
 
-const GravityForm = (props) => {
+const GravityForm = props => {
   const { initialPage, populatedEntry, onChange } = props;
 
   const [submitFailed, setSubmitFailed] = useState(false);
@@ -44,7 +44,7 @@ const GravityForm = (props) => {
 
   const wrapperRef = useRef(null);
 
-  const updateEntryFields = useCallback((populatedEntry) => {
+  const updateEntryFields = useCallback(populatedEntry => {
     updateFieldsValuesBasedOnEntry(populatedEntry);
   }, []);
 
@@ -119,14 +119,16 @@ const GravityForm = (props) => {
 
   const { cssClass } = formData;
 
-  const handlePrevStep = (e) => {
+  const handlePrevStep = e => {
     e.preventDefault();
     prevStep(formValues, pages, activePage, setActivePage, setPageClicked);
   };
 
-  const onSubmit = async (event) => {
-    const { onSubmit: customOnSubmit } = props;
-    const formData = new FormData(event.target);
+  const onSubmit = async event => {
+    const { onSubmit: customOnSubmit, filterFormData } = props;
+    let formData = new FormData(event.target);
+
+    if (filterFormData) formData = filterFormData(formData);
 
     event.preventDefault();
 
@@ -167,8 +169,8 @@ const GravityForm = (props) => {
         method: "POST",
         body: formData,
       })
-        .then((resp) => resp.json())
-        .then((response) => {
+        .then(resp => resp.json())
+        .then(response => {
           if (response && response.is_valid) {
             if (onSubmitSuccess) {
               const res = onSubmitSuccess(response);
@@ -197,7 +199,7 @@ const GravityForm = (props) => {
             };
           }
         })
-        .catch((error) => {
+        .catch(error => {
           const errorMessages =
             error && error.response && error.response.validation_messages
               ? error.response.validation_messages
@@ -246,7 +248,7 @@ const GravityForm = (props) => {
 
       {!submitSuccess && formData.fields ? (
         <form
-          onSubmit={(event) => onSubmit(event)}
+          onSubmit={event => onSubmit(event)}
           className={cssClass}
           encType={isMultipart ? "multipart/form-data" : undefined}
           noValidate
@@ -288,12 +290,12 @@ const GravityForm = (props) => {
                 )
               }
               touched={touched}
-              setTouched={(id) => setTouchedHandler(id, touched, setTouched)}
+              setTouched={id => setTouchedHandler(id, touched, setTouched)}
               setErrorMessages={setErrorMessages}
               pagination={formData.pagination}
               activePage={activePage}
-              prevStep={(e) => handlePrevStep(e)}
-              nextStep={(e) =>
+              prevStep={e => handlePrevStep(e)}
+              nextStep={e =>
                 nextStep(
                   e,
                   props,
@@ -312,7 +314,7 @@ const GravityForm = (props) => {
               saveStateToHtmlField={saveStateToHtmlField}
               enableHoneypot={formData.enableHoneypot}
               errors={errorMessages}
-              unsetError={(id) => unsetError(id, errorMessages)}
+              unsetError={id => unsetError(id, errorMessages)}
               dropzoneText={dropzoneText}
               pageClicked={pageClicked}
               language={language}
@@ -327,7 +329,7 @@ const GravityForm = (props) => {
                 formData={formData}
                 submitIcon={submitIcon}
                 submitting={submitting}
-                prevStep={(e) => handlePrevStep(e)}
+                prevStep={e => handlePrevStep(e)}
                 loadingSpinner={loadingSpinner}
               />
             )}
