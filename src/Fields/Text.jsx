@@ -31,7 +31,7 @@ export default ({
     customName,
   } = field;
   const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
-
+  const { i18n } = props || {};
   const setDisabled = () => cssClass === 'field--street' || cssClass === 'field--city';
 
   return (
@@ -64,11 +64,11 @@ export default ({
           placeholder={placeholder}
           maxLength={maxLength}
           required={isRequired}
-          onChange={(event) => {
+          onChange={event => {
             updateForm(event, field);
             unsetError(id);
           }}
-          onBlur={(event) => {
+          onBlur={event => {
             updateForm(event, field);
             setTouched(id);
             setFocusClass(value !== '');
@@ -79,6 +79,16 @@ export default ({
           aria-describedby={`error_${formId}_${id}`}
           aria-invalid={(!!validationMessage && touched) || !!error}
         />
+        {maxLength && maxLength > 0 && (
+          <div className="charleft">
+            {i18n
+              ? `${i18n.t('maxCharachters', {
+                  length: value.length || 0,
+                  maxLength: maxLength,
+                })}`
+              : `${value.length || 0} of ${maxLength} max charachters`}
+          </div>
+        )}
         {descriptionPlacement !== 'above' && description && (
           <div className="description">{description}</div>
         )}
@@ -91,3 +101,4 @@ export default ({
     </Box>
   );
 };
+

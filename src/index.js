@@ -1,12 +1,6 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
-import fetch from "isomorphic-unfetch";
-import {
-  FormConfirmation,
-  FormError,
-  RenderFields,
-  Submit,
-  ProgressBar,
-} from "./FormElements";
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import fetch from 'isomorphic-unfetch';
+import { FormConfirmation, FormError, RenderFields, Submit, ProgressBar } from './FormElements';
 
 import {
   checkConditionalLogic,
@@ -19,9 +13,9 @@ import {
   unsetError,
   updateFieldsValuesBasedOnEntry,
   updateFormHandler,
-} from "./Helpers/form";
+} from './Helpers/form';
 
-import { validateField } from "./Helpers/validation";
+import { validateField } from './Helpers/validation';
 
 const GravityForm = props => {
   const { initialPage, populatedEntry, onChange } = props;
@@ -88,7 +82,7 @@ const GravityForm = props => {
   const scrollToFirstInvalidField = () => {
     if (!wrapperRef) return;
 
-    const firstErrEl = wrapperRef.current.querySelector(".form-field.error");
+    const firstErrEl = wrapperRef.current.querySelector('.form-field.error');
     if (firstErrEl) {
       firstErrEl.scrollIntoView();
     }
@@ -114,7 +108,7 @@ const GravityForm = props => {
     Loading,
     FormError: SFormError,
     FormConfirmation: SFormConfirmation,
-    GFWrapper = "div",
+    GFWrapper = 'div',
   } = styledComponents || false;
 
   const { cssClass } = formData;
@@ -153,20 +147,11 @@ const GravityForm = props => {
       setConfirmationMessage(false);
       setErrorMessages(false);
 
-      const {
-        formID,
-        backendUrl,
-        jumpToConfirmation,
-        onSubmitSuccess,
-        onError,
-      } = props;
-      const gfSubmissionUrl = backendUrl.substring(
-        0,
-        backendUrl.indexOf("/wp-json")
-      );
+      const { formID, backendUrl, jumpToConfirmation, onSubmitSuccess, onError } = props;
+      const gfSubmissionUrl = backendUrl.substring(0, backendUrl.indexOf('/wp-json'));
 
       fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
-        method: "POST",
+        method: 'POST',
         body: formData,
       })
         .then(resp => resp.json())
@@ -180,8 +165,8 @@ const GravityForm = props => {
             }
             const confirmationMessage = response.confirmation_message;
             const { type, link } = confirmationMessage || false;
-            if (type && link && type === "redirect") {
-              if (typeof window !== "undefined") {
+            if (type && link && type === 'redirect') {
+              if (typeof window !== 'undefined') {
                 window.location.replace(link);
                 return false;
               }
@@ -203,7 +188,7 @@ const GravityForm = props => {
           const errorMessages =
             error && error.response && error.response.validation_messages
               ? error.response.validation_messages
-              : "Something went wrong";
+              : 'Something went wrong';
 
           if (onError) {
             onError(errorMessages);
@@ -223,19 +208,13 @@ const GravityForm = props => {
   };
 
   return (
-    <GFWrapper
-      ref={wrapperRef}
-      className="form-wrapper"
-      id={`gravity_form_${formID}`}
-    >
+    <GFWrapper ref={wrapperRef} className="form-wrapper" id={`gravity_form_${formID}`}>
       {formData.title ? null : Loading && <Loading isLoading />}
 
       {submitFailed && !submitSuccess && !onError && (
         <FormError
           SFormError={SFormError || false}
-          errorMessage={
-            errorMessage || "There was a problem with your submission"
-          }
+          errorMessage={errorMessage || 'There was a problem with your submission'}
         />
       )}
 
@@ -250,14 +229,12 @@ const GravityForm = props => {
         <form
           onSubmit={event => onSubmit(event)}
           className={cssClass}
-          encType={isMultipart ? "multipart/form-data" : undefined}
+          encType={isMultipart ? 'multipart/form-data' : undefined}
           noValidate
         >
           {(formData.title || formData.description) && (
             <div>
-              {formData.title && title ? (
-                <h3 className="form-title">{formData.title}</h3>
-              ) : null}
+              {formData.title && title ? <h3 className="form-title">{formData.title}</h3> : null}
               {formData.description ? (
                 <p className="form-description">{formData.description}</p>
               ) : null}
@@ -319,10 +296,10 @@ const GravityForm = props => {
               pageClicked={pageClicked}
               language={language}
               apiKeys={apiKeys}
+              {...props}
             />
             {(!formData.pagination ||
-              (formData.pagination &&
-                formData.pagination.pages.length === activePage)) && (
+              (formData.pagination && formData.pagination.pages.length === activePage)) && (
               <Submit
                 Button={Button}
                 Loading={Loading}
@@ -336,7 +313,7 @@ const GravityForm = props => {
           </div>
         </form>
       ) : (
-        ""
+        ''
       )}
     </GFWrapper>
   );
@@ -352,3 +329,4 @@ GravityForm.defaultProps = {
 export { validateField, FormConfirmation, FormError, RenderFields, Submit };
 
 export default GravityForm;
+
