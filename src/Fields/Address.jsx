@@ -1,6 +1,6 @@
 import React from 'react';
 import countries from 'i18n-iso-countries';
-import Select from "react-select";
+import Select from 'react-select';
 import InputLabel from '../FormElements/InputLabel';
 
 export default ({
@@ -39,7 +39,7 @@ export default ({
   const countryNames = Object.values(
     countries.getNames(language ? language : 'en', { select: 'official' })
   )
-    .map((a) => a)
+    .map(a => a)
     .sort((a, b) => a.localeCompare(b));
 
   const { Input = 'input', Label = 'label', Box = 'div', ReactSelect } = styledComponents || false;
@@ -72,8 +72,19 @@ export default ({
                 <div className="description">{description}</div>
               )}
               {key === 5 ? (
-                <RSelect>
-                  {countryNames.map((country) => (
+                <RSelect
+                  onChange={event => {
+                    updateForm(event, field, input.id);
+                    unsetError(input.id);
+                  }}
+                  onBlur={event => {
+                    updateForm(event, field);
+                    setTouched(input.id);
+                    setFocusClass(value !== '');
+                  }}
+                  onFocus={() => setFocusClass(true)}
+                >
+                  {countryNames.map(country => (
                     <option value={country}>{country}</option>
                   ))}
                 </RSelect>
@@ -87,11 +98,11 @@ export default ({
                   placeholder={input.placeholder}
                   maxLength={maxLength}
                   required={isRequired}
-                  onChange={(event) => {
+                  onChange={event => {
                     updateForm(event, field, input.id);
                     unsetError(input.id);
                   }}
-                  onBlur={(event) => {
+                  onBlur={event => {
                     updateForm(event, field);
                     setTouched(input.id);
                     setFocusClass(value !== '');
@@ -116,3 +127,4 @@ export default ({
     </Box>
   );
 };
+

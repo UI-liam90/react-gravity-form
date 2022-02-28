@@ -123,7 +123,6 @@ class Fileupload extends Component {
 
     const hasDropzone = cssClass.indexOf("dropzone") > -1;
 
-    console.log("hasDropzone", hasDropzone);
     return (
       <Box
         width={width}
