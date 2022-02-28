@@ -1,5 +1,6 @@
 import React from 'react';
 import countries from 'i18n-iso-countries';
+import Select from "react-select";
 import InputLabel from '../FormElements/InputLabel';
 
 export default ({
@@ -41,7 +42,9 @@ export default ({
     .map((a) => a)
     .sort((a, b) => a.localeCompare(b));
 
-  const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
+  const { Input = 'input', Label = 'label', Box = 'div', ReactSelect } = styledComponents || false;
+
+  const RSelect = ReactSelect || Select;
 
   return (
     <Box
@@ -69,11 +72,11 @@ export default ({
                 <div className="description">{description}</div>
               )}
               {key === 5 ? (
-                <select>
+                <RSelect>
                   {countryNames.map((country) => (
                     <option value={country}>{country}</option>
                   ))}
-                </select>
+                </RSelect>
               ) : (
                 <Input
                   id={`input_${formId}_${input.id}`}
