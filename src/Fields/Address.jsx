@@ -1,7 +1,6 @@
-import React from 'react';
-import countries from 'i18n-iso-countries';
-import Select from 'react-select';
-import InputLabel from '../FormElements/InputLabel';
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -34,17 +33,54 @@ export default ({
     width,
     customName,
   } = field;
-  countries.registerLocale(require(`i18n-iso-countries/langs/${language ? language : 'en'}.json`));
 
-  const countryNames = Object.values(
-    countries.getNames(language ? language : 'en', { select: 'official' })
-  )
-    .map(a => a)
-    .sort((a, b) => a.localeCompare(b));
+  const [countryNames, setNames] = useState([]);
 
-  const { Input = 'input', Label = 'label', Box = 'div', ReactSelect } = styledComponents || false;
+  function getCountries() {
+    // Dynamic import
+    import("i18n-iso-countries")
+      .then(countries => {
+        countries.registerLocale(
+          require(`i18n-iso-countries/langs/${language ? language : "en"}.json`)
+        );
+
+        const names = Object.values(
+          countries.getNames(language ? language : "en", { select: "official" })
+        )
+          .map(a => a)
+          .sort((a, b) => a.localeCompare(b));
+
+        console.log("names", names);
+
+        setNames(names);
+      })
+      .catch(error => console.log(error));
+  }
+
+  const {
+    Input = "input",
+    Label = "label",
+    Box = "div",
+    ReactSelect,
+  } = styledComponents || false;
 
   const RSelect = ReactSelect || Select;
+
+  const handleChange = option => {
+    const event =
+      option && option.target
+        ? option
+        : {
+            target: {
+              value: option,
+            },
+          };
+    updateForm(event, field);
+  };
+
+  useEffect(() => {
+    getCountries();
+  }, []);
 
   return (
     <Box
@@ -54,7 +90,7 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       {inputs?.map(
         (input, key) =>
@@ -68,21 +104,24 @@ export default ({
                 isRequired={isRequired}
                 styledComponent={styledComponents}
               />
-              {descriptionPlacement === 'above' && description && (
+              {descriptionPlacement === "above" && description && (
                 <div className="description">{description}</div>
               )}
-              {key === 5 ? (
+              {key === 5 && countryNames ? (
                 <RSelect
                   onChange={event => {
-                    updateForm(event, field, input.id);
+                    handleChange(event);
                     unsetError(input.id);
                   }}
                   onBlur={event => {
                     updateForm(event, field);
                     setTouched(input.id);
-                    setFocusClass(value !== '');
+                    setFocusClass(value !== "");
                   }}
                   onFocus={() => setFocusClass(true)}
+                  options={countryNames.map(item => {
+                    return { label: item, value: item };
+                  })}
                 >
                   {countryNames.map(country => (
                     <option value={country}>{country}</option>
@@ -94,7 +133,7 @@ export default ({
                   key={input.id}
                   name={customName || `input_${input.id}`}
                   type={type}
-                  value={!value ? '' : value[input.id]}
+                  value={!value ? "" : value[input.id]}
                   placeholder={input.placeholder}
                   maxLength={maxLength}
                   required={isRequired}
@@ -105,7 +144,7 @@ export default ({
                   onBlur={event => {
                     updateForm(event, field);
                     setTouched(input.id);
-                    setFocusClass(value !== '');
+                    setFocusClass(value !== "");
                   }}
                   onFocus={() => setFocusClass(true)}
                   aria-label={input.label}
@@ -113,7 +152,7 @@ export default ({
                   aria-invalid={(!!validationMessage && touched) || !!error}
                 />
               )}
-              {descriptionPlacement !== 'above' && description && (
+              {descriptionPlacement !== "above" && description && (
                 <div className="description">{description}</div>
               )}
               {((validationMessage && touched) || error) && (
@@ -127,4 +166,3 @@ export default ({
     </Box>
   );
 };
-
