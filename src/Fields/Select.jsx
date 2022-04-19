@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import InputLabel from '../FormElements/InputLabel'
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -29,15 +29,16 @@ export default ({
     descriptionPlacement,
     labelPlacement,
     width,
-    customName
+    customName,
   } = field;
+  const [focusClass, setFocusClasses] = useState("");
 
-  let selected = '';
+  let selected = "";
   // Map options
   const options = choices.map(choice => {
     const item = {
       value: choice.value,
-      label: choice.text
+      label: choice.text,
     };
     if (choice.isSelected) {
       selected = item;
@@ -51,8 +52,8 @@ export default ({
     selectOption(option);
     const event = {
       target: {
-        value: option
-      }
+        value: option,
+      },
     };
     updateForm(event, field);
   };
@@ -60,15 +61,19 @@ export default ({
   const handleBlur = () => {
     const event = {
       target: {
-        value: selectedOption
-      }
+        value: selectedOption,
+      },
     };
     updateForm(event, field);
     setTouched(id);
     setFocusClass(selectedOption && selectedOption.value);
+    setFocusClasses("");
   };
-  const { ReactSelect, Label = "label", Box = "div" } =
-    styledComponents || false;
+  const {
+    ReactSelect,
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
 
   const RSelect = ReactSelect || Select;
 
@@ -77,8 +82,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field error ${cssClass} ${focusClass}`
+          : `form-field ${cssClass} ${focusClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -97,13 +102,16 @@ export default ({
         <RSelect
           name={customName || `input_${id}`}
           required={isRequired}
-          value={selectedOption && selectedOption.value ? selectedOption : ''}
+          value={selectedOption && selectedOption.value ? selectedOption : ""}
           onChange={option => {
             handleChange(option, field);
             unsetError(id);
           }}
           onBlur={() => handleBlur()}
-          onFocus={() => setFocusClass(true)}
+          onFocus={() => {
+            setFocusClass(true);
+            setFocusClasses("is-open");
+          }}
           placeholder={placeholder}
           options={options}
           className="form-select"
@@ -111,7 +119,9 @@ export default ({
           // styles={customStyles}
           inputId={`input_${formId}_${id}`}
         />
-        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+        {descriptionPlacement !== "above" && description && (
+          <div className="description">{description}</div>
+        )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}

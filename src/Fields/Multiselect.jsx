@@ -31,6 +31,7 @@ export default ({
     width,
     customName,
   } = field;
+  const [focusClass, setFocusClasses] = useState("");
   // Map options
   const options = choices.map(choice => ({
     value: choice.value,
@@ -72,9 +73,9 @@ export default ({
             : "",
       },
     };
-    console.log("event", event);
     updateForm(event, field);
     setTouched(id);
+    setFocusClasses("");
   };
   const {
     ReactSelect,
@@ -92,8 +93,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field error ${cssClass} ${focusClass}`
+          : `form-field ${cssClass} ${focusClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -118,7 +119,10 @@ export default ({
             unsetError(id);
           }}
           onBlur={() => handleBlur()}
-          onFocus={() => setFocusClass(true)}
+          onFocus={() => {
+            setFocusClass(true);
+            setFocusClasses("is-open");
+          }}
           placeholder={placeholder}
           options={options}
           autoFocus={false}
