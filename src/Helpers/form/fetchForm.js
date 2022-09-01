@@ -1,7 +1,7 @@
-import fetch from 'isomorphic-unfetch';
-import { getFieldPrepopulatedValue } from './index';
-import { validateField } from '../validation';
-import checkConditionalLogic from './checkConditionalLogic';
+import fetch from "isomorphic-unfetch";
+import { getFieldPrepopulatedValue } from "./index";
+import { validateField } from "../validation";
+import checkConditionalLogic from "./checkConditionalLogic";
 
 async function fetchForm({
   initialPage,
@@ -23,14 +23,16 @@ async function fetchForm({
 
   const queryString = getParams
     ? Object.keys(getParams)
-        .map((key) => `${key}=${getParams[key]}`)
-        .join('&')
-    : '';
-  const requestUrl = `${backendUrl}/${formID}${queryString ? `?${queryString}` : ''}`;
+        .map(key => `${key}=${getParams[key]}`)
+        .join("&")
+    : "";
+  const requestUrl = `${backendUrl}/${formID}${
+    queryString ? `?${queryString}` : ""
+  }`;
 
   const form = await fetch(requestUrl, fetchOptions)
-    .then((resp) => resp.json())
-    .then((response) => response)
+    .then(resp => resp.json())
+    .then(response => response)
     .catch(() => false);
 
   if (form) {
@@ -42,13 +44,13 @@ async function fetchForm({
     for (const field of form.fields) {
       let value;
 
-      if (field.type === 'page') {
+      if (field.type === "page") {
         pages.push(field.id);
       }
 
       value = getFieldPrepopulatedValue(field, populatedFields, populatedEntry);
 
-      if (field.type === 'fileupload') {
+      if (field.type === "fileupload") {
         isMultipart = true;
       }
 
@@ -58,7 +60,7 @@ async function fetchForm({
           id: field.id,
           conditionalLogic: field.conditionalLogic,
         };
-        const ids = field.conditionalLogic.rules.map((item) => item.fieldId);
+        const ids = field.conditionalLogic.rules.map(item => item.fieldId);
         for (let i = 0; i < ids.length; i++) {
           const id = parseInt(ids[i]);
           if (conditionalIds.indexOf(id) === -1) {
@@ -76,6 +78,7 @@ async function fetchForm({
         cssClass: field.cssClass,
         isRequired: field.isRequired,
         type: field.type,
+        inputName: field.inputName,
       };
     }
 
