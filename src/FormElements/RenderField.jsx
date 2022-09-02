@@ -73,6 +73,7 @@ const RenderField = ({
   dropzoneText,
   language,
   apiKeys,
+  errors,
   ...props
 }) => {
   let FormComponent = FormFields[formatComponentName(field.type)];
@@ -155,6 +156,7 @@ const RenderField = ({
       dropzoneText={dropzoneText}
       language={language}
       apiKeys={apiKeys}
+      errors={errors}
       {...props}
     />
   );

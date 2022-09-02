@@ -125,6 +125,7 @@ export default props => {
         language={language}
         apiKeys={apiKeys}
         fields={fields}
+        errors={errors}
         {...rest}
       />
     );
