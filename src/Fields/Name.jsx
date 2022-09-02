@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Select from 'react-select';
-import InputLabel from '../FormElements/InputLabel';
+import React, { useState } from "react";
+import Select from "react-select";
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -34,7 +34,10 @@ export default ({
   } = field;
 
   const {
-    ReactSelect, Input = 'input', Label = 'label', Box = 'div',
+    ReactSelect,
+    Input = "input",
+    Label = "label",
+    Box = "div",
   } = styledComponents || false;
 
   const RSelect = ReactSelect || Select;
@@ -54,16 +57,16 @@ export default ({
       },
     ];
   } else {
-    preselected = '';
+    preselected = "";
   }
   // Handle State
   const [selectedOption, selectOption] = useState(value || preselected);
 
   // Handle change
-  const selectChange = (option) => {
+  const selectChange = option => {
     selectOption(option);
   };
-  
+
   return (
     <Box
       width={width}
@@ -72,58 +75,63 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
-      {inputs.map(input => (
-        !input.isHidden && (
-          <div className={type} key={input.id}>
-            <InputLabel
-              formId={formId}
-              id={input.id}
-              label={input.label}
-              labelPlacement={labelPlacement}
-              isRequired={isRequired}
-              styledComponent={styledComponents}
-            />
-            {descriptionPlacement === 'above' && description && (
-              <div className="description">{description}</div>
-            )}
-            {input.inputType === 'radio' ? (
-              <RSelect
-                name={customName || `input_${input.id}`}
-                required={isRequired}
-                value={selectedOption && selectedOption.value ? selectedOption : ''}
-                onChange={(option) => {
-                  selectChange(option, field);
-                  unsetError(input.id);
-                }}
-                onFocus={() => setFocusClass(true)}
-                placeholder={input.placeholder}
-                options={options}
-                className="form-select"
-                autoFocus={false}
-                // styles={customStyles}
-                inputId={`input_${formId}_${input.id}`}
+      {inputs.map(
+        input =>
+          !input.isHidden && (
+            <div className={type} key={input.id}>
+              <InputLabel
+                formId={formId}
+                id={input.id}
+                label={input.label}
+                labelPlacement={labelPlacement}
+                isRequired={isRequired}
+                styledComponent={styledComponents}
               />
-            )
-              : (
+              {descriptionPlacement === "above" && description && (
+                <div
+                  className="description"
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
+              )}
+              {input.inputType === "radio" ? (
+                <RSelect
+                  name={customName || `input_${input.id}`}
+                  required={isRequired}
+                  value={
+                    selectedOption && selectedOption.value ? selectedOption : ""
+                  }
+                  onChange={option => {
+                    selectChange(option, field);
+                    unsetError(input.id);
+                  }}
+                  onFocus={() => setFocusClass(true)}
+                  placeholder={input.placeholder}
+                  options={options}
+                  className="form-select"
+                  autoFocus={false}
+                  // styles={customStyles}
+                  inputId={`input_${formId}_${input.id}`}
+                />
+              ) : (
                 <Input
                   id={`input_${formId}_${input.id}`}
                   key={input.id}
                   name={customName || `input_${input.id}`}
                   type={type}
-                  value={!value ? '' : value[input.id]}
+                  value={!value ? "" : value[input.id]}
                   placeholder={input.placeholder}
                   maxLength={maxLength}
                   required={isRequired}
-                  onChange={(event) => {
+                  onChange={event => {
                     updateForm(event, field, input.id);
                     unsetError(input.id);
                   }}
-                  onBlur={(event) => {
+                  onBlur={event => {
                     updateForm(event, field);
                     setTouched(input.id);
-                    setFocusClass(value !== '');
+                    setFocusClass(value !== "");
                   }}
                   onFocus={() => setFocusClass(true)}
                   aria-label={input.label}
@@ -131,15 +139,20 @@ export default ({
                   aria-invalid={(!!validationMessage && touched) || !!error}
                 />
               )}
-            {descriptionPlacement !== 'above' && description && <div className="description">{description}</div>}
-            {((validationMessage && touched) || error) && (
-              <span className="error-message" id={`error_${formId}_${id}`}>
-                {validationMessage || error}
-              </span>
-            )}
-          </div>
-        )
-      ))}
+              {descriptionPlacement !== "above" && description && (
+                <div
+                  className="description"
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
+              )}
+              {((validationMessage && touched) || error) && (
+                <span className="error-message" id={`error_${formId}_${id}`}>
+                  {validationMessage || error}
+                </span>
+              )}
+            </div>
+          )
+      )}
     </Box>
   );
 };

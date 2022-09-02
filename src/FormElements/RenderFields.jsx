@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import RenderField from './RenderField';
+import React, { useState, useRef, useEffect } from "react";
+import RenderField from "./RenderField";
 
 const divideFieldsIntoPages = (fields, pages) => {
   const tmpFields = pages.map(item => []);
@@ -8,7 +8,7 @@ const divideFieldsIntoPages = (fields, pages) => {
     const arr = tmpFields[fields[i].pageNumber];
     if (tmpFields[fields[i].pageNumber - 1]) {
       // move page field to the first group
-      if (fields[i].type === 'page') {
+      if (fields[i].type === "page") {
         tmpFields[fields[i].pageNumber - 2].push(fields[i]);
       } else {
         tmpFields[fields[i].pageNumber - 1].push(fields[i]);
@@ -29,32 +29,32 @@ const getMaxFieldId = fields => {
 };
 
 const fieldTypes = [
-  'checkbox',
-  'email',
-  'hidden',
-  'html',
-  'number',
-  'phone',
-  'radio',
-  'select',
-  'multiselect',
-  'text',
-  'textarea',
-  'website',
-  'page',
-  'date',
-  'fileupload',
-  'consent',
-  'password',
-  'section',
-  'scustom',
-  'name',
-  'address',
-  'buckarooideal',
-  'postcode',
+  "checkbox",
+  "email",
+  "hidden",
+  "html",
+  "number",
+  "phone",
+  "radio",
+  "select",
+  "multiselect",
+  "text",
+  "textarea",
+  "website",
+  "page",
+  "date",
+  "fileupload",
+  "consent",
+  "password",
+  "section",
+  "scustom",
+  "name",
+  "address",
+  "buckarooideal",
+  "postcode",
 ];
 
-const honeyPotLables = ['Name', 'Email', 'Phone', 'Comments'];
+const honeyPotLables = ["Name", "Email", "Phone", "Comments"];
 const honeypotLabel = honeyPotLables[Math.floor(Math.random() * Math.floor(4))];
 
 export default props => {
@@ -87,9 +87,11 @@ export default props => {
   } = props;
 
   // get page indexes
-  const dividedFields = pagination ? divideFieldsIntoPages(fields, pagination.pages) : undefined;
+  const dividedFields = pagination
+    ? divideFieldsIntoPages(fields, pagination.pages)
+    : undefined;
   const maxID = getMaxFieldId(fields);
-  const [honeypotValue, setHoneypotValue] = useState('');
+  const [honeypotValue, setHoneypotValue] = useState("");
 
   const prevSteptRef = useRef();
   useEffect(() => {
@@ -97,7 +99,7 @@ export default props => {
   });
   const prevCount = prevSteptRef.current;
 
-  function renderFiled(field) {
+  function renderFiled(field, fields) {
     return (
       <RenderField
         key={`${field.formId}-${field.id}`}
@@ -122,6 +124,7 @@ export default props => {
         dropzoneText={dropzoneText}
         language={language}
         apiKeys={apiKeys}
+        fields={fields}
         {...rest}
       />
     );
@@ -131,20 +134,20 @@ export default props => {
     <div
       className={`form-fields${
         pagination && pagination.pages.length > 1
-          ? ` hasPages ${!pageClicked ? ' noPageClicked' : ''}`
-          : ''
+          ? ` hasPages ${!pageClicked ? " noPageClicked" : ""}`
+          : ""
       }`}
     >
       {pagination && pagination.pages.length > 1
         ? pagination.pages.map((page, index) => (
             <div
-              className={`page${activePage === index + 1 ? ' active' : ''}${
+              className={`page${activePage === index + 1 ? " active" : ""}${
                 prevCount &&
                 index === prevCount &&
                 activePage !== index + 1 &&
                 prevCount !== activePage
-                  ? ' prevStep'
-                  : ''
+                  ? " prevStep"
+                  : ""
               }`}
               key={`page-${index}`}
             >
@@ -154,11 +157,15 @@ export default props => {
                 </div>
               )}
               {dividedFields[index].map(
-                field => fieldTypes.includes(field.type) && renderFiled(field)
+                field =>
+                  fieldTypes.includes(field.type) && renderFiled(field, fields)
               )}
             </div>
           ))
-        : fields.map(field => fieldTypes.includes(field.type) && renderFiled(field))}
+        : fields.map(
+            field =>
+              fieldTypes.includes(field.type) && renderFiled(field, fields)
+          )}
       {enableHoneypot && (
         <div className="form-field gform_validation_container">
           <label htmlFor={`input_${maxID}`} className="gf-label ">
@@ -177,4 +184,3 @@ export default props => {
     </div>
   );
 };
-

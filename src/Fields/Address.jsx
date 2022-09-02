@@ -50,8 +50,6 @@ export default ({
           .map(a => a)
           .sort((a, b) => a.localeCompare(b));
 
-        console.log("names", names);
-
         setNames(names);
       })
       .catch(error => console.log(error));
@@ -105,7 +103,10 @@ export default ({
                 styledComponent={styledComponents}
               />
               {descriptionPlacement === "above" && description && (
-                <div className="description">{description}</div>
+                <div
+                  className="description"
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
               )}
               {key === 5 && countryNames ? (
                 <RSelect
@@ -153,7 +154,10 @@ export default ({
                 />
               )}
               {descriptionPlacement !== "above" && description && (
-                <div className="description">{description}</div>
+                <div
+                  className="description"
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
               )}
               {((validationMessage && touched) || error) && (
                 <span className="error-message" id={`error_${formId}_${id}`}>

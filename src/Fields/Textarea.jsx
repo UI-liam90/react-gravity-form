@@ -1,5 +1,5 @@
-import React from 'react';
-import InputLabel from '../FormElements/InputLabel';
+import React from "react";
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -31,7 +31,11 @@ export default ({
     customName,
   } = field;
 
-  const { Textarea = 'textarea', Label = 'label', Box = 'div' } = styledComponents || false;
+  const {
+    Textarea = "textarea",
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
   const { i18n } = props || {};
 
   return (
@@ -42,7 +46,7 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
         <InputLabel
@@ -53,14 +57,17 @@ export default ({
           isRequired={isRequired}
           styledComponent={styledComponents}
         />
-        {descriptionPlacement === 'above' && description && (
-          <div className="description">{description}</div>
+        {descriptionPlacement === "above" && description && (
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         <Textarea
           id={`input_${formId}_${id}`}
           name={customName || `input_${id}`}
           type={type}
-          value={!value ? '' : value}
+          value={!value ? "" : value}
           placeholder={placeholder}
           maxLength={maxLength}
           required={isRequired}
@@ -71,7 +78,7 @@ export default ({
           onBlur={event => {
             updateForm(event, field);
             setTouched(id);
-            setFocusClass(value !== '');
+            setFocusClass(value !== "");
           }}
           onFocus={() => setFocusClass(true)}
           aria-describedby={`error_${formId}_${id}`}
@@ -80,15 +87,18 @@ export default ({
         {maxLength && maxLength > 0 && (
           <div className="charleft">
             {i18n
-              ? `${i18n.t('maxCharachters', {
+              ? `${i18n.t("maxCharachters", {
                   length: value.length || 0,
                   maxLength: maxLength,
                 })}`
               : `${value.length || 0} of ${maxLength} max charachters`}
           </div>
         )}
-        {descriptionPlacement !== 'above' && description && (
-          <div className="description">{description}</div>
+        {descriptionPlacement !== "above" && description && (
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
@@ -99,4 +109,3 @@ export default ({
     </Box>
   );
 };
-

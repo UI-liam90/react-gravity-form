@@ -14,7 +14,7 @@ class Fileupload extends Component {
 
   inputFile = React.createRef();
 
-  onChangeHandler = (event) => {
+  onChangeHandler = event => {
     const { hasPreview, allowedExtensions } = this.props.field;
     this.setState({
       imagePreviewUrl: null,
@@ -57,9 +57,9 @@ class Fileupload extends Component {
     unsetError(field.id);
   };
 
-  prepareAllowedTypes = (types) => {
+  prepareAllowedTypes = types => {
     let accept = types.split(",");
-    accept = accept.map((str) => `.${str.replace(/\s/g, "")}`).join(", ");
+    accept = accept.map(str => `.${str.replace(/\s/g, "")}`).join(", ");
     return accept;
   };
 
@@ -143,7 +143,10 @@ class Fileupload extends Component {
             styledComponent={styledComponents}
           />
           {descriptionPlacement === "above" && description && description && (
-            <div className="description">{description}</div>
+            <div
+              className="description"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
           )}
           {hasDropzone ? (
             <GFDropzone
@@ -171,7 +174,7 @@ class Fileupload extends Component {
                 type="file"
                 required={isRequired}
                 ref={this.inputFile}
-                onChange={(event) => {
+                onChange={event => {
                   this.onChangeHandler(event);
                   updateForm(
                     { target: { value: event?.target?.files?.[0]?.name } },
@@ -180,7 +183,7 @@ class Fileupload extends Component {
                   setTouched(id);
                   unsetError(id);
                 }}
-                onBlur={(event) => {
+                onBlur={event => {
                   updateForm(
                     { target: { value: event?.target?.files?.[0]?.name } },
                     field
@@ -238,7 +241,7 @@ class Fileupload extends Component {
                 <div>
                   <button
                     type="button"
-                    onClick={(e) => this.removeFile(e, field)}
+                    onClick={e => this.removeFile(e, field)}
                   >
                     remove file
                   </button>
@@ -246,7 +249,10 @@ class Fileupload extends Component {
                 </div>
               )}
               {description && descriptionPlacement !== "above" && (
-                <div className="description">{description}</div>
+                <div
+                  className="description"
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
               )}
             </>
           )}

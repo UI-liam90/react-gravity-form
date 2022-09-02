@@ -1,5 +1,5 @@
-import fetch from 'isomorphic-unfetch';
-import { forceValidation, scrollToConfirmation } from './index';
+import fetch from "isomorphic-unfetch";
+import { forceValidation, scrollToConfirmation } from "./index";
 
 async function onSubmit(
   event,
@@ -21,7 +21,12 @@ async function onSubmit(
 
   event.preventDefault();
 
-  const isPageValid = forceValidation(activePage, formValues, setShowPageValidationMsg, setTouched);
+  const isPageValid = forceValidation(
+    activePage,
+    formValues,
+    setShowPageValidationMsg,
+    setTouched
+  );
   if (!isPageValid) return false;
 
   if (customOnSubmit) {
@@ -33,19 +38,20 @@ async function onSubmit(
     setConfirmationMessage(false);
     setErrorMessages(false);
 
-    const { formID, backendUrl, jumpToConfirmation, onSubmitSuccess, onError } = props;
-    const gfSubmissionUrl = backendUrl.substring(0, backendUrl.indexOf('/wp-json'));
+    const { formID, backendUrl, jumpToConfirmation, onSubmitSuccess, onError } =
+      props;
+    const gfSubmissionUrl = backendUrl.substring(
+      0,
+      backendUrl.indexOf("/wp-json")
+    );
 
     fetch(`${gfSubmissionUrl}/wp-json/gf/v2/forms/${formID}/submissions`, {
-      method: 'POST',
+      method: "POST",
       body: formData,
     })
-      .then((resp) => resp.json())
-      .then((response) => {
-        console.log(response);
+      .then(resp => resp.json())
+      .then(response => {
         if (response && response.is_valid) {
-          console.log('valid');
-
           if (onSubmitSuccess) {
             const res = onSubmitSuccess(response);
             if (!res) {
@@ -54,8 +60,8 @@ async function onSubmit(
           }
           const confirmationMessage = response.confirmation_message;
           const { type, link } = confirmationMessage || false;
-          if (type && link && type === 'redirect') {
-            if (typeof window !== 'undefined') {
+          if (type && link && type === "redirect") {
+            if (typeof window !== "undefined") {
               window.location.replace(link);
               return false;
             }
@@ -63,8 +69,6 @@ async function onSubmit(
           setSubmitting(false);
           setSubmitSuccess(true);
           setConfirmationMessage(confirmationMessage);
-          console.log(confirmationMessage);
-          console.log(submitSuccess);
 
           if (jumpToConfirmation) {
             scrollToConfirmation(props, wrapperRef);
@@ -75,11 +79,11 @@ async function onSubmit(
           };
         }
       })
-      .catch((error) => {
+      .catch(error => {
         const errorMessages =
           error && error.response && error.response.validation_messages
             ? error.response.validation_messages
-            : 'Something went wrong';
+            : "Something went wrong";
 
         if (onError) {
           onError(errorMessages);

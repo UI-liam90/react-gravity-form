@@ -108,7 +108,10 @@ export default ({
           styledComponent={styledComponents}
         />
         {descriptionPlacement === "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         <RSelect
           name={customName || `input_${id}`}
@@ -146,7 +149,10 @@ export default ({
           ))}
 
         {descriptionPlacement !== "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>

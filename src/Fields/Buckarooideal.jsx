@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Select from 'react-select';
-import InputLabel from '../FormElements/InputLabel';
+import React, { useState } from "react";
+import Select from "react-select";
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -32,9 +32,9 @@ export default ({
     customName,
   } = field;
 
-  let selected = '';
+  let selected = "";
   // Map options
-  const options = choices.map((choice) => {
+  const options = choices.map(choice => {
     const item = {
       value: choice.value,
       label: choice.text,
@@ -47,7 +47,7 @@ export default ({
   // Handle State
   const [selectedOption, selectOption] = useState(value || selected);
   // Handle change
-  const handleChange = (option) => {
+  const handleChange = option => {
     selectOption(option);
     const event = {
       target: {
@@ -67,7 +67,11 @@ export default ({
     setTouched(id);
     setFocusClass(selectedOption && selectedOption.value);
   };
-  const { ReactSelect, Label = 'label', Box = 'div' } = styledComponents || false;
+  const {
+    ReactSelect,
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
 
   const RSelect = ReactSelect || Select;
 
@@ -79,7 +83,7 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
         <InputLabel
@@ -90,14 +94,17 @@ export default ({
           isRequired={isRequired}
           styledComponent={styledComponents}
         />
-        {descriptionPlacement === 'above' && description && (
-          <div className="description">{description}</div>
+        {descriptionPlacement === "above" && description && (
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         <RSelect
           name={customName || `input_${id}`}
           required={isRequired}
-          value={selectedOption && selectedOption.value ? selectedOption : ''}
-          onChange={(option) => {
+          value={selectedOption && selectedOption.value ? selectedOption : ""}
+          onChange={option => {
             handleChange(option, field);
             unsetError(id);
           }}
@@ -110,8 +117,11 @@ export default ({
           // styles={customStyles}
           inputId={`input_${formId}_${id}`}
         />
-        {descriptionPlacement !== 'above' && description && (
-          <div className="description">{description}</div>
+        {descriptionPlacement !== "above" && description && (
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>

@@ -45,8 +45,11 @@ export default ({
     setEmails(email);
   };
 
-  const { Input = "input", Label = "label", Box = "div" } =
-    styledComponents || false;
+  const {
+    Input = "input",
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
   return (
     <Box
       width={width}
@@ -66,7 +69,10 @@ export default ({
           {isRequired ? <abbr>*</abbr> : null}
         </Label>
         {descriptionPlacement === "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         {emailConfirmEnabled ? (
           <>
@@ -102,12 +108,12 @@ export default ({
                     }
                     required={isRequired}
                     autoComplete="off"
-                    onChange={(event) => {
+                    onChange={event => {
                       field.subId = i;
                       updateForm(event, field);
                       unsetError(id);
                     }}
-                    onBlur={(event) => {
+                    onBlur={event => {
                       field.subId = i;
                       updateForm(event, field);
                       setTouched(id);
@@ -137,11 +143,11 @@ export default ({
               placeholder={placeholder}
               maxLength={maxLength}
               required={isRequired}
-              onChange={(event) => {
+              onChange={event => {
                 updateForm(event, field);
                 unsetError(id);
               }}
-              onBlur={(event) => {
+              onBlur={event => {
                 updateForm(event, field);
                 setTouched(id);
                 setFocusClass(value !== "");
@@ -154,7 +160,10 @@ export default ({
           </>
         )}
         {descriptionPlacement !== "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
