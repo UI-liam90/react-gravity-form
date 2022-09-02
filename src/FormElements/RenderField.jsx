@@ -148,7 +148,9 @@ const RenderField = ({
       setFocusClass={setFocusClass}
       component={
         customComponents &&
-        (customComponents[field.id] || customComponents[field.cssClass])
+        (customComponents[field.id] ||
+          customComponents[field.cssClass] ||
+          customComponents[field.inputName])
       }
       dropzoneText={dropzoneText}
       language={language}
