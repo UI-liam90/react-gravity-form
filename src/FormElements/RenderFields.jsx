@@ -52,6 +52,7 @@ const fieldTypes = [
   "address",
   "buckarooideal",
   "postcode",
+  "captcha",
 ];
 
 const honeyPotLables = ["Name", "Email", "Phone", "Comments"];

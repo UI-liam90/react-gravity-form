@@ -85,6 +85,11 @@ function adjust_date_field($form){
 }
 ```
 
+### Captcha
+
+We use [recaptcha package](https://www.npmjs.com/package/react-google-recaptcha)
+To make it work pass `sitekey` as property to GravityForm component
+
 ### Change validation messages from backend
 
 Y
