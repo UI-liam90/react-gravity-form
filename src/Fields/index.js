@@ -20,7 +20,7 @@ import Custom from "./Custom";
 import Name from "./Name";
 import Address from "./Address";
 import Buckarooideal from "./Buckarooideal";
-import Captcha from "./captcha";
+import Captcha from "./Captcha";
 
 export {
   Checkbox,
