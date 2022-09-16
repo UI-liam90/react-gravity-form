@@ -10,6 +10,7 @@ const Captcha = ({
   setTouched,
   unsetError,
   touched,
+  hideField,
   ...props
 }) => {
   const {
