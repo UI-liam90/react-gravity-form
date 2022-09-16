@@ -111,7 +111,13 @@ const GravityForm = props => {
     GFWrapper = 'div',
   } = styledComponents || false;
 
-  const { cssClass } = formData;
+  const { cssClass, button: { conditionalLogic } = {} } = formData || {};
+  const hideSubmitButton =
+  conditionalLogic &&
+  checkConditionalLogic(
+    conditionalLogic,
+    Object.keys(formValues).length > 0 ? formValues : formData.fields
+  );
 
   const handlePrevStep = e => {
     e.preventDefault();
@@ -308,6 +314,7 @@ const GravityForm = props => {
                 submitting={submitting}
                 prevStep={e => handlePrevStep(e)}
                 loadingSpinner={loadingSpinner}
+                hideSubmitButton={hideSubmitButton}
               />
             )}
           </div>

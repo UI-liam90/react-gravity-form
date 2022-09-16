@@ -9,6 +9,7 @@ const Submit = ({
   prevStep,
   Component,
   loadingSpinner,
+  hideSubmitButton,
 }) => {
   const SButton = Button || 'button';
 
@@ -17,15 +18,18 @@ const Submit = ({
       <div className={`footer${Component ? ' multiple' : ''}`}>
         <input type="hidden" name="nonce" value={formData.nonce} />
         {Component ? <Component submitting={submitting} /> : ''}
-        <SButton
-          type="submit"
-          mr={20}
-          disabled={isDisabled || submitting}
-          className={submitting ? 'loading' : undefined}
-        >
-          {formData.button.text}
-          {loadingSpinner ? <span /> : ''}
-        </SButton>
+        {!hideSubmitButton && (
+          <SButton
+            type="submit"
+            mr={20}
+            disabled={isDisabled || submitting}
+            className={submitting ? 'loading' : undefined}
+          >
+            {formData.button.text}
+            {loadingSpinner ? <span /> : ''}
+          </SButton>
+        )}
+
         {formData.lastPageButton && (
           <SButton className="prev" onClick={prevStep}>
             {formData.lastPageButton.text}
