@@ -484,8 +484,7 @@ class GravityForm extends Component {
                 return false;
               }
             }
-            const confirmationMessage = response.confirmation_message;
-            const { type, link } = confirmationMessage || false;
+            const { confirmation_message: confirmationMessage, confirmation_redirect: link, confirmation_type: type} = response || false;
             if (type && link && type === "redirect") {
               if (typeof window !== "undefined") {
                 window.location.replace(link);
@@ -495,7 +494,7 @@ class GravityForm extends Component {
             this.setState({
               submitting: false,
               submitSuccess: true,
-              confirmationMessage: response.confirmation_message,
+              confirmationMessage,
             });
             if (jumpToConfirmation) {
               this.scrollToConfirmation();
