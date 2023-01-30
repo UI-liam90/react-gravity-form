@@ -1,5 +1,5 @@
 import React from "react";
-import InputMask from "react-input-mask";
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -14,7 +14,6 @@ export default ({
   unsetError,
   setFocusClass,
   cssClass,
-  formatChars,
   ...props
 }) => {
   const {
@@ -30,19 +29,15 @@ export default ({
     labelPlacement,
     width,
     customName,
-    inputMask,
-    inputMaskValue,
   } = field;
-  const { Input = "input", Label = "label", Box = "div" } =
-    styledComponents || false;
-
-  const beforeMaskedValueChange = (newState, oldState, userInput) => {
-    // if input mask is Zip code -> make last chars uppercase automatically
-    if (inputMask && inputMaskValue === "9999 aa") {
-      newState.value = newState.value.toUpperCase();
-    }
-    return newState;
-  };
+  const {
+    Input = "input",
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
+  const { i18n } = props || {};
+  const setDisabled = () =>
+    cssClass === "field--street" || cssClass === "field--city";
 
   return (
     <Box
@@ -55,52 +50,58 @@ export default ({
       style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label
-          htmlFor={`input_${formId}_${id}`}
-          className={`gf-label ${labelPlacement}`}
-        >
-          {label}
-          {isRequired ? <abbr>*</abbr> : null}
-        </Label>
+        <InputLabel
+          formId={formId}
+          id={id}
+          label={label}
+          labelPlacement={labelPlacement}
+          isRequired={isRequired}
+          styledComponent={styledComponents}
+        />
         {descriptionPlacement === "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
-
-        <InputMask
-          formatChars={formatChars}
-          value={!value ? '' : value}
-          defaultValue={!value ? '' : value}
-          mask={inputMask && inputMaskValue}
-          onChange={(event) => {
+        <Input
+          id={`input_${formId}_${id}`}
+          name={customName || `input_${id}`}
+          type={type}
+          value={!value ? "" : value}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          required={isRequired}
+          onChange={event => {
             updateForm(event, field);
             unsetError(id);
           }}
-          onBlur={(event) => {
-            updateForm(event, field, true);
+          onBlur={event => {
+            updateForm(event, field);
             setTouched(id);
             setFocusClass(value !== "");
           }}
-          beforeMaskedValueChange={beforeMaskedValueChange}
+          disabled={setDisabled()}
           onFocus={() => setFocusClass(true)}
-        >
-          {(inputProps) => (
-            <Input
-              {...inputProps}
-              id={`input_${formId}_${id}`}
-              name={customName || `input_${id}`}
-              type={type}
-              placeholder={placeholder}
-              maxLength={maxLength}
-              required={isRequired}
-              aria-label={label}
-              aria-describedby={`error_${formId}_${id}`}
-              aria-invalid={(!!validationMessage && touched) || !!error}
-            />
-          )}
-        </InputMask>
-
+          aria-label={label}
+          aria-describedby={`error_${formId}_${id}`}
+          aria-invalid={(!!validationMessage && touched) || !!error}
+        />
+        {maxLength && maxLength > 0 && (
+          <div className="charleft">
+            {i18n
+              ? `${i18n.t("maxCharachters", {
+                  length: value.length || 0,
+                  maxLength: maxLength,
+                })}`
+              : `${value.length || 0} of ${maxLength} max charachters`}
+          </div>
+        )}
         {descriptionPlacement !== "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>

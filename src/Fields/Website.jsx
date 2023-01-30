@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -29,7 +30,11 @@ export default ({
     width,
     customName,
   } = field;
-  const { Input = 'input', Label = 'label', Box = 'div' } = styledComponents || false;
+  const {
+    Input = "input",
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
   return (
     <Box
       width={width}
@@ -38,38 +43,50 @@ export default ({
           ? `form-field error ${cssClass}`
           : `form-field ${cssClass}`
       }
-      style={{ display: hideField ? 'none' : undefined }}
+      style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label htmlFor={`input_${formId}_${id}`} className={`gf-label ${labelPlacement}`}>
-          {label}
-          {isRequired ? <abbr>*</abbr> : null}
-        </Label>
+        <InputLabel
+          formId={formId}
+          id={id}
+          label={label}
+          labelPlacement={labelPlacement}
+          isRequired={isRequired}
+          styledComponent={styledComponents}
+        />
         {descriptionPlacement === "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         <Input
           id={`input_${formId}_${id}`}
           name={customName || `input_${id}`}
           type={type}
-          value={!value ? '' : value}
+          value={!value ? "" : value}
           placeholder={placeholder}
           maxLength={maxLength}
           required={isRequired}
-          onChange={(event) => {
+          onChange={event => {
             updateForm(event, field);
             unsetError(id);
           }}
-          onBlur={(event) => {
+          onBlur={event => {
             updateForm(event, field);
             setTouched(id);
-            setFocusClass(value !== '');
+            setFocusClass(value !== "");
           }}
           onFocus={() => setFocusClass(true)}
           aria-describedby={`error_${formId}_${id}`}
           aria-invalid={(!!validationMessage && touched) || !!error}
         />
-        {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+        {descriptionPlacement !== "above" && description && (
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
+        )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
             {validationMessage || error}

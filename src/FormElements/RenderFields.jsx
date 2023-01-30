@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import RenderField from "./RenderField";
 
 const divideFieldsIntoPages = (fields, pages) => {
-  const tmpFields = pages.map((item) => []);
+  const tmpFields = pages.map(item => []);
 
   for (let i = 0; i < fields.length; i++) {
     const arr = tmpFields[fields[i].pageNumber];
@@ -18,7 +18,7 @@ const divideFieldsIntoPages = (fields, pages) => {
   return tmpFields;
 };
 
-const getMaxFieldId = (fields) => {
+const getMaxFieldId = fields => {
   let max = 0;
   for (let i = 0; i < fields.length; i++) {
     if (parseInt(fields[i].id) > max) {
@@ -47,13 +47,18 @@ const fieldTypes = [
   "consent",
   "password",
   "section",
-  "custom",
+  "scustom",
+  "name",
+  "address",
+  "buckarooideal",
+  "postcode",
+  "captcha",
 ];
 
 const honeyPotLables = ["Name", "Email", "Phone", "Comments"];
 const honeypotLabel = honeyPotLables[Math.floor(Math.random() * Math.floor(4))];
 
-export default (props) => {
+export default props => {
   const {
     fields,
     formValues,
@@ -62,6 +67,7 @@ export default (props) => {
     submitSuccess,
     touched,
     setTouched,
+    setErrorMessages,
     pagination,
     activePage,
     prevStep,
@@ -76,7 +82,9 @@ export default (props) => {
     errors,
     dropzoneText,
     pageClicked,
-    formatChars,
+    language,
+    apiKeys,
+    ...rest
   } = props;
 
   // get page indexes
@@ -91,6 +99,38 @@ export default (props) => {
     prevSteptRef.current = activePage;
   });
   const prevCount = prevSteptRef.current;
+
+  function renderFiled(field, fields) {
+    return (
+      <RenderField
+        key={`${field.formId}-${field.id}`}
+        field={field}
+        formValues={formValues}
+        submitFailed={submitFailed}
+        setTouched={setTouched}
+        setErrorMessages={setErrorMessages}
+        submitSuccess={submitSuccess}
+        updateForm={updateForm}
+        touched={touched}
+        pages={pagination && pagination.pages.length}
+        prevStep={prevStep}
+        nextStep={nextStep}
+        isNextDisabled={isNextDisabled}
+        checkConditionalLogic={checkConditionalLogic}
+        saveStateToHtmlField={saveStateToHtmlField}
+        styledComponents={styledComponents}
+        customComponents={customComponents}
+        error={errors && errors[field.id] ? errors[field.id] : false}
+        unsetError={unsetError}
+        dropzoneText={dropzoneText}
+        language={language}
+        apiKeys={apiKeys}
+        fields={fields}
+        errors={errors}
+        {...rest}
+      />
+    );
+  }
 
   return (
     <div
@@ -119,57 +159,14 @@ export default (props) => {
                 </div>
               )}
               {dividedFields[index].map(
-                (field) =>
-                  fieldTypes.includes(field.type) && (
-                    <RenderField
-                      key={`${field.formId}-${field.id}`}
-                      field={field}
-                      formValues={formValues}
-                      submitFailed={submitFailed}
-                      setTouched={setTouched}
-                      submitSuccess={submitSuccess}
-                      updateForm={updateForm}
-                      touched={touched}
-                      pages={pagination.pages.length}
-                      prevStep={prevStep}
-                      nextStep={nextStep}
-                      isNextDisabled={isNextDisabled}
-                      checkConditionalLogic={checkConditionalLogic}
-                      saveStateToHtmlField={saveStateToHtmlField}
-                      styledComponents={styledComponents}
-                      customComponents={customComponents}
-                      error={
-                        errors && errors[field.id] ? errors[field.id] : false
-                      }
-                      unsetError={unsetError}
-                      dropzoneText={dropzoneText}
-                      formatChars={formatChars}
-                    />
-                  )
+                field =>
+                  fieldTypes.includes(field.type) && renderFiled(field, fields)
               )}
             </div>
           ))
         : fields.map(
-            (field) =>
-              fieldTypes.includes(field.type) && (
-                <RenderField
-                  key={`${field.formId}-${field.id}`}
-                  field={field}
-                  formValues={formValues}
-                  submitFailed={submitFailed}
-                  setTouched={setTouched}
-                  submitSuccess={submitSuccess}
-                  updateForm={updateForm}
-                  touched={touched}
-                  checkConditionalLogic={checkConditionalLogic}
-                  styledComponents={styledComponents}
-                  error={errors && errors[field.id] ? errors[field.id] : false}
-                  unsetError={unsetError}
-                  dropzoneText={dropzoneText}
-                  customComponents={customComponents}
-                  formatChars={formatChars}
-                />
-              )
+            field =>
+              fieldTypes.includes(field.type) && renderFiled(field, fields)
           )}
       {enableHoneypot && (
         <div className="form-field gform_validation_container">
@@ -181,7 +178,7 @@ export default (props) => {
             name={`input_${maxID}`}
             id={`input_${maxID}`}
             value={honeypotValue}
-            onChange={(e) => setHoneypotValue(e.target.value)}
+            onChange={e => setHoneypotValue(e.target.value)}
             autoComplete="off"
           />
         </div>

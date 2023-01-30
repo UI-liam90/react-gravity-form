@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as FormFields from "../Fields";
 
-const frac2dec = (fraction) => {
+const frac2dec = fraction => {
   /* assumes fraction is in the form  1-1/2 or 1 1/2 */
   /* doesn't work on negative numbers */
   let fractionParts = fraction.split("-");
@@ -25,9 +25,9 @@ const frac2dec = (fraction) => {
   return parseInt(fraction);
 };
 
-const formatComponentName = (string) =>
+const formatComponentName = string =>
   string.charAt(0).toUpperCase() + string.slice(1);
-const formatWidthFromCss = (cssClass) => {
+const formatWidthFromCss = cssClass => {
   if (!cssClass) return {};
   const widthStarts = cssClass.indexOf("[");
   const widthEnds = cssClass.indexOf("]");
@@ -39,7 +39,7 @@ const formatWidthFromCss = (cssClass) => {
   const width = cssClass
     .substring(widthStarts + 1, widthEnds)
     .split(",")
-    .map((item) => frac2dec(item.replace(/\s/g, "")));
+    .map(item => frac2dec(item.replace(/\s/g, "")));
 
   const cleanedCssClass = `${cssClass.replace(
     cssClass.substring(widthStarts, widthEnds + 1),
@@ -58,6 +58,7 @@ const RenderField = ({
   submitFailed,
   submitSuccess,
   setTouched,
+  setErrorMessages,
   touched,
   updateForm,
   pages,
@@ -70,7 +71,10 @@ const RenderField = ({
   error,
   unsetError,
   dropzoneText,
-  formatChars,
+  language,
+  apiKeys,
+  errors,
+  ...props
 }) => {
   let FormComponent = FormFields[formatComponentName(field.type)];
 
@@ -103,7 +107,7 @@ const RenderField = ({
     }`
   );
 
-  const setFocusClass = (action) => {
+  const setFocusClass = action => {
     if (action) {
       if (fieldClassName.indexOf(" filled") === -1) {
         setFieldClassName(`${fieldClassName} filled`);
@@ -118,14 +122,16 @@ const RenderField = ({
       key={`el-${field.formId}-${field.id}`}
       field={field}
       value={value}
-      updateForm={updateForm}
+      updateForm={(event, field, inputID) => updateForm(event, field, inputID)}
       validationMessage={
         formValues[field.id] ? formValues[field.id].valid : false
       }
+      formValues={formValues}
       submitFailed={submitFailed}
       submitSuccess={submitSuccess}
       touched={touched[field.id]}
       setTouched={setTouched}
+      setErrorMessages={setErrorMessages}
       unsetError={unsetError}
       error={error}
       pages={pages}
@@ -143,10 +149,15 @@ const RenderField = ({
       setFocusClass={setFocusClass}
       component={
         customComponents &&
-        (customComponents[field.id] || customComponents[field.cssClass])
+        (customComponents[field.id] ||
+          customComponents[field.cssClass] ||
+          customComponents[field.inputName])
       }
       dropzoneText={dropzoneText}
-      formatChars={formatChars}
+      language={language}
+      apiKeys={apiKeys}
+      errors={errors}
+      {...props}
     />
   );
 };

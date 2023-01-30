@@ -1,30 +1,33 @@
-import React, { Component } from 'react';
-import Dropzone from 'react-dropzone';
-import GFDropzone from './GFDropzone';
+import React, { Component } from "react";
+import Dropzone from "react-dropzone";
+import GFDropzone from "./GFDropzone";
+import InputLabel from "../../FormElements/InputLabel";
 
 class Fileupload extends Component {
   state = {
     imagePreviewUrl: this.props.field.preview || null,
     selectedFile: this.props.field.preview ? true : null,
-    uploadFileText: 'No file chosen',
+    uploadFileText: "No file chosen",
     previewID: this.props.value || null,
     errorText: this.props.error || false,
   };
 
   inputFile = React.createRef();
 
-  onChangeHandler = (event) => {
+  onChangeHandler = event => {
     const { hasPreview, allowedExtensions } = this.props.field;
     this.setState({
       imagePreviewUrl: null,
       selectedFile: event.target.files[0],
-      uploadFileText: event.target.files[0] ? event.target.files[0].name : 'No file chosen',
+      uploadFileText: event.target.files[0]
+        ? event.target.files[0].name
+        : "No file chosen",
     });
 
     if (hasPreview && event.target && event.target.files[0]) {
       // check file type
       const extension = event.target.files[0].name
-        .split('.')
+        .split(".")
         .pop()
         .toLowerCase(); // file extension from input file
       const isSuccess = allowedExtensions.indexOf(extension) > -1; // is extension in acceptable types
@@ -45,14 +48,18 @@ class Fileupload extends Component {
 
   removeFilePreview = () => {
     const { field, unsetError } = this.props;
-    this.inputFile.current.value = '';
-    this.setState({ imagePreviewUrl: null, selectedFile: null, previewID: false });
+    this.inputFile.current.value = "";
+    this.setState({
+      imagePreviewUrl: null,
+      selectedFile: null,
+      previewID: false,
+    });
     unsetError(field.id);
   };
 
-  prepareAllowedTypes = (types) => {
-    let accept = types.split(',');
-    accept = accept.map((str) => `.${str.replace(/\s/g, '')}`).join(', ');
+  prepareAllowedTypes = types => {
+    let accept = types.split(",");
+    accept = accept.map(str => `.${str.replace(/\s/g, "")}`).join(", ");
     return accept;
   };
 
@@ -60,8 +67,22 @@ class Fileupload extends Component {
     this.inputFile.current.click();
   };
 
+  removeFile = (e, field) => {
+    e.preventDefault();
+    const { updateForm } = this.props;
+    updateForm({ target: { value: "" } }, field);
+    this.inputFile.current.value = "";
+    this.setState({
+      imagePreviewUrl: false,
+      selectedFile: false,
+      previewID: false,
+      uploadFileText: "No file chosen",
+    });
+  };
+
   render() {
-    const { selectedFile, uploadFileText, imagePreviewUrl, previewID } = this.state;
+    const { selectedFile, uploadFileText, imagePreviewUrl, previewID } =
+      this.state;
 
     const {
       field,
@@ -93,10 +114,14 @@ class Fileupload extends Component {
       hasPreview,
       maxFileSize,
     } = field;
-    const { Button = 'button', Label = 'label', FileWrapper = 'div', Box = 'div' } =
-      styledComponents || false;
+    const {
+      Button = "button",
+      Label = "label",
+      FileWrapper = "div",
+      Box = "div",
+    } = styledComponents || false;
 
-    const hasDropzone = cssClass.indexOf('dropzone') > -1;
+    const hasDropzone = cssClass.indexOf("dropzone") > -1;
 
     return (
       <Box
@@ -106,16 +131,24 @@ class Fileupload extends Component {
             ? `form-field error ${cssClass}`
             : `form-field ${cssClass}`
         }
-        style={{ display: hideField ? 'none' : undefined }}
+        style={{ display: hideField ? "none" : undefined }}
       >
         <FileWrapper className={type}>
-          <Label htmlFor={`input_${formID}_${id}`} className={`gf-label ${labelPlacement}`}>
-            {label}
-            {isRequired ? <abbr>*</abbr> : null}
-          </Label>
-          {descriptionPlacement === 'above' && description ? (
-            description && <div className="description">{description}</div>
-          ) : hasDropzone ? (
+          <InputLabel
+            formId={formID}
+            id={id}
+            label={label}
+            labelPlacement={labelPlacement}
+            isRequired={isRequired}
+            styledComponent={styledComponents}
+          />
+          {descriptionPlacement === "above" && description && description && (
+            <div
+              className="description"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
+          )}
+          {hasDropzone ? (
             <GFDropzone
               dropzoneText={dropzoneText}
               field={field}
@@ -127,9 +160,13 @@ class Fileupload extends Component {
               unsetError={unsetError}
             />
           ) : (
-            <React.Fragment>
+            <>
               {maxFileSize && (
-                <input type="hidden" name="MAX_FILE_SIZE" value={maxFileSize * 1048576} />
+                <input
+                  type="hidden"
+                  name="MAX_FILE_SIZE"
+                  value={maxFileSize * 1048576}
+                />
               )}
               <input
                 id={`input_${formID}_${id}`}
@@ -137,24 +174,36 @@ class Fileupload extends Component {
                 type="file"
                 required={isRequired}
                 ref={this.inputFile}
-                onChange={(event) => {
+                onChange={event => {
                   this.onChangeHandler(event);
-                  updateForm(event, field);
+                  updateForm(
+                    { target: { value: event?.target?.files?.[0]?.name } },
+                    field
+                  );
                   setTouched(id);
                   unsetError(id);
                 }}
-                onBlur={(event) => {
-                  updateForm(event, field);
+                onBlur={event => {
+                  updateForm(
+                    { target: { value: event?.target?.files?.[0]?.name } },
+                    field
+                  );
                   setTouched(id);
                 }}
-                accept={this.prepareAllowedTypes(allowedExtensions) || undefined}
+                accept={
+                  this.prepareAllowedTypes(allowedExtensions) || undefined
+                }
                 aria-label={label}
                 aria-describedby={`error_${formID}_${id}`}
                 aria-invalid={!!validationMessage || !!error}
                 hidden="hidden"
               />
               {previewID && field.preview && (
-                <input type="hidden" name="file-upload-preview" value={previewID} />
+                <input
+                  type="hidden"
+                  name="file-upload-preview"
+                  value={previewID}
+                />
               )}
               {hasPreview && (
                 <div
@@ -182,13 +231,30 @@ class Fileupload extends Component {
                 onClick={this.onButtonClickHandler}
               >
                 <Button color="yellow" tabIndex="-1" type="button">
-                  {buttonText || 'Choose a file'}
+                  {buttonText || "Choose a file"}
                 </Button>
-                <span>{uploadFileText}</span>
+                {!selectedFile && (
+                  <span className="no-file">{uploadFileText}</span>
+                )}
               </div>
-
-              {description && <div className="description">{description}</div>}
-            </React.Fragment>
+              {selectedFile && (
+                <div>
+                  <button
+                    type="button"
+                    onClick={e => this.removeFile(e, field)}
+                  >
+                    remove file
+                  </button>
+                  <span>{uploadFileText}</span>
+                </div>
+              )}
+              {description && descriptionPlacement !== "above" && (
+                <div
+                  className="description"
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
+              )}
+            </>
           )}
           {((validationMessage && touched) || error) && (
             <span className="error-message" id={`error_${id}`}>
@@ -207,4 +273,3 @@ class Fileupload extends Component {
 }
 
 export default Fileupload;
-

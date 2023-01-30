@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -29,12 +30,12 @@ export default ({
     labelPlacement,
     width,
     customName,
-    isDisabled,
   } = field;
+  const [focusClass, setFocusClasses] = useState("");
 
   let selected = "";
   // Map options
-  const options = choices.map((choice) => {
+  const options = choices.map(choice => {
     const item = {
       value: choice.value,
       label: choice.text,
@@ -47,7 +48,7 @@ export default ({
   // Handle State
   const [selectedOption, selectOption] = useState(value || selected);
   // Handle change
-  const handleChange = (option) => {
+  const handleChange = option => {
     selectOption(option);
     const event = {
       target: {
@@ -66,9 +67,13 @@ export default ({
     updateForm(event, field);
     setTouched(id);
     setFocusClass(selectedOption && selectedOption.value);
+    setFocusClasses("");
   };
-  const { ReactSelect, Label = "label", Box = "div" } =
-    styledComponents || false;
+  const {
+    ReactSelect,
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
 
   const RSelect = ReactSelect || Select;
 
@@ -77,42 +82,51 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field error ${cssClass} ${focusClass}`
+          : `form-field ${cssClass} ${focusClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
       <div className={type}>
-        <Label
-          htmlFor={`input_${formId}_${id}`}
-          className={`gf-label ${labelPlacement}`}
-        >
-          {label}
-          {isRequired ? <abbr>*</abbr> : null}
-        </Label>
+        <InputLabel
+          formId={formId}
+          id={id}
+          label={label}
+          labelPlacement={labelPlacement}
+          isRequired={isRequired}
+          styledComponent={styledComponents}
+        />
         {descriptionPlacement === "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         <RSelect
           name={customName || `input_${id}`}
           required={isRequired}
           value={selectedOption && selectedOption.value ? selectedOption : ""}
-          onChange={(option) => {
+          onChange={option => {
             handleChange(option, field);
             unsetError(id);
           }}
           onBlur={() => handleBlur()}
-          onFocus={() => setFocusClass(true)}
+          onFocus={() => {
+            setFocusClass(true);
+            setFocusClasses("is-open");
+          }}
           placeholder={placeholder}
           options={options}
           className="form-select"
           autoFocus={false}
           // styles={customStyles}
           inputId={`input_${formId}_${id}`}
-          isDisabled={isDisabled}
         />
         {descriptionPlacement !== "above" && description && (
-          <div className="description">{description}</div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
         )}
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>

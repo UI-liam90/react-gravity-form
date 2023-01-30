@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import InputLabel from "../FormElements/InputLabel";
 
 function formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
   try {
@@ -23,15 +24,13 @@ function formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
             .slice(2)
         : "")
     );
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 }
 
 class Radio extends Component {
   state = {
     otherValue: false,
-    inputValue: false
+    inputValue: false,
   };
 
   onFocus = e => {
@@ -77,7 +76,7 @@ class Radio extends Component {
       hideField,
       styledComponents,
       error,
-      unsetError
+      unsetError,
     } = this.props;
     const {
       id,
@@ -92,7 +91,7 @@ class Radio extends Component {
       labelPlacement,
       width,
       customName,
-      otherPlaceholder
+      otherPlaceholder,
     } = field;
     const { inputValue } = this.state;
 
@@ -100,7 +99,7 @@ class Radio extends Component {
       Radiogroup = "fieldset",
       Label = "legend",
       Box = "div",
-      Input = "input"
+      Input = "input",
     } = styledComponents || false;
 
     return (
@@ -114,12 +113,19 @@ class Radio extends Component {
         style={{ display: hideField ? "none" : undefined }}
       >
         <Radiogroup className="radios">
-          <Label as="legend" className={`group-label ${labelPlacement}`}>
-            {label}
-            {isRequired ? <abbr>*</abbr> : null}
-          </Label>
+          <InputLabel
+            formId={formId}
+            id={id}
+            label={label}
+            labelPlacement={labelPlacement}
+            isRequired={isRequired}
+            styledComponent={styledComponents}
+          />
           {descriptionPlacement === "above" && description && (
-            <div className="description">{description}</div>
+            <div
+              className="description"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
           )}
           {choices.map((choice, i) => (
             <div className={type} key={choice.value}>
@@ -175,7 +181,12 @@ class Radio extends Component {
               />
             </div>
           )}
-          {descriptionPlacement !== "above" && description && <div className="description">{description}</div>}
+          {descriptionPlacement !== "above" && description && (
+            <div
+              className="description"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
+          )}
         </Radiogroup>
         {((validationMessage && touched) || error) && (
           <span className="error-message" id={`error_${formId}_${id}`}>
