@@ -55,8 +55,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field form-field--email error ${cssClass}`
+          : `form-field form-field--email ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -108,12 +108,12 @@ export default ({
                     }
                     required={isRequired}
                     autoComplete="off"
-                    onChange={event => {
+                    onChange={(event) => {
                       field.subId = i;
                       updateForm(event, field);
                       unsetError(id);
                     }}
-                    onBlur={event => {
+                    onBlur={(event) => {
                       field.subId = i;
                       updateForm(event, field);
                       setTouched(id);
@@ -143,11 +143,11 @@ export default ({
               placeholder={placeholder}
               maxLength={maxLength}
               required={isRequired}
-              onChange={event => {
+              onChange={(event) => {
                 updateForm(event, field);
                 unsetError(id);
               }}
-              onBlur={event => {
+              onBlur={(event) => {
                 updateForm(event, field);
                 setTouched(id);
                 setFocusClass(value !== "");
