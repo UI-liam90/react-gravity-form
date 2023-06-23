@@ -44,11 +44,11 @@ export default ({
 
   const prefixField = inputs[0];
 
-  const options = prefixField?.choices?.map(choice => ({
+  const options = prefixField?.choices?.map((choice) => ({
     value: choice.value,
     label: choice.text,
   }));
-  let preselected = prefixField?.choices.filter(choice => choice.isSelected);
+  let preselected = prefixField?.choices.filter((choice) => choice.isSelected);
   if (preselected.length) {
     preselected = [
       {
@@ -63,7 +63,7 @@ export default ({
   const [selectedOption, selectOption] = useState(value || preselected);
 
   // Handle change
-  const selectChange = option => {
+  const selectChange = (option) => {
     selectOption(option);
   };
 
@@ -72,13 +72,13 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field form-field--name error ${cssClass}`
+          : `form-field form-field--name ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
       {inputs.map(
-        input =>
+        (input) =>
           !input.isHidden && (
             <div className={type} key={input.id}>
               <InputLabel
@@ -102,7 +102,7 @@ export default ({
                   value={
                     selectedOption && selectedOption.value ? selectedOption : ""
                   }
-                  onChange={option => {
+                  onChange={(option) => {
                     selectChange(option, field);
                     unsetError(input.id);
                   }}
@@ -124,11 +124,11 @@ export default ({
                   placeholder={input.placeholder}
                   maxLength={maxLength}
                   required={isRequired}
-                  onChange={event => {
+                  onChange={(event) => {
                     updateForm(event, field, input.id);
                     unsetError(input.id);
                   }}
-                  onBlur={event => {
+                  onBlur={(event) => {
                     updateForm(event, field);
                     setTouched(input.id);
                     setFocusClass(value !== "");
