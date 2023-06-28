@@ -39,7 +39,7 @@ export default ({
   function getCountries() {
     // Dynamic import
     import("i18n-iso-countries")
-      .then(countries => {
+      .then((countries) => {
         countries.registerLocale(
           require(`i18n-iso-countries/langs/${language ? language : "en"}.json`)
         );
@@ -47,12 +47,12 @@ export default ({
         const names = Object.values(
           countries.getNames(language ? language : "en", { select: "official" })
         )
-          .map(a => a)
+          .map((a) => a)
           .sort((a, b) => a.localeCompare(b));
 
         setNames(names);
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   }
 
   const {
@@ -64,7 +64,7 @@ export default ({
 
   const RSelect = ReactSelect || Select;
 
-  const handleChange = option => {
+  const handleChange = (option) => {
     const event =
       option && option.target
         ? option
@@ -85,8 +85,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field form-field--address error ${cssClass}`
+          : `form-field form-field--address ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -110,21 +110,21 @@ export default ({
               )}
               {key === 5 && countryNames ? (
                 <RSelect
-                  onChange={event => {
+                  onChange={(event) => {
                     handleChange(event);
                     unsetError(input.id);
                   }}
-                  onBlur={event => {
+                  onBlur={(event) => {
                     updateForm(event, field);
                     setTouched(input.id);
                     setFocusClass(value !== "");
                   }}
                   onFocus={() => setFocusClass(true)}
-                  options={countryNames.map(item => {
+                  options={countryNames.map((item) => {
                     return { label: item, value: item };
                   })}
                 >
-                  {countryNames.map(country => (
+                  {countryNames.map((country) => (
                     <option value={country}>{country}</option>
                   ))}
                 </RSelect>
@@ -138,11 +138,11 @@ export default ({
                   placeholder={input.placeholder}
                   maxLength={maxLength}
                   required={isRequired}
-                  onChange={event => {
+                  onChange={(event) => {
                     updateForm(event, field, input.id);
                     unsetError(input.id);
                   }}
-                  onBlur={event => {
+                  onBlur={(event) => {
                     updateForm(event, field);
                     setTouched(input.id);
                     setFocusClass(value !== "");

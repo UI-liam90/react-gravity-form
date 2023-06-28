@@ -34,7 +34,7 @@ export default ({
 
   let selected = "";
   // Map options
-  const options = choices.map(choice => {
+  const options = choices.map((choice) => {
     const item = {
       value: choice.value,
       label: choice.text,
@@ -47,7 +47,7 @@ export default ({
   // Handle State
   const [selectedOption, selectOption] = useState(value || selected);
   // Handle change
-  const handleChange = option => {
+  const handleChange = (option) => {
     selectOption(option);
     const event = {
       target: {
@@ -80,8 +80,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field form-field--buckarooideal error ${cssClass}`
+          : `form-field form-field--buckarooideal ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -104,7 +104,7 @@ export default ({
           name={customName || `input_${id}`}
           required={isRequired}
           value={selectedOption && selectedOption.value ? selectedOption : ""}
-          onChange={option => {
+          onChange={(option) => {
             handleChange(option, field);
             unsetError(id);
           }}

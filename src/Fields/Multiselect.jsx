@@ -33,11 +33,11 @@ export default ({
   } = field;
   const [focusClass, setFocusClasses] = useState("");
   // Map options
-  const options = choices.map(choice => ({
+  const options = choices.map((choice) => ({
     value: choice.value,
     label: choice.text,
   }));
-  let preselected = choices.filter(choice => choice.isSelected);
+  let preselected = choices.filter((choice) => choice.isSelected);
   if (preselected.length) {
     preselected = [
       {
@@ -51,12 +51,12 @@ export default ({
   // Handle State
   const [selectedOption, selectOption] = useState(value || preselected);
   // Handle change
-  const handleChange = option => {
+  const handleChange = (option) => {
     selectOption(option);
     const event = {
       target: {
         value:
-          option && option.length > 0 ? option.map(item => item.value) : "",
+          option && option.length > 0 ? option.map((item) => item.value) : "",
       },
     };
 
@@ -69,7 +69,7 @@ export default ({
       target: {
         value:
           selectedOption && selectedOption.length > 0
-            ? selectedOption.map(item => item.value)
+            ? selectedOption.map((item) => item.value)
             : "",
       },
     };
@@ -93,8 +93,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass} ${focusClass}`
-          : `form-field ${cssClass} ${focusClass}`
+          ? `form-field form-field--multi-select error ${cssClass} ${focusClass}`
+          : `form-field form-field--multi-select ${cssClass} ${focusClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -117,7 +117,7 @@ export default ({
           name={customName || `input_${id}`}
           required={isRequired}
           value={selectedOption}
-          onChange={option => {
+          onChange={(option) => {
             handleChange(option, field);
             unsetError(id);
           }}
@@ -144,7 +144,7 @@ export default ({
         />
         {selectValues &&
           selectValues.length > 0 &&
-          selectValues.map(item => (
+          selectValues.map((item) => (
             <input type="hidden" name={`input_${id}[]`} value={item.value} />
           ))}
 

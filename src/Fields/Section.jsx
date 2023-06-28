@@ -8,7 +8,7 @@ export default ({ field, hideField, styledComponents }) => {
   return (
     <Box
       width={width}
-      className={`form-field gsection ${cssClass}`}
+      className={`form-field form-field--section gsection ${cssClass}`}
       style={{ display: hideField ? "none" : undefined }}
     >
       <React.Fragment>

@@ -41,8 +41,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field consent error ${cssClass}`
-          : `form-field consent ${cssClass}`
+          ? `form-field form-field--consent consent error ${cssClass}`
+          : `form-field form-field--consent consent ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -62,7 +62,7 @@ export default ({
           />
         )}
         {inputs
-          .filter(s => !s.isHidden)
+          .filter((s) => !s.isHidden)
           .map((input, i) => (
             <React.Fragment key={`input_${formId}_${id}_${i}`}>
               {i === 0 && (
@@ -74,7 +74,7 @@ export default ({
                     value={1}
                     required={isRequired}
                     // checked={!value}
-                    onChange={event => {
+                    onChange={(event) => {
                       updateForm(event, field);
                       setTouched(id);
                       unsetError(id);

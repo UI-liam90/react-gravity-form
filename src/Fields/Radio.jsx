@@ -33,7 +33,7 @@ class Radio extends Component {
     inputValue: false,
   };
 
-  onFocus = e => {
+  onFocus = (e) => {
     let { value } = e.target;
     const { otherValue, inputValue } = this.state;
 
@@ -45,7 +45,7 @@ class Radio extends Component {
     this.setState({ inputValue: value });
   };
 
-  onBlur = e => {
+  onBlur = (e) => {
     const { value } = e.target;
     if (value.replace(" ", "") == "") {
       this.setState({ inputValue: this.state.otherValue });
@@ -55,13 +55,13 @@ class Radio extends Component {
     }
   };
 
-  onChange = e => {
+  onChange = (e) => {
     const { value } = e.target;
 
     this.setState({ inputValue: value });
   };
 
-  setFocus = e => {
+  setFocus = (e) => {
     this.otherChoise.focus();
   };
 
@@ -107,8 +107,8 @@ class Radio extends Component {
         width={width}
         className={
           (validationMessage && touched) || error
-            ? `form-field error ${cssClass}`
-            : `form-field ${cssClass}`
+            ? `form-field form-field--radio error ${cssClass}`
+            : `form-field form-field--radio ${cssClass}`
         }
         style={{ display: hideField ? "none" : undefined }}
       >
@@ -135,7 +135,7 @@ class Radio extends Component {
                 name={customName || `input_${id}`}
                 value={choice.value}
                 checked={value === choice.value}
-                onChange={event => {
+                onChange={(event) => {
                   updateForm(event, field);
                   setTouched(id);
                   unsetError(id);
@@ -153,31 +153,31 @@ class Radio extends Component {
                 type="radio"
                 name={`input_${id}`}
                 value={inputValue}
-                onChange={event => {
+                onChange={(event) => {
                   updateForm(event, field);
                   setTouched(id);
                   unsetError(id);
                 }}
-                ref={e => (this.otherRadio = e)}
-                onFocus={e => this.setFocus(e)}
+                ref={(e) => (this.otherRadio = e)}
+                onFocus={(e) => this.setFocus(e)}
               />
               <Input
                 id={`input_${formId}_${id}_${choices.length}_other`}
                 type="text"
                 placeholder={otherPlaceholder || "Other"}
                 value={inputValue || ""}
-                onFocus={e => this.onFocus(e)}
-                onBlur={e => {
+                onFocus={(e) => this.onFocus(e)}
+                onBlur={(e) => {
                   updateForm(e, field);
                   this.onBlur(e);
                 }}
-                onChange={e => {
+                onChange={(e) => {
                   // updateForm(e, field);
                   // setTouched(id);
                   this.onChange(e);
                   unsetError(id);
                 }}
-                ref={e => (this.otherChoise = e)}
+                ref={(e) => (this.otherChoise = e)}
               />
             </div>
           )}

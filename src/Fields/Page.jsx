@@ -1,6 +1,13 @@
-import React from 'react';
+import React from "react";
 
-export default ({ field, pages, nextStep, prevStep, isNextDisabled, styledComponents }) => {
+export default ({
+  field,
+  pages,
+  nextStep,
+  prevStep,
+  isNextDisabled,
+  styledComponents,
+}) => {
   const {
     id,
     type,
@@ -18,17 +25,22 @@ export default ({ field, pages, nextStep, prevStep, isNextDisabled, styledCompon
     pageNumber,
   } = field;
 
-  const { Box = 'div', Button = 'button' } = styledComponents || false;
+  const { Box = "div", Button = "button" } = styledComponents || false;
 
   return (
-    <Box className="form-field">
+    <Box className="form-field form-field--page">
       {pageNumber - 1 > 1 && (
-        <Button className="prev" mr={10} onClick={e => prevStep(e)}>
+        <Button className="prev" mr={10} onClick={(e) => prevStep(e)}>
           {previousButton.text}
         </Button>
       )}
       {pageNumber <= pages && (
-        <Button className="next" onClick={e => nextStep(e)} mt={20} disabled={isNextDisabled}>
+        <Button
+          className="next"
+          onClick={(e) => nextStep(e)}
+          mt={20}
+          disabled={isNextDisabled}
+        >
           {nextButton.text}
         </Button>
       )}

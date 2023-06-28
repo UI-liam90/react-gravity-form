@@ -33,8 +33,8 @@ const Captcha = ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field captcha error ${cssClass}`
-          : `form-field captcha ${cssClass}`
+          ? `form-field form-field--captcha captcha error ${cssClass}`
+          : `form-field form-field--captcha captcha ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >

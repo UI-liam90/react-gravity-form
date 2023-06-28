@@ -41,8 +41,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field form-field--checkbox error ${cssClass}`
+          : `form-field form-field--checkbox ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -69,15 +69,16 @@ export default ({
               name={customName || `input_${inputs[i].id}`}
               value={choice.value}
               checked={value.includes(choice.value)}
-              onChange={event => {
+              onChange={(event) => {
                 updateForm(event, field);
                 setTouched(id);
                 unsetError(id);
               }}
             />
-            <label htmlFor={`input_${formId}_${inputs[i].id}`}>
-              {choice.text}
-            </label>
+            <label
+              htmlFor={`input_${formId}_${inputs[i].id}`}
+              dangerouslySetInnerHTML={{ __html: choice.text }}
+            />
           </div>
         ))}
         {descriptionPlacement !== "above" && description && (

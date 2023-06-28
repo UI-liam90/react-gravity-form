@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InputLabel from '../FormElements/InputLabel'
+import InputLabel from "../FormElements/InputLabel";
 
 export default ({
   field,
@@ -33,8 +33,11 @@ export default ({
     minPasswordStrength,
   } = field;
 
-  const { Input = "input", Label = "label", Box = "div" } =
-    styledComponents || false;
+  const {
+    Input = "input",
+    Label = "label",
+    Box = "div",
+  } = styledComponents || false;
 
   const [passwords, setPasswords] = useState(inputs);
   const [passwordStrength, setPasswordStrength] = useState("blank");
@@ -89,8 +92,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field form-field--password error ${cssClass}`
+          : `form-field form-field--password ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -186,25 +189,26 @@ export default ({
             }}
           />
         )}
-        {!((validationMessage && touched) || error) && passwordStrengthEnabled && (
-          <React.Fragment>
-            <div
-              id={`input_${formId}_${id}_strength_indicator`}
-              className={`gfield_password_strength ${passwordStrength}`}
-            >
-              {passwordStrength && passwordStrength !== "blank"
-                ? passwordStrength
-                : "Strength indicator"}
-            </div>
-            <input
-              type="hidden"
-              className="gform_hidden"
-              id={`input_${formId}_${id}_strength`}
-              name={`input_${id}_strength`}
-              value={passwordStrength}
-            />
-          </React.Fragment>
-        )}
+        {!((validationMessage && touched) || error) &&
+          passwordStrengthEnabled && (
+            <React.Fragment>
+              <div
+                id={`input_${formId}_${id}_strength_indicator`}
+                className={`gfield_password_strength ${passwordStrength}`}
+              >
+                {passwordStrength && passwordStrength !== "blank"
+                  ? passwordStrength
+                  : "Strength indicator"}
+              </div>
+              <input
+                type="hidden"
+                className="gform_hidden"
+                id={`input_${formId}_${id}_strength`}
+                name={`input_${id}_strength`}
+                value={passwordStrength}
+              />
+            </React.Fragment>
+          )}
       </div>
     </Box>
   );

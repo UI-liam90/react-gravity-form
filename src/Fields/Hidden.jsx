@@ -18,7 +18,7 @@ export default ({
     prePopulated = queries[field.inputName];
   }
   return (
-    <div className={cssClass}>
+    <div className={`form-field form-field--hidden ${cssClass}`}>
       <input
         name={customName || `input_${id}`}
         type={type}

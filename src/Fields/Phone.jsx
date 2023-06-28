@@ -41,8 +41,8 @@ export default ({
       width={width}
       className={
         (validationMessage && touched) || error
-          ? `form-field error ${cssClass}`
-          : `form-field ${cssClass}`
+          ? `form-field form-field--phone error ${cssClass}`
+          : `form-field form-field--phone ${cssClass}`
       }
       style={{ display: hideField ? "none" : undefined }}
     >
@@ -69,11 +69,11 @@ export default ({
           placeholder={placeholder}
           maxLength={maxLength}
           required={isRequired}
-          onChange={event => {
+          onChange={(event) => {
             updateForm(event, field);
             unsetError(id);
           }}
-          onBlur={event => {
+          onBlur={(event) => {
             updateForm(event, field);
             setTouched(id);
             setFocusClass(value !== "");
