@@ -77,6 +77,14 @@ export default ({
       }
       style={{ display: hideField ? "none" : undefined }}
     >
+      <InputLabel
+        formId={formId}
+        id={id}
+        label={label}
+        labelPlacement={labelPlacement}
+        isRequired={isRequired}
+        styledComponent={styledComponents}
+      />
       {inputs.map(
         (input) =>
           !input.isHidden && (
