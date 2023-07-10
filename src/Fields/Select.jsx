@@ -102,7 +102,9 @@ export default ({
             dangerouslySetInnerHTML={{ __html: description }}
           />
         )}
-        <RSelect
+        <Select
+          className="react-select-container"
+          classNamePrefix="react-select"
           name={customName || `input_${id}`}
           required={isRequired}
           value={selectedOption && selectedOption.value ? selectedOption : ""}
