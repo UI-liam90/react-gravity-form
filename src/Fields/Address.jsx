@@ -40,12 +40,10 @@ export default ({
     // Dynamic import
     import("i18n-iso-countries")
       .then((countries) => {
-        countries.registerLocale(
-          require(`i18n-iso-countries/langs/${language ? language : "en"}.json`)
-        );
+        countries.registerLocale(require(`i18n-iso-countries/langs/en.json`));
 
         const names = Object.values(
-          countries.getNames(language ? language : "en", { select: "official" })
+          countries.getNames("en", { select: "official" })
         )
           .map((a) => a)
           .sort((a, b) => a.localeCompare(b));
