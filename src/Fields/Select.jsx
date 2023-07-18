@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select";
+import { Select } from "react-functional-select";
 import InputLabel from "../FormElements/InputLabel";
 
 export default ({
@@ -104,16 +104,15 @@ export default ({
         )}
         <Select
           className="react-select-container"
-          classNamePrefix="react-select"
           name={customName || `input_${id}`}
           required={isRequired}
           value={selectedOption && selectedOption.value ? selectedOption : ""}
-          onChange={(option) => {
+          onOptionChange={(option) => {
             handleChange(option, field);
             unsetError(id);
           }}
-          onBlur={() => handleBlur()}
-          onFocus={() => {
+          onInputBlur={() => handleBlur()}
+          onInputFocus={() => {
             setFocusClass(true);
             setFocusClasses("is-open");
           }}

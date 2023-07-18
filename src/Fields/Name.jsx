@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select";
+import { Select } from "react-functional-select";
 import InputLabel from "../FormElements/InputLabel";
 
 export default ({
@@ -104,17 +104,17 @@ export default ({
                 />
               )}
               {input.inputType === "radio" ? (
-                <RSelect
+                <Select
                   name={customName || `input_${input.id}`}
                   required={isRequired}
                   value={
                     selectedOption && selectedOption.value ? selectedOption : ""
                   }
-                  onChange={(option) => {
+                  onOptionChange={(option) => {
                     selectChange(option, field);
                     unsetError(input.id);
                   }}
-                  onFocus={() => setFocusClass(true)}
+                  onInputFocus={() => setFocusClass(true)}
                   placeholder={input.placeholder}
                   options={options}
                   className="form-select"
