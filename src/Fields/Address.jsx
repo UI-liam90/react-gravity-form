@@ -77,9 +77,9 @@ export default ({
     updateForm(event, field);
   };
 
-  useEffect(() => {
-    getCountries();
-  }, []);
+  // useEffect(() => {
+  //   getCountries();
+  // }, []);
 
   return (
     <Box

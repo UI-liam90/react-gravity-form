@@ -104,7 +104,6 @@ export default ({
         )}
         <Select
           className="react-select-container"
-          classNamePrefix="react-select"
           name={customName || `input_${id}`}
           required={isRequired}
           value={selectedOption && selectedOption.value ? selectedOption : ""}
@@ -119,9 +118,7 @@ export default ({
           }}
           placeholder={placeholder}
           options={options}
-          className="form-select"
           autoFocus={false}
-          // styles={customStyles}
           inputId={`input_${formId}_${id}`}
         />
         {descriptionPlacement !== "above" && description && (
