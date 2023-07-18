@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select } from "react-functional-select";
+import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
 import { getNames } from "country-list";
 
@@ -87,17 +87,17 @@ export default ({
                 />
               )}
               {key === 5 && countryNames ? (
-                <Select
-                  onOptionChange={(event) => {
+                <RSelect
+                  onChange={(event) => {
                     handleChange(event);
                     unsetError(input.id);
                   }}
-                  onInputBlur={(event) => {
+                  onBlur={(event) => {
                     updateForm(event, field);
                     setTouched(input.id);
                     setFocusClass(value !== "");
                   }}
-                  onInputFocus={() => setFocusClass(true)}
+                  onFocus={() => setFocusClass(true)}
                   options={countryNames.map((item) => {
                     return { label: item, value: item };
                   })}
@@ -105,7 +105,7 @@ export default ({
                   {countryNames.map((country) => (
                     <option value={country}>{country}</option>
                   ))}
-                </Select>
+                </RSelect>
               ) : (
                 <Input
                   id={`input_${formId}_${input.id}`}
