@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Select from "react-select-zero";
+import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
 import { getNames } from "country-list";
 

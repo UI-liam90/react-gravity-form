@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select-zero";
+import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
 
 export default ({

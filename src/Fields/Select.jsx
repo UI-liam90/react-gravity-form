@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select from "react-select-zero";
+import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
 
 export default ({
@@ -104,6 +104,7 @@ export default ({
         )}
         <Select
           className="react-select-container"
+          classNamePrefix="react-select"
           name={customName || `input_${id}`}
           required={isRequired}
           value={selectedOption && selectedOption.value ? selectedOption : ""}
