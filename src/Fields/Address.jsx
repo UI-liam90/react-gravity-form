@@ -37,25 +37,6 @@ export default ({
 
   const [countryNames, setNames] = useState(getNames());
 
-  // function getCountries() {
-  //   // Dynamic import
-  //   import("i18n-iso-countries")
-  //     .then((countries) => {
-  //       countries.registerLocale(
-  //         require(`i18n-iso-countries/langs/${language ? language : "en"}.json`)
-  //       );
-
-  //       const names = Object.values(
-  //         countries.getNames(language ? language : "en", { select: "official" })
-  //       )
-  //         .map((a) => a)
-  //         .sort((a, b) => a.localeCompare(b));
-
-  //       setNames(names);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }
-
   const {
     Input = "input",
     Label = "label",
@@ -76,10 +57,6 @@ export default ({
           };
     updateForm(event, field);
   };
-
-  // useEffect(() => {
-  //   getCountries();
-  // }, []);
 
   return (
     <Box
