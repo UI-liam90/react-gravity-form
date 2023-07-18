@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
+import { getNames } from "country-list";
 
 export default ({
   field,
@@ -34,26 +35,26 @@ export default ({
     customName,
   } = field;
 
-  const [countryNames, setNames] = useState([]);
+  const [countryNames, setNames] = useState(getNames());
 
-  function getCountries() {
-    // Dynamic import
-    import("i18n-iso-countries")
-      .then((countries) => {
-        countries.registerLocale(
-          require(`i18n-iso-countries/langs/${language ? language : "en"}.json`)
-        );
+  // function getCountries() {
+  //   // Dynamic import
+  //   import("i18n-iso-countries")
+  //     .then((countries) => {
+  //       countries.registerLocale(
+  //         require(`i18n-iso-countries/langs/${language ? language : "en"}.json`)
+  //       );
 
-        const names = Object.values(
-          countries.getNames(language ? language : "en", { select: "official" })
-        )
-          .map((a) => a)
-          .sort((a, b) => a.localeCompare(b));
+  //       const names = Object.values(
+  //         countries.getNames(language ? language : "en", { select: "official" })
+  //       )
+  //         .map((a) => a)
+  //         .sort((a, b) => a.localeCompare(b));
 
-        setNames(names);
-      })
-      .catch((error) => console.log(error));
-  }
+  //       setNames(names);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }
 
   const {
     Input = "input",
