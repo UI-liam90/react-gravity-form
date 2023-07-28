@@ -1,8 +1,9 @@
-import React from 'react';
-import ReactSelect from 'react-select';
-import ValidationMessage from '../../FormElements/ValidationMessage'
+import React from "react";
+import ReactSelect from "react-select";
+import ValidationMessage from "../../FormElements/ValidationMessage";
+import { v4 } from "uuid";
 
-export default ({defaultProps}) => {
+export default ({ defaultProps }) => {
   const {
     field,
     value,
@@ -22,7 +23,7 @@ export default ({defaultProps}) => {
 
   const { id, isRequired, formId, type, customName } = field;
 
-  const RSelect = ReactSelect || 'select';
+  const RSelect = ReactSelect || "select";
 
   const getNumberDropdown = (i) => {
     const options = [];
@@ -31,8 +32,14 @@ export default ({defaultProps}) => {
     const monthDropdownID = 1;
 
     const startNumber = i === dayDropdownID || i === monthDropdownID ? 1 : 1920;
-    const endNumber = i === dayDropdownID ? 31 : i === monthDropdownID ? 12 : new Date().getFullYear();
-    const selectedValue = i === dayDropdownID ? 1 : i === monthDropdownID ? 3 : 0;
+    const endNumber =
+      i === dayDropdownID
+        ? 31
+        : i === monthDropdownID
+        ? 12
+        : new Date().getFullYear();
+    const selectedValue =
+      i === dayDropdownID ? 1 : i === monthDropdownID ? 3 : 0;
 
     const increment = startNumber < endNumber ? 1 : -1;
     for (let i = startNumber; i !== endNumber + increment; i += increment) {
@@ -72,45 +79,49 @@ export default ({defaultProps}) => {
 
   return (
     <>
-      {formattedInputs
-      && formattedInputs.map((input, index) => (
-        <div key={input.id} className="gfield_date_dropdown">
-          <RSelect
-            required={isRequired}
-            placeholder={input.placeholder}
-            options={getNumberDropdown(index)}
-            value={getValueByIndex(index)}
-            id={`input_${formId}_${id}_${index + 1}`}
-            name={customName || `input_${id}[]`}
-            onBlur={(event) => {
-              const value = getValueByIndex(index);
-              if (!value) {
+      {formattedInputs &&
+        formattedInputs.map((input, index) => (
+          <div key={v4()} className="gfield_date_dropdown">
+            <RSelect
+              required={isRequired}
+              placeholder={input.placeholder}
+              options={getNumberDropdown(index)}
+              value={getValueByIndex(index)}
+              id={`input_${formId}_${id}_${index + 1}`}
+              name={customName || `input_${id}[]`}
+              onBlur={(event) => {
+                const value = getValueByIndex(index);
+                if (!value) {
+                  const tmpState = {
+                    ...field,
+                    subId: index,
+                    dateLabel: input.label,
+                  };
+                  handleChange({ value: "" }, tmpState, index);
+                }
+                setTouched(id);
+                unsetError(id);
+                setFocusClass(input.value !== "");
+              }}
+              onChange={(option) => {
                 const tmpState = {
                   ...field,
                   subId: index,
                   dateLabel: input.label,
                 };
-                handleChange({ value: '' }, tmpState, index);
-              }
-              setTouched(id);
-              unsetError(id);
-              setFocusClass(input.value !== '');
-            }}
-            onChange={(option) => {
-              const tmpState = {
-                ...field,
-                subId: index,
-                dateLabel: input.label,
-              };
-              handleChange(option, tmpState, index);
-              unsetError(id);
-            }}
-            onFocus={() => setFocusClass(true)}
-          />
-        </div>
-      ))}
+                handleChange(option, tmpState, index);
+                unsetError(id);
+              }}
+              onFocus={() => setFocusClass(true)}
+            />
+          </div>
+        ))}
       {((validationMessage && touched) || error) && (
-        <ValidationMessage validationMessage={validationMessage} error={error} id={id} />
+        <ValidationMessage
+          validationMessage={validationMessage}
+          error={error}
+          id={id}
+        />
       )}
     </>
   );

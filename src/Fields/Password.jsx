@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import InputLabel from "../FormElements/InputLabel";
+import { v4 } from "uuid";
 
 export default ({
   field,
@@ -121,7 +122,7 @@ export default ({
               (input, i) =>
                 !input.isHidden && (
                   <span
-                    key={`input_${formId}_${input.id}`}
+                    key={v4()}
                     className={`${
                       inputs.length > 1
                         ? `ginput_${i === 0 ? "left" : "right"}`

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import InputLabel from "../FormElements/InputLabel";
+import { v4 } from "uuid";
 
 function formatMoney(amount, decimalCount = 2, decimal = ".", thousands = ",") {
   try {
@@ -128,7 +129,7 @@ class Radio extends Component {
             />
           )}
           {choices.map((choice, i) => (
-            <div className={type} key={choice.value}>
+            <div className={type} key={v4()}>
               <input
                 id={`input_${formId}_${id}_${i}`}
                 type="radio"

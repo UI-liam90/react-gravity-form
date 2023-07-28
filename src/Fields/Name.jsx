@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
+import { v4 } from "uuid";
 
 export default ({
   field,
@@ -88,7 +89,7 @@ export default ({
       {inputs.map(
         (input) =>
           !input.isHidden && (
-            <div className={type} key={input.id}>
+            <div className={type} key={v4()}>
               <InputLabel
                 formId={formId}
                 id={input.id}
@@ -125,7 +126,7 @@ export default ({
               ) : (
                 <Input
                   id={`input_${formId}_${input.id}`}
-                  key={input.id}
+                  key={v4()}
                   name={customName || `input_${input.id}`}
                   type={type}
                   value={!value ? "" : value[input.id]}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { v4 } from "uuid";
 
 export default ({
   field,
@@ -80,7 +81,7 @@ export default ({
               inputs.length &&
               inputs.map((input, i) => (
                 <span
-                  key={`input_${formId}_${input.id}`}
+                  key={v4()}
                   className={`${
                     inputs.length > 1
                       ? `ginput_${i === 0 ? "left" : "right"}`

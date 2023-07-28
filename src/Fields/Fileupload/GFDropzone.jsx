@@ -1,43 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { v4 } from "uuid";
 
 function Accept({ dropzoneText, ...props }) {
   const { field } = props;
   const { defaultValue } = field || [];
   const [files, setFiles] = useState(defaultValue ? [defaultValue] : []);
-  const [cssClass, setcssClass] = useState('dropzone');
+  const [cssClass, setcssClass] = useState("dropzone");
   const {
- getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject 
-} = useDropzone({
-    accept: 'image/*',
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    accept: "image/*",
     onDrop: (event) => {
       const {
- id, formID, field, isRequired, updateForm, setTouched, unsetError 
-} = props;
+        id,
+        formID,
+        field,
+        isRequired,
+        updateForm,
+        setTouched,
+        unsetError,
+      } = props;
       setFiles(
-        event.map(file => Object.assign(file, {
+        event.map((file) =>
+          Object.assign(file, {
             preview: URL.createObjectURL(file),
-          }),),
+          })
+        )
       );
       updateForm(event, field);
       setTouched(id);
       unsetError(id);
     },
     onDragOver: (event) => {
-      setcssClass('dropzone over');
+      setcssClass("dropzone over");
     },
     onDragLeave: (event) => {
-      setcssClass('dropzone');
+      setcssClass("dropzone");
     },
     onDropAccepted: (event) => {
-      setcssClass('dropzone');
+      setcssClass("dropzone");
     },
   });
 
-  const thumbs =    files
-    && !!files.length > 0
-    && files.map(file => (
-      <div key={file.name}>
+  const thumbs =
+    files &&
+    !!files.length > 0 &&
+    files.map((file) => (
+      <div key={v4()}>
         <div>
           <img src={file.preview} />
         </div>
@@ -48,12 +62,13 @@ function Accept({ dropzoneText, ...props }) {
   useEffect(
     () => () => {
       // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach(file => URL.revokeObjectURL(file.preview));
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
     },
-    [files],
+    [files]
   );
 
-  const text = dropzoneText || 'Drag \'n\' drop some files here, or click to select files';
+  const text =
+    dropzoneText || "Drag 'n' drop some files here, or click to select files";
 
   return (
     <div className="container">

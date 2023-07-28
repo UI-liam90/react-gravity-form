@@ -1,5 +1,6 @@
 import React from "react";
 import InputLabel from "../FormElements/InputLabel";
+import { v4 } from "uuid";
 
 export default ({
   field,
@@ -64,7 +65,7 @@ export default ({
         {inputs
           .filter((s) => !s.isHidden)
           .map((input, i) => (
-            <React.Fragment key={`input_${formId}_${id}_${i}`}>
+            <React.Fragment key={v4()}>
               {i === 0 && (
                 <React.Fragment>
                   <input

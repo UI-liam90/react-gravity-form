@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import * as FormFields from "../Fields";
+import { v4 } from "uuid";
 
-const frac2dec = fraction => {
+const frac2dec = (fraction) => {
   /* assumes fraction is in the form  1-1/2 or 1 1/2 */
   /* doesn't work on negative numbers */
   let fractionParts = fraction.split("-");
@@ -25,9 +26,9 @@ const frac2dec = fraction => {
   return parseInt(fraction);
 };
 
-const formatComponentName = string =>
+const formatComponentName = (string) =>
   string.charAt(0).toUpperCase() + string.slice(1);
-const formatWidthFromCss = cssClass => {
+const formatWidthFromCss = (cssClass) => {
   if (!cssClass) return {};
   const widthStarts = cssClass.indexOf("[");
   const widthEnds = cssClass.indexOf("]");
@@ -39,7 +40,7 @@ const formatWidthFromCss = cssClass => {
   const width = cssClass
     .substring(widthStarts + 1, widthEnds)
     .split(",")
-    .map(item => frac2dec(item.replace(/\s/g, "")));
+    .map((item) => frac2dec(item.replace(/\s/g, "")));
 
   const cleanedCssClass = `${cssClass.replace(
     cssClass.substring(widthStarts, widthEnds + 1),
@@ -107,7 +108,7 @@ const RenderField = ({
     }`
   );
 
-  const setFocusClass = action => {
+  const setFocusClass = (action) => {
     if (action) {
       if (fieldClassName.indexOf(" filled") === -1) {
         setFieldClassName(`${fieldClassName} filled`);
@@ -119,7 +120,7 @@ const RenderField = ({
 
   return (
     <FormComponent
-      key={`el-${field.formId}-${field.id}`}
+      key={v4()}
       field={field}
       value={value}
       updateForm={(event, field, inputID) => updateForm(event, field, inputID)}

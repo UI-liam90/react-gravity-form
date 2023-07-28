@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import RenderField from "./RenderField";
+import { v4 } from "uuid";
 
 const divideFieldsIntoPages = (fields, pages) => {
-  const tmpFields = pages.map(item => []);
+  const tmpFields = pages.map((item) => []);
 
   for (let i = 0; i < fields.length; i++) {
     const arr = tmpFields[fields[i].pageNumber];
@@ -18,7 +19,7 @@ const divideFieldsIntoPages = (fields, pages) => {
   return tmpFields;
 };
 
-const getMaxFieldId = fields => {
+const getMaxFieldId = (fields) => {
   let max = 0;
   for (let i = 0; i < fields.length; i++) {
     if (parseInt(fields[i].id) > max) {
@@ -58,7 +59,7 @@ const fieldTypes = [
 const honeyPotLables = ["Name", "Email", "Phone", "Comments"];
 const honeypotLabel = honeyPotLables[Math.floor(Math.random() * Math.floor(4))];
 
-export default props => {
+export default (props) => {
   const {
     fields,
     formValues,
@@ -103,7 +104,7 @@ export default props => {
   function renderFiled(field, fields) {
     return (
       <RenderField
-        key={`${field.formId}-${field.id}`}
+        key={v4()}
         field={field}
         formValues={formValues}
         submitFailed={submitFailed}
@@ -151,7 +152,7 @@ export default props => {
                   ? " prevStep"
                   : ""
               }`}
-              key={`page-${index}`}
+              key={v4()}
             >
               {page && (
                 <div className="gf_step">
@@ -159,13 +160,13 @@ export default props => {
                 </div>
               )}
               {dividedFields[index].map(
-                field =>
+                (field) =>
                   fieldTypes.includes(field.type) && renderFiled(field, fields)
               )}
             </div>
           ))
         : fields.map(
-            field =>
+            (field) =>
               fieldTypes.includes(field.type) && renderFiled(field, fields)
           )}
       {enableHoneypot && (
@@ -178,7 +179,7 @@ export default props => {
             name={`input_${maxID}`}
             id={`input_${maxID}`}
             value={honeypotValue}
-            onChange={e => setHoneypotValue(e.target.value)}
+            onChange={(e) => setHoneypotValue(e.target.value)}
             autoComplete="off"
           />
         </div>
