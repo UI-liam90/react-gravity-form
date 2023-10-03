@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
 import { getNames } from "country-list";
@@ -38,6 +38,8 @@ export default ({
 
   const [countryNames, setNames] = useState(getNames());
 
+  const inputID = useMemo(() => v4(), []);
+
   const {
     Input = "input",
     Label = "label",
@@ -72,7 +74,7 @@ export default ({
       {inputs?.map(
         (input, key) =>
           !input.isHidden && (
-            <div className={type} key={v4()}>
+            <div className={type} key={`${inputID}_${input.id}_${key}`}>
               <InputLabel
                 formId={formId}
                 id={input.id}
@@ -89,7 +91,7 @@ export default ({
               )}
               {key === 5 && countryNames ? (
                 <RSelect
-                  key={v4()}
+                  key={`${inputID}_${input.id}_${key}`}
                   onChange={(event) => {
                     handleChange(event);
                     unsetError(input.id);
@@ -111,7 +113,7 @@ export default ({
               ) : (
                 <Input
                   id={`input_${formId}_${input.id}`}
-                  key={v4()}
+                  key={`${inputID}_${input.id}_${key}`}
                   name={customName || `input_${input.id}`}
                   type={type}
                   value={!value ? "" : value[input.id]}

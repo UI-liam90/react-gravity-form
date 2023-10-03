@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import * as FormFields from "../Fields";
 import { v4 } from "uuid";
 
@@ -117,10 +117,10 @@ const RenderField = ({
       setFieldClassName(fieldClassName.replace(" filled", ""));
     }
   };
-
+  const inputID = useMemo(() => v4(), []);
   return (
     <FormComponent
-      key={v4()}
+      key={inputID}
       field={field}
       value={value}
       updateForm={(event, field, inputID) => updateForm(event, field, inputID)}

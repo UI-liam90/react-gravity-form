@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import InputLabel from "../FormElements/InputLabel";
 import { v4 } from "uuid";
 
@@ -39,6 +39,8 @@ export default ({
     Label = "label",
     Box = "div",
   } = styledComponents || false;
+
+  const inputID = useMemo(() => v4(), []);
 
   const [passwords, setPasswords] = useState(inputs);
   const [passwordStrength, setPasswordStrength] = useState("blank");
@@ -122,7 +124,7 @@ export default ({
               (input, i) =>
                 !input.isHidden && (
                   <span
-                    key={v4()}
+                    key={`${inputID}_${input.id}_${i}`}
                     className={`${
                       inputs.length > 1
                         ? `ginput_${i === 0 ? "left" : "right"}`

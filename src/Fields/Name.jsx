@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Select from "react-select";
 import InputLabel from "../FormElements/InputLabel";
 import { v4 } from "uuid";
@@ -40,6 +40,8 @@ export default ({
     Label = "label",
     Box = "div",
   } = styledComponents || false;
+
+  const inputID = useMemo(() => v4(), []);
 
   const RSelect = ReactSelect || Select;
 
@@ -87,9 +89,9 @@ export default ({
         styledComponent={styledComponents}
       />
       {inputs.map(
-        (input) =>
+        (input, i) =>
           !input.isHidden && (
-            <div className={type} key={v4()}>
+            <div className={type} key={`${inputID}_${input.id}_${i}`}>
               <InputLabel
                 formId={formId}
                 id={input.id}
@@ -126,7 +128,7 @@ export default ({
               ) : (
                 <Input
                   id={`input_${formId}_${input.id}`}
-                  key={v4()}
+                  key={`${inputID}_${input.id}_${i}`}
                   name={customName || `input_${input.id}`}
                   type={type}
                   value={!value ? "" : value[input.id]}

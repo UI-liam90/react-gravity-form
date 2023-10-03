@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useMemo } from "react";
 import InputLabel from "../FormElements/InputLabel";
 import { v4 } from "uuid";
 
@@ -102,7 +102,7 @@ class Radio extends Component {
       Box = "div",
       Input = "input",
     } = styledComponents || false;
-
+    const inputID = useMemo(() => v4(), []);
     return (
       <Box
         width={width}
@@ -129,7 +129,7 @@ class Radio extends Component {
             />
           )}
           {choices.map((choice, i) => (
-            <div className={type} key={v4()}>
+            <div className={type} key={`${inputID}_${id}_${i}`}>
               <input
                 id={`input_${formId}_${id}_${i}`}
                 type="radio"

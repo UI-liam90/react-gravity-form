@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import RenderField from "./RenderField";
 import { v4 } from "uuid";
 
@@ -100,11 +100,12 @@ export default (props) => {
     prevSteptRef.current = activePage;
   });
   const prevCount = prevSteptRef.current;
-
+  const inputID = useMemo(() => v4(), []);
   function renderFiled(field, fields) {
+    const inputFieldID = useMemo(() => v4(), []);
     return (
       <RenderField
-        key={v4()}
+        key={inputFieldID}
         field={field}
         formValues={formValues}
         submitFailed={submitFailed}
@@ -152,7 +153,7 @@ export default (props) => {
                   ? " prevStep"
                   : ""
               }`}
-              key={v4()}
+              key={`${inputID}_${index}`}
             >
               {page && (
                 <div className="gf_step">

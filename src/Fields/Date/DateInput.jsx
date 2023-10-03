@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ValidationMessage from "../../FormElements/ValidationMessage";
 import { v4 } from "uuid";
 
@@ -18,12 +18,12 @@ export default ({ defaultProps }) => {
   const { id, formId, type, customName } = field;
 
   const { Input = "input" } = styledComponents || false;
-
+  const inputID = useMemo(() => v4(), []);
   return (
     <>
       {formattedInputs &&
         formattedInputs.map((item, index) => (
-          <div className={type} key={v4()}>
+          <div className={type} key={`${inputID}_${id}_${index}`}>
             <Input
               id={`input_${formId}_${id}_${index}`}
               type="number"

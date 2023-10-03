@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import InputLabel from "../FormElements/InputLabel";
 import { v4 } from "uuid";
 
@@ -37,6 +37,8 @@ export default ({
     Box = "div",
   } = styledComponents || false;
 
+  const inputID = useMemo(() => v4(), []);
+
   return (
     <Box
       width={width}
@@ -63,7 +65,7 @@ export default ({
           />
         )}
         {choices.map((choice, i) => (
-          <div className={type} key={v4()}>
+          <div className={type} key={`${inputID}_${input.id}_${i}`}>
             <input
               id={`input_${formId}_${inputs[i].id}`}
               type="checkbox"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import InputLabel from "../FormElements/InputLabel";
 import { v4 } from "uuid";
 
@@ -36,7 +36,7 @@ export default ({
     Label = "label",
     Box = "div",
   } = styledComponents || false;
-
+  const inputID = useMemo(() => v4(), []);
   return (
     <Box
       width={width}
@@ -65,7 +65,7 @@ export default ({
         {inputs
           .filter((s) => !s.isHidden)
           .map((input, i) => (
-            <React.Fragment key={v4()}>
+            <React.Fragment key={`${inputID}_${input.id}_${i}`}>
               {i === 0 && (
                 <React.Fragment>
                   <input

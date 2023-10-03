@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { v4 } from "uuid";
 
 export default ({
@@ -34,6 +34,8 @@ export default ({
   } = field;
 
   const [emails, setEmails] = useState(inputs);
+
+  const inputID = useMemo(() => v4(), []);
 
   const setFocusClassMultiple = (action, i) => {
     const email = { ...emails };
@@ -81,7 +83,7 @@ export default ({
               inputs.length &&
               inputs.map((input, i) => (
                 <span
-                  key={v4()}
+                  key={`${inputID}_${input.id}_${i}`}
                   className={`${
                     inputs.length > 1
                       ? `ginput_${i === 0 ? "left" : "right"}`

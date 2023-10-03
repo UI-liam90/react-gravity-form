@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 } from "uuid";
 
@@ -7,6 +7,7 @@ function Accept({ dropzoneText, ...props }) {
   const { defaultValue } = field || [];
   const [files, setFiles] = useState(defaultValue ? [defaultValue] : []);
   const [cssClass, setcssClass] = useState("dropzone");
+  const inputID = useMemo(() => v4(), []);
   const {
     getRootProps,
     getInputProps,
@@ -50,8 +51,8 @@ function Accept({ dropzoneText, ...props }) {
   const thumbs =
     files &&
     !!files.length > 0 &&
-    files.map((file) => (
-      <div key={v4()}>
+    files.map((file, i) => (
+      <div key={`${inputID}_${id}_${i}`}>
         <div>
           <img src={file.preview} />
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import ReactSelect from "react-select";
 import ValidationMessage from "../../FormElements/ValidationMessage";
 import { v4 } from "uuid";
@@ -22,6 +22,7 @@ export default ({ defaultProps }) => {
   } = defaultProps;
 
   const { id, isRequired, formId, type, customName } = field;
+  const inputID = useMemo(() => v4(), []);
 
   const RSelect = ReactSelect || "select";
 
@@ -81,7 +82,10 @@ export default ({ defaultProps }) => {
     <>
       {formattedInputs &&
         formattedInputs.map((input, index) => (
-          <div key={v4()} className="gfield_date_dropdown">
+          <div
+            key={`${inputID}_${id}_${index}`}
+            className="gfield_date_dropdown"
+          >
             <RSelect
               required={isRequired}
               placeholder={input.placeholder}
