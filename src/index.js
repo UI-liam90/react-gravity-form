@@ -233,6 +233,7 @@ const GravityForm = props => {
 
       {!submitSuccess && formData.fields ? (
         <form
+          id={`gravity_form_element_${formID}`}
           onSubmit={event => onSubmit(event)}
           className={cssClass}
           encType={isMultipart ? 'multipart/form-data' : undefined}
